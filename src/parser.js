@@ -234,8 +234,12 @@ export function parse(src) {
       case 'func': {
         next();
         let base;
+        let power;
         if (at('_')) { next(); base = unwrap(primary()); }
-        return { type: 'func', name: t.value, base, arg: argument(t.value) };
+        // "sin^2 x" means (sin x)^2.
+        if (at('^')) { next(); power = unwrap(exponent()); }
+        const fn = { type: 'func', name: t.value, base, arg: argument(t.value) };
+        return power ? { type: 'pow', base: fn, exp: power } : fn;
       }
       case ')': throw new ParseError('There is a closing bracket with no opening bracket.', t.pos);
       default: throw new ParseError(`"${t.value}" can't go here.`, t.pos);
