@@ -96,8 +96,9 @@ input[type="text"]:focus, textarea:focus { border-color: var(--accent); }
 
 .input-row { margin-top: 1.2rem; }
 .big-label { display: block; font-weight: 700; margin-bottom: 6px; }
-.field { display: flex; gap: 8px; }
-.field input { flex: 1; min-width: 0; font-family: ui-monospace, Menlo, monospace; font-size: 1.05rem; }
+.field { display: flex; gap: 8px; max-width: 100%; }
+.field button { flex: none; }
+.field input { flex: 1 1 0; min-width: 0; width: 100%; font-family: ui-monospace, Menlo, monospace; font-size: 1.05rem; }
 .msg:empty { display: none; }
 .msg { margin-top: 8px; display: grid; gap: 6px; }
 .msg p { margin: 0; padding: 10px 12px; border-radius: 10px; }
@@ -168,8 +169,8 @@ input[type="checkbox"], input[type="radio"] { width: 20px; height: 20px; accent-
 .visual.listen-only > * { display: none; }
 .visual.listen-only::after { content: "Written math hidden: press Hear the problem, or explore with the arrow keys"; display: block; font-family: "Atkinson Hyperlegible", sans-serif; font-size: 1rem; color: var(--muted); }
 .hint-box { background: var(--accent-soft); border-left: 4px solid var(--accent); padding: 10px 12px; border-radius: 10px; }
-.answer { margin: 14px 0 12px; display: grid; gap: 8px; justify-items: start; }
-.answer .field { width: 100%; }
+.answer { margin: 14px 0 12px; display: grid; gap: 8px; }
+.answer > button { justify-self: start; }
 .echo { margin: 0; font-size: 1.05rem; }
 #pEcho { font-weight: 700; }
 .feedback:empty { display: none; }

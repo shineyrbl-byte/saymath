@@ -84,8 +84,13 @@ tabs.forEach((t, i) => {
     e.preventDefault();
   });
 });
-const start = tabs.find((t) => `#${t.getAttribute('aria-controls')}` === location.hash);
-if (start) selectTab(start, false);
+// Open the tab named in the link (#practice, #teach), also on back/forward.
+function tabFromHash() {
+  const t = tabs.find((x) => `#${x.getAttribute('aria-controls')}` === location.hash);
+  if (t) selectTab(t, false);
+}
+tabFromHash();
+window.addEventListener('hashchange', tabFromHash);
 
 // Chrome loads voices late.
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
