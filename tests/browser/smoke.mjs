@@ -34,12 +34,27 @@ const send = (method, params = {}) => new Promise((r) => { const i = ++id; pendi
 const evaluate = async (expr) => (await send('Runtime.evaluate', { expression: expr, awaitPromise: true, returnByValue: true })).result.result.value;
 const KEYS = { ArrowDown: 40, ArrowUp: 38, ArrowLeft: 37, ArrowRight: 39, Home: 36, Enter: 13, ' ': 32, Tab: 9 };
 async function press(key) {
+  await evaluate("document.getElementById('announcer').textContent = ''");
   const code = KEYS[key];
   await send('Input.dispatchKeyEvent', { type: 'keyDown', key, windowsVirtualKeyCode: code, code: key === ' ' ? 'Space' : key });
   await send('Input.dispatchKeyEvent', { type: 'keyUp', key, windowsVirtualKeyCode: code, code: key === ' ' ? 'Space' : key });
   await wait(80);
 }
-const heard = () => evaluate("document.getElementById('announcer').textContent");
+// Waits until the live region has text that stops changing.
+async function heard() {
+  let last = null;
+  for (let i = 0; i < 40; i++) {
+    const now = await evaluate("document.getElementById('announcer').textContent");
+    if (now && now === last) return now;
+    last = now;
+    await wait(40);
+  }
+  return last;
+}
+async function until(expr) {
+  for (let i = 0; i < 100; i++) { if (await evaluate(expr)) return; await wait(50); }
+  throw new Error(`Timed out waiting for: ${expr}`);
+}
 
 let failures = 0;
 function check(name, actual, expected) {
@@ -53,7 +68,7 @@ try {
   await connect();
   await send('Page.enable'); await send('Runtime.enable');
   await send('Page.navigate', { url: URL });
-  await wait(1500);
+  await until("document.getElementById('result') && !document.getElementById('result').hidden");
   await evaluate("document.getElementById('voiceOn').checked = false");
 
   await evaluate("document.getElementById('mathIn').value = '(x+1)/(x-1) = 2'; document.getElementById('mathForm').requestSubmit()");
