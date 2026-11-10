@@ -4,6 +4,7 @@ import { render, rawScreenReader } from './src/render.js';
 import { attachExplorer } from './src/explorer.js';
 import { $, settings, say, announce, mountMath } from './src/ui.js';
 import { initPractice } from './src/practice.js';
+import { initTeacher } from './src/teacher.js';
 
 let current = null; // { tree, words, src }
 
@@ -90,3 +91,4 @@ if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
 
 update({ speakNow: false });
 initPractice();
+initTeacher();

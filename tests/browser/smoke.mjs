@@ -105,8 +105,9 @@ try {
   await press('Tab');
   check('Tab order: input then Hear it', await evaluate('document.activeElement.textContent'), 'Hear it');
 
-  const extra = process.argv[2];
-  if (extra) await import(new URL(extra, import.meta.url)).then((m) => m.default({ evaluate, press, wait, check, heard, send }));
+  for (const extra of process.argv.slice(2)) {
+    await import(new URL(extra, import.meta.url)).then((m) => m.default({ evaluate, press, wait, check, heard, send }));
+  }
 } catch (e) {
   console.error(e); failures++;
 } finally {

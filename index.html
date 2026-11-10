@@ -50,6 +50,7 @@
     <div class="tabs" role="tablist" aria-label="What do you want to do?">
       <button role="tab" id="tab-listen" aria-controls="listen" aria-selected="true">Listen</button>
       <button role="tab" id="tab-practice" aria-controls="practice" aria-selected="false" tabindex="-1">Practice</button>
+      <button role="tab" id="tab-teach" aria-controls="teach" aria-selected="false" tabindex="-1">Teach</button>
     </div>
 
     <section id="listen" role="tabpanel" aria-labelledby="tab-listen">
@@ -142,6 +143,41 @@
         </div>
       </div>
       <p class="score" id="pScore"></p>
+    </section>
+
+    <section id="teach" role="tabpanel" aria-labelledby="tab-teach" hidden>
+      <h1>Make an offline worksheet</h1>
+      <p class="lead">Type your questions. SayMath checks every line and flags anything a listener could misunderstand. It then builds one small file that opens on any phone or computer with no internet. Students can hear each question, explore it with the keyboard and check their answers.</p>
+
+      <div class="teach-grid">
+        <div class="teach-form">
+          <label for="wsTitle" class="big-label">Title</label>
+          <input id="wsTitle" type="text" value="Homework: equations and powers">
+          <label for="wsInstr" class="big-label">Instructions <span class="hint">(optional)</span></label>
+          <input id="wsInstr" type="text" value="Listen to each question, explore it with the arrow keys, then type your answer.">
+          <label for="wsLines" class="big-label">Questions</label>
+          <textarea id="wsLines" rows="7" spellcheck="false" aria-describedby="wsFormat">Solve for x: 3x - 4 = 11 answer: x = 5
+Solve for x: (x + 2)/4 = 3 answer: x = 10
+Work out: 2^4 + sqrt(9) answer: 19
+Simplify: (x^2 - 4)/(x - 2) answer: x + 2</textarea>
+          <p id="wsFormat" class="hint">One question per line. You can start with words and a colon (<kbd>Solve for x:</kbd>) and end with <kbd>answer: x = 5</kbd>.</p>
+          <label for="wsLangSel" class="big-label">Students hear it in</label>
+          <select id="wsLangSel">
+            <option value="en">English</option>
+            <option value="hi" lang="hi">हिन्दी (Hindi)</option>
+          </select>
+          <div class="row ws-actions">
+            <button type="button" id="wsDownload" class="primary">Download worksheet (.html)</button>
+            <button type="button" id="wsCopy">Copy as plain words (SMS, braille)</button>
+          </div>
+          <p id="wsSize" class="hint" role="status"></p>
+        </div>
+        <div>
+          <h2 class="label">Check your questions</h2>
+          <p id="wsStatus" class="hint"></p>
+          <ol id="wsPreview" class="ws-preview"></ol>
+        </div>
+      </div>
     </section>
   </main>
 
