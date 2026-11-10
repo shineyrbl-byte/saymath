@@ -148,4 +148,33 @@ input[type="text"]:focus, textarea:focus { border-color: var(--accent); }
 #crumbs { font-weight: 700; }
 .m-node.is-current { background: var(--hl); outline: 2px solid var(--focus); outline-offset: 1px; }
 
+/* Tabs */
+.tabs { display: flex; gap: 6px; margin-top: 1.2rem; border-bottom: 2px solid var(--line); flex-wrap: wrap; }
+.tabs [role="tab"] { border: none; border-radius: 10px 10px 0 0; background: transparent; padding: 10px 18px; font-weight: 700; color: var(--muted); margin-bottom: -2px; border-bottom: 4px solid transparent; }
+.tabs [role="tab"][aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.tabs [role="tab"]:hover { color: var(--ink); }
+
+/* Practice */
+.sets { border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px 14px; margin: 1rem 0 0.6rem; }
+.sets legend { font-weight: 700; padding: 0 6px; }
+#sets { display: flex; flex-wrap: wrap; gap: 8px; }
+.set-choice { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; cursor: pointer; min-height: 44px; }
+.set-choice:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); font-weight: 700; }
+label.check { display: flex; gap: 8px; align-items: center; cursor: pointer; }
+input[type="checkbox"], input[type="radio"] { width: 20px; height: 20px; accent-color: var(--accent); }
+.problem { margin-top: 1rem; }
+.prompt { font-size: 1.2rem; font-weight: 700; margin: 0 0 4px; }
+.visual.listen-only > * { display: none; }
+.visual.listen-only::after { content: "Written math hidden: press Hear the problem, or explore with the arrow keys"; display: block; font-family: "Atkinson Hyperlegible", sans-serif; font-size: 1rem; color: var(--muted); }
+.hint-box { background: var(--accent-soft); border-left: 4px solid var(--accent); padding: 10px 12px; border-radius: 10px; }
+.answer { margin: 14px 0 12px; display: grid; gap: 8px; justify-items: start; }
+.answer .field { width: 100%; }
+.echo { margin: 0; font-size: 1.05rem; }
+#pEcho { font-weight: 700; }
+.feedback:empty { display: none; }
+.feedback { margin: 12px 0; padding: 12px 14px; border-radius: 12px; font-size: 1.1rem; background: var(--paper); }
+.feedback.good { background: var(--accent-soft); border-left: 4px solid var(--accent); }
+.feedback.bad { background: var(--bad-soft); border-left: 4px solid var(--bad); }
+.score { color: var(--muted); }
+
 .foot { color: var(--muted); font-size: 0.85rem; padding-top: 2rem; padding-bottom: 2rem; }

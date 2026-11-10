@@ -1,45 +1,11 @@
 import { parse, ParseError } from './src/parser.js';
 import { speak } from './src/speak.js';
 import { render, rawScreenReader } from './src/render.js';
-import { EN } from './src/lang/en.js';
-import { HI } from './src/lang/hi.js';
 import { attachExplorer } from './src/explorer.js';
-
-const $ = (id) => document.getElementById(id);
-const LANG_INFO = { en: EN, hi: HI };
-
-export const settings = {
-  get lang() { return $('lang').value; },
-  get mode() { return $('mode').value; },
-  get voiceOn() { return $('voiceOn').checked; },
-  get rate() { return Number($('rate').value); },
-};
-
-// Speaks with the device's built-in voice (works offline on most phones).
-export function say(text, lang = settings.lang) {
-  announce(text);
-  if (!settings.voiceOn || !('speechSynthesis' in window)) return;
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  const want = (LANG_INFO[lang] || EN).speechLang;
-  u.lang = want;
-  const voices = speechSynthesis.getVoices();
-  const voice = voices.find((v) => v.lang === want) || voices.find((v) => v.lang.startsWith(want.slice(0, 2)));
-  if (voice) u.voice = voice;
-  else if (lang !== 'en') announce(`${text} (No ${want} voice on this device: install one in your system speech settings.)`);
-  u.rate = settings.rate;
-  speechSynthesis.speak(u);
-}
-
-// Screen reader users hear this through the live region.
-export function announce(text) {
-  const a = $('announcer');
-  a.textContent = '';
-  setTimeout(() => { a.textContent = text; }, 30);
-}
+import { $, settings, say, announce, mountMath } from './src/ui.js';
+import { initPractice } from './src/practice.js';
 
 let current = null; // { tree, words, src }
-let explorer = null;
 
 function showMessages(errors, warnings) {
   const box = $('mathMsg');
@@ -57,24 +23,14 @@ function update({ speakNow = true } = {}) {
     if (!(err instanceof ParseError)) throw err;
     const where = err.pos !== undefined && src.trim() ? ` (at character ${err.pos + 1})` : '';
     showMessages([err.message + where], []);
-    if (speakNow) say(err.message);
+    if (speakNow) say(err.message, 'en');
     return;
   }
   showMessages([], parsed.warnings.map((w) => w.message));
   const words = speak(parsed.tree, { lang: settings.lang, mode: settings.mode });
   current = { tree: parsed.tree, words, src };
 
-  const rendered = render(parsed.tree);
-  rendered.root.setAttribute('aria-hidden', 'true');
-  $('visual').replaceChildren(rendered.root);
-  $('visual').setAttribute('aria-label', `Math explorer: ${words}`);
-  explorer?.detach();
-  explorer = attachExplorer($('visual'), rendered, {
-    onSay: (t) => say(t),
-    getOpts: () => ({ lang: settings.lang, mode: settings.mode }),
-    crumbs: $('crumbs'),
-    lang: () => LANG_INFO[settings.lang] || EN,
-  });
+  mountMath($('visual'), $('crumbs'), render(parsed.tree), words, attachExplorer);
   $('spoken').textContent = words;
   // Tells screen readers which voice to use for the words.
   for (const id of ['spoken', 'afterText']) $(id).lang = settings.lang;
@@ -84,7 +40,6 @@ function update({ speakNow = true } = {}) {
   $('afterText').textContent = words;
   $('compare').hidden = false;
 
-  document.dispatchEvent(new CustomEvent('saymath:update', { detail: { ...current, parsed } }));
   if (speakNow) say(words);
 }
 
@@ -99,9 +54,39 @@ document.querySelectorAll('[data-ex]').forEach((b) => b.addEventListener('click'
   $('mathIn').value = b.dataset.ex;
   update();
 }));
-['lang', 'mode'].forEach((id) => $(id).addEventListener('change', () => update({ speakNow: false })));
+['lang', 'mode'].forEach((id) => $(id).addEventListener('change', () => {
+  update({ speakNow: false });
+  document.dispatchEvent(new Event('saymath:settings'));
+}));
+
+// Tabs: Left/Right arrows move between them (ARIA tabs pattern).
+const tabs = [...document.querySelectorAll('[role="tab"]')];
+function selectTab(tab, focus = true) {
+  for (const t of tabs) {
+    const on = t === tab;
+    t.setAttribute('aria-selected', String(on));
+    t.tabIndex = on ? 0 : -1;
+    $(t.getAttribute('aria-controls')).hidden = !on;
+  }
+  if (focus) tab.focus();
+  try { history.replaceState(null, '', `#${tab.getAttribute('aria-controls')}`); } catch { /* file:// */ }
+}
+tabs.forEach((t, i) => {
+  t.addEventListener('click', () => selectTab(t));
+  t.addEventListener('keydown', (e) => {
+    const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+    if (e.key === 'Home') selectTab(tabs[0]);
+    else if (e.key === 'End') selectTab(tabs[tabs.length - 1]);
+    else if (step) selectTab(tabs[(i + step + tabs.length) % tabs.length]);
+    else return;
+    e.preventDefault();
+  });
+});
+const start = tabs.find((t) => `#${t.getAttribute('aria-controls')}` === location.hash);
+if (start) selectTab(start, false);
 
 // Chrome loads voices late.
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
 
 update({ speakNow: false });
+initPractice();

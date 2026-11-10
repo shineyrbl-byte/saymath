@@ -47,7 +47,12 @@
   </header>
 
   <main id="main" class="wrap">
-    <section id="listen" aria-labelledby="listen-h">
+    <div class="tabs" role="tablist" aria-label="What do you want to do?">
+      <button role="tab" id="tab-listen" aria-controls="listen" aria-selected="true">Listen</button>
+      <button role="tab" id="tab-practice" aria-controls="practice" aria-selected="false" tabindex="-1">Practice</button>
+    </div>
+
+    <section id="listen" role="tabpanel" aria-labelledby="tab-listen">
       <h1 id="listen-h">Type math. Hear it clearly.</h1>
       <p class="lead">Screen readers often read typed math as a string of symbols. SayMath reads it the way a teacher would, and tells you where every fraction, root and bracket ends.</p>
 
@@ -95,6 +100,48 @@
           <p id="afterText"></p>
         </div>
       </div>
+    </section>
+
+    <section id="practice" role="tabpanel" aria-labelledby="tab-practice" hidden>
+      <h1>Practice by ear</h1>
+      <p class="lead">Hear a problem, explore it with the arrow keys, and type your answer. SayMath reads your answer back before checking it, so you know it understood what you typed.</p>
+
+      <fieldset class="sets">
+        <legend>Choose a practice set</legend>
+        <div id="sets"></div>
+      </fieldset>
+      <label class="check"><input type="checkbox" id="listenOnly"> Listen only: hide the written math (practise listening)</label>
+
+      <div class="card problem">
+        <p class="label" id="pCount"></p>
+        <p class="prompt" id="pPrompt"></p>
+        <div class="visual" id="pVisual" tabindex="0" role="application"
+             aria-roledescription="math explorer" aria-label="Math explorer" aria-describedby="exploreHelp2"></div>
+        <p class="crumbs" aria-hidden="true"><span class="label-inline">You are on:</span> <span id="pCrumbs"></span></p>
+        <p id="exploreHelp2" class="sr-only">Use the arrow keys to explore the problem. Down goes inside a part, Up comes back out, Left and Right move between parts.</p>
+        <div class="row">
+          <button type="button" id="pHear">Hear the problem</button>
+          <button type="button" id="pHint">Hint</button>
+        </div>
+        <p id="pHintText" class="hint-box" hidden></p>
+
+        <form id="pForm" class="answer" autocomplete="off">
+          <label for="pAnswer" class="big-label">Your answer</label>
+          <div class="field">
+            <input id="pAnswer" type="text" spellcheck="false" aria-describedby="pEchoLine">
+            <button type="submit" class="primary">Check</button>
+          </div>
+          <p id="pEchoLine" class="echo"><span id="pEchoLabel" class="label-inline">SayMath hears:</span> <span id="pEcho">…</span></p>
+          <button type="button" id="pEchoHear">Hear my answer</button>
+        </form>
+
+        <div id="pFeedback" class="feedback" role="status"></div>
+        <div class="row">
+          <button type="button" id="pShow" hidden>Show the answer</button>
+          <button type="button" id="pNext" class="primary">Next problem</button>
+        </div>
+      </div>
+      <p class="score" id="pScore"></p>
     </section>
   </main>
 

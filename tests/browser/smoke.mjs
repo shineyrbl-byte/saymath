@@ -7,7 +7,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-const URL = process.env.URL || 'http://localhost:8765/';
+const SITE = process.env.URL || 'http://localhost:8765/';
 const port = 9333;
 const chrome = spawn(CHROME, ['--headless=new', `--remote-debugging-port=${port}`, '--no-first-run',
   `--user-data-dir=${mkdtempSync(join(tmpdir(), 'sm-'))}`, 'about:blank'], { stdio: 'ignore' });
@@ -67,7 +67,7 @@ export const steps = [];
 try {
   await connect();
   await send('Page.enable'); await send('Runtime.enable');
-  await send('Page.navigate', { url: URL });
+  await send('Page.navigate', { url: SITE });
   await until("document.getElementById('result') && !document.getElementById('result').hidden");
   await evaluate("document.getElementById('voiceOn').checked = false");
 
