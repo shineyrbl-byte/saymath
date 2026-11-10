@@ -10,7 +10,7 @@ const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/M
 const SITE = process.env.URL || 'http://localhost:8765/';
 const port = 9333;
 const chrome = spawn(CHROME, ['--headless=new', `--remote-debugging-port=${port}`, '--no-first-run',
-  `--user-data-dir=${mkdtempSync(join(tmpdir(), 'sm-'))}`, 'about:blank'], { stdio: 'ignore' });
+  `--user-data-dir=${mkdtempSync(join(tmpdir(), 'sm-'))}`, ...(process.env.CI ? ['--no-sandbox'] : []), 'about:blank'], { stdio: 'ignore' });
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 let ws; let id = 0; const pending = new Map();
