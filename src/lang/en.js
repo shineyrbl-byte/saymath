@@ -76,4 +76,9 @@ export const EN = {
     subscript: 'subscript', radicand: 'inside the root', index: 'root index', argument: 'inside',
     inside: 'inside', term: 'term', factor: 'factor', side: 'side', item: 'item' },
   ofCount: (i, n) => `${i} of ${n}`,
+  wholeThing: 'whole expression',
+  nothingInside: 'Nothing further inside this part.',
+  atTop: 'You are at the whole expression.',
+  lastPart: 'No more parts to the right.',
+  firstPart: 'No more parts to the left.',
 };

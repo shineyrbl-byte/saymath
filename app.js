@@ -2,6 +2,7 @@ import { parse, ParseError } from './src/parser.js';
 import { speak } from './src/speak.js';
 import { render, rawScreenReader } from './src/render.js';
 import { EN } from './src/lang/en.js';
+import { attachExplorer } from './src/explorer.js';
 
 const $ = (id) => document.getElementById(id);
 const LANG_INFO = { en: EN };
@@ -36,6 +37,7 @@ export function announce(text) {
 }
 
 let current = null; // { tree, words, src }
+let explorer = null;
 
 function showMessages(errors, warnings) {
   const box = $('mathMsg');
@@ -60,8 +62,17 @@ function update({ speakNow = true } = {}) {
   const words = speak(parsed.tree, { lang: settings.lang, mode: settings.mode });
   current = { tree: parsed.tree, words, src };
 
-  const { root } = render(parsed.tree);
-  $('visual').replaceChildren(root);
+  const rendered = render(parsed.tree);
+  rendered.root.setAttribute('aria-hidden', 'true');
+  $('visual').replaceChildren(rendered.root);
+  $('visual').setAttribute('aria-label', `Math explorer: ${words}`);
+  explorer?.detach();
+  explorer = attachExplorer($('visual'), rendered, {
+    onSay: (t) => say(t),
+    getOpts: () => ({ lang: settings.lang, mode: settings.mode }),
+    crumbs: $('crumbs'),
+    lang: () => LANG_INFO[settings.lang] || EN,
+  });
   $('spoken').textContent = words;
   $('result').hidden = false;
 

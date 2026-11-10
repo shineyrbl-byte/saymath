@@ -141,6 +141,11 @@ input[type="text"]:focus, textarea:focus { border-color: var(--accent); }
 .m-radicand { border-top: 2px solid currentColor; padding: 2px 0.15em 0; display: inline-block; }
 .m-index { font-size: 0.55em; vertical-align: 1em; line-height: 0; margin-right: -0.35em; }
 .m-fence { font-style: normal; }
+.visual { cursor: pointer; }
+.visual:focus-visible { outline-offset: -3px; border-radius: 12px; }
+.crumbs { margin: -6px 0 4px; font-size: 0.9rem; }
+.label-inline { color: var(--muted); }
+#crumbs { font-weight: 700; }
 .m-node.is-current { background: var(--hl); outline: 2px solid var(--focus); outline-offset: 1px; }
 
 .foot { color: var(--muted); font-size: 0.85rem; padding-top: 2rem; padding-bottom: 2rem; }

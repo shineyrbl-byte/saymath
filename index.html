@@ -71,7 +71,10 @@
       </div>
 
       <div class="card result" id="result" hidden>
-        <div class="visual" id="visual" aria-hidden="true"></div>
+        <div class="visual" id="visual" tabindex="0" role="application"
+             aria-roledescription="math explorer" aria-label="Math explorer" aria-describedby="exploreHelp"></div>
+        <p class="crumbs" aria-hidden="true"><span class="label-inline">You are on:</span> <span id="crumbs"></span></p>
+        <p id="exploreHelp" class="hint">Explore by keyboard: click the equation or press <kbd>Tab</kbd> to reach it, then <kbd>↓</kbd> goes inside a part, <kbd>↑</kbd> comes back out, <kbd>←</kbd> <kbd>→</kbd> move between parts, <kbd>Space</kbd> repeats.</p>
         <h2 class="label">SayMath says</h2>
         <p class="spoken" id="spoken"></p>
         <div class="row">
