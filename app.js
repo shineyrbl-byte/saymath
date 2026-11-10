@@ -2,10 +2,11 @@ import { parse, ParseError } from './src/parser.js';
 import { speak } from './src/speak.js';
 import { render, rawScreenReader } from './src/render.js';
 import { EN } from './src/lang/en.js';
+import { HI } from './src/lang/hi.js';
 import { attachExplorer } from './src/explorer.js';
 
 const $ = (id) => document.getElementById(id);
-const LANG_INFO = { en: EN };
+const LANG_INFO = { en: EN, hi: HI };
 
 export const settings = {
   get lang() { return $('lang').value; },
@@ -25,6 +26,7 @@ export function say(text, lang = settings.lang) {
   const voices = speechSynthesis.getVoices();
   const voice = voices.find((v) => v.lang === want) || voices.find((v) => v.lang.startsWith(want.slice(0, 2)));
   if (voice) u.voice = voice;
+  else if (lang !== 'en') announce(`${text} (No ${want} voice on this device: install one in your system speech settings.)`);
   u.rate = settings.rate;
   speechSynthesis.speak(u);
 }
@@ -74,6 +76,8 @@ function update({ speakNow = true } = {}) {
     lang: () => LANG_INFO[settings.lang] || EN,
   });
   $('spoken').textContent = words;
+  // Tells screen readers which voice to use for the words.
+  for (const id of ['spoken', 'afterText']) $(id).lang = settings.lang;
   $('result').hidden = false;
 
   $('beforeText').textContent = rawScreenReader(src);
