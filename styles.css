@@ -71,6 +71,7 @@ kbd {
 .settings { position: relative; }
 .settings summary { cursor: pointer; padding: 8px 14px; border: 1px solid var(--line); border-radius: 10px; list-style: none; }
 .settings summary::-webkit-details-marker { display: none; }
+.settings-panel input[type="range"] { accent-color: var(--accent); }
 .settings-panel {
   position: absolute; right: 0; top: calc(100% + 6px); z-index: 5; width: min(340px, calc(100vw - 32px));
   background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px;

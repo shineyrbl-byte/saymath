@@ -9,6 +9,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#0b6e69">
 </head>
 <body>
   <a class="skip" href="#main">Skip to the math</a>
@@ -41,6 +44,21 @@
             <span class="hint">Turn off if you use a screen reader, so you don't hear everything twice.</span>
           </label>
           <label>Speed <input type="range" id="rate" min="0.6" max="1.4" step="0.1" value="0.9"></label>
+          <label>Text size
+            <select id="textSize">
+              <option value="1">Normal</option>
+              <option value="1.2">Large</option>
+              <option value="1.45">Extra large</option>
+            </select>
+          </label>
+          <label>Colours
+            <select id="theme">
+              <option value="auto">Match my device</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+              <option value="contrast">High contrast (yellow on black)</option>
+            </select>
+          </label>
         </div>
       </details>
     </div>
@@ -184,7 +202,7 @@ Simplify: (x^2 - 4)/(x - 2) answer: x + 2</textarea>
   <div id="announcer" class="sr-only" aria-live="polite"></div>
 
   <footer class="wrap foot">
-    <p>Made for AccessED Hacks 2026. Runs in your browser: nothing you type is sent anywhere.</p>
+    <p>Made for AccessED Hacks 2026. Runs in your browser: nothing you type is sent anywhere. <span id="offlineNote"></span></p>
   </footer>
 
   <script type="module" src="app.js"></script>

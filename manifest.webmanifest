@@ -1,0 +1,11 @@
+{
+  "name": "SayMath: math you can hear",
+  "short_name": "SayMath",
+  "description": "Type an equation and hear it read clearly, then explore it piece by piece with the keyboard. Works offline.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fbf8f2",
+  "theme_color": "#0b6e69",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

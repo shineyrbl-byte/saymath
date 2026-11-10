@@ -5,6 +5,7 @@ import { attachExplorer } from './src/explorer.js';
 import { $, settings, say, announce, mountMath } from './src/ui.js';
 import { initPractice } from './src/practice.js';
 import { initTeacher } from './src/teacher.js';
+import { initSettings } from './src/settings.js';
 
 let current = null; // { tree, words, src }
 
@@ -89,6 +90,14 @@ if (start) selectTab(start, false);
 // Chrome loads voices late.
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
 
+initSettings();
 update({ speakNow: false });
 initPractice();
 initTeacher();
+
+// Offline: after the first visit, SayMath works with no internet.
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  navigator.serviceWorker.register('sw.js').then(() => navigator.serviceWorker.ready).then(() => {
+    $('offlineNote').textContent = 'Saved for offline use.';
+  }).catch(() => {});
+}
