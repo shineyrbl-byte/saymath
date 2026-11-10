@@ -1,0 +1,12 @@
+{
+  "name": "saymath",
+  "version": "0.1.0",
+  "description": "Math you can hear: turns typed equations into clear speech you can explore with the keyboard.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/",
+    "start": "python3 -m http.server 8080"
+  },
+  "license": "MIT"
+}
