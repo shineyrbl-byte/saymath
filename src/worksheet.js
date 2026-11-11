@@ -47,6 +47,40 @@ export function worksheetText(title, instructions, questions, opts) {
   return lines.join('\n');
 }
 
+// Braille worksheet (.brf): uncontracted English for the words, Nemeth
+// Code for the maths. Lines are at most 40 cells and pages 25 lines, the
+// usual size for braille embossers. Experimental.
+export function worksheetBraille(title, instructions, questions, { toBraille, toASCII, textToBraille }) {
+  const WIDTH = 40;
+  const PAGE = 25;
+  const wrap = (cells) => {
+    const out = [];
+    for (const para of cells.split('\n')) {
+      let line = '';
+      for (const w of para.split('⠀')) {
+        if (!line) line = w;
+        else if ([...line].length + 1 + [...w].length <= WIDTH) line += `⠀${w}`;
+        else { out.push(line); line = w; }
+        while ([...line].length > WIDTH) { out.push([...line].slice(0, WIDTH).join('')); line = [...line].slice(WIDTH).join(''); }
+      }
+      out.push(line);
+    }
+    return out;
+  };
+  // Prompts in other scripts (like Hindi) can't be written in English braille: they are left out.
+  const words = (t) => (/^[\x20-\x7e]*$/.test(t) ? textToBraille(t) : '');
+  const lines = [...wrap(words(title)), ''];
+  if (instructions && words(instructions)) lines.push(...wrap(words(instructions)), '');
+  questions.filter((q) => !q.error).forEach((q, i) => {
+    const prompt = q.prompt ? words(`${q.prompt}:`) : '';
+    lines.push(...wrap(`${textToBraille(`${i + 1}.`)}${prompt ? `⠀${prompt}` : ''}`));
+    lines.push(...wrap(`⠀⠀${toBraille(parse(q.math).tree)}`), '');
+  });
+  const pages = [];
+  for (let i = 0; i < lines.length; i += PAGE) pages.push(lines.slice(i, i + PAGE).map(toASCII).join('\r\n'));
+  return `${pages.join('\r\n\f')}\r\n`;
+}
+
 // ---- A tiny bundler: turns the ES modules into one inline script. ----
 
 export const ENGINE = ['parser', 'lang/en', 'lang/hi', 'speak', 'render', 'explorer', 'evaluate'];

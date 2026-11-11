@@ -7,6 +7,8 @@ import { $, settings, say, announce, mountMath } from './src/ui.js';
 import { initPractice } from './src/practice.js';
 import { initTeacher } from './src/teacher.js';
 import { initSettings } from './src/settings.js';
+import { toBraille, toASCII } from './src/braille.js';
+import { download } from './src/download.js';
 
 let current = null; // { tree, words, src }
 
@@ -36,6 +38,8 @@ function update({ speakNow = true } = {}) {
 
   mountMath($('visual'), $('crumbs'), render(parsed.tree), words, attachExplorer);
   $('spoken').textContent = words;
+  current.braille = toBraille(parsed.tree);
+  $('brailleOut').textContent = current.braille;
   // Tells screen readers which voice to use for the words.
   for (const id of ['spoken', 'afterText']) $(id).lang = settings.lang;
   $('result').hidden = false;
@@ -54,6 +58,11 @@ $('copySpoken').addEventListener('click', async () => {
   if (!current) return;
   try { await navigator.clipboard.writeText(current.words); announce(ui(settings.lang).copied); } catch { announce(ui(settings.lang).copyFailed); }
 });
+$('copyBraille').addEventListener('click', async () => {
+  if (!current) return;
+  try { await navigator.clipboard.writeText(current.braille); announce(ui(settings.lang).brailleCopied); } catch { announce(ui(settings.lang).copyFailed); }
+});
+$('downloadBrf').addEventListener('click', () => current && download('saymath.brf', `${toASCII(current.braille)}\r\n`, 'text/plain'));
 document.querySelectorAll('[data-ex]').forEach((b) => b.addEventListener('click', () => {
   $('mathIn').value = b.dataset.ex;
   update();

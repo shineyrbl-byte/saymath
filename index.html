@@ -119,6 +119,15 @@
           <button type="button" id="replay" data-i18n="hearAgain">Hear again</button>
           <button type="button" id="copySpoken" data-i18n="copyWords">Copy words</button>
         </div>
+        <details class="braille-box">
+          <summary data-i18n="brailleTitle">Braille (Nemeth Code, experimental)</summary>
+          <p class="braille" id="brailleOut" aria-describedby="brailleNote"></p>
+          <p id="brailleNote" class="hint" data-i18n="brailleNote">Nemeth braille for this maths, for braille displays and embossers. It has not been checked by a braille transcriber yet.</p>
+          <div class="row">
+            <button type="button" id="copyBraille" data-i18n="copyBraille">Copy braille</button>
+            <button type="button" id="downloadBrf" data-i18n="downloadBrf">Download .brf (embosser file)</button>
+          </div>
+        </details>
       </div>
 
       <div class="compare" id="compare" hidden>
@@ -200,6 +209,7 @@ Simplify: (x^2 - 4)/(x - 2) answer: x + 2</textarea>
           <div class="row ws-actions">
             <button type="button" id="wsDownload" class="primary" data-i18n="wsDownload">Download worksheet (.html)</button>
             <button type="button" id="wsCopy" data-i18n="wsCopy">Copy as plain words (SMS, braille)</button>
+            <button type="button" id="wsBrf" data-i18n="wsBrf">Download braille worksheet (.brf)</button>
           </div>
           <p id="wsSize" class="hint" role="status"></p>
         </div>

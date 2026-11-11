@@ -17,4 +17,8 @@ export default async function ({ evaluate, press, wait, check, heard }) {
   check('explorer: matrix row then entry', await heard(), 'entry 1 of 2: a');
   await press('ArrowUp'); await press('ArrowRight');
   check('explorer: second row', await heard(), 'row 2 of 2: c, d');
+
+  await evaluate("document.querySelector('[data-ex^=\"x = (-b\"]').click()");
+  await wait(150);
+  check('braille panel shows Nemeth for the quadratic formula', await evaluate("document.getElementById('brailleOut').textContent"), '⠭⠀⠨⠅⠀⠹⠤⠃⠬⠜⠃⠘⠆⠐⠤⠲⠁⠉⠻⠌⠆⠁⠼');
 }

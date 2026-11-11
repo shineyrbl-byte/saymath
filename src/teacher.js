@@ -4,7 +4,9 @@ import { parse } from './parser.js';
 import { speak, explain } from './speak.js';
 import { ui } from './i18n.js';
 import { render } from './render.js';
-import { parseWorksheet, worksheetText, buildWorksheetHTML } from './worksheet.js';
+import { parseWorksheet, worksheetText, worksheetBraille, buildWorksheetHTML } from './worksheet.js';
+import { toBraille, toASCII, textToBraille } from './braille.js';
+import { download as save } from './download.js';
 import { $, announce, settings } from './ui.js';
 
 const slug = (s) => s.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '') || 'worksheet';
@@ -95,11 +97,20 @@ export function initTeacher() {
     announce($('wsSize').textContent);
   }
 
+  function brf() {
+    const d = data();
+    const name = `${slug(d.title)}.brf`;
+    save(name, worksheetBraille(d.title, d.instructions, questions, { toBraille, toASCII, textToBraille }));
+    $('wsSize').textContent = t().wsBrfDone(name);
+    announce($('wsSize').textContent);
+  }
+
   let timer;
   $('wsLines').addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(preview, 250); });
   $('wsLangSel').addEventListener('change', preview);
   document.addEventListener('saymath:settings', preview);
   $('wsDownload').addEventListener('click', download);
   $('wsCopy').addEventListener('click', copyText);
+  $('wsBrf').addEventListener('click', brf);
   preview();
 }

@@ -143,6 +143,9 @@ input[type="text"]:focus, textarea:focus { border-color: var(--accent); }
 .m-radicand { border-top: 2px solid currentColor; padding: 2px 0.15em 0; display: inline-block; }
 .m-index { font-size: 0.55em; vertical-align: 1em; line-height: 0; margin-right: -0.35em; }
 .m-fence { font-style: normal; }
+.braille-box { margin-top: 1rem; }
+.braille-box summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; }
+.braille { font-size: calc(1.8rem * var(--scale, 1)); line-height: 1.6; letter-spacing: 0.08em; white-space: pre-wrap; overflow-wrap: anywhere; margin: 0.5rem 0; }
 .m-limits { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 0.15em; line-height: 1.1; }
 .m-lim-up, .m-lim-lo { font-size: 0.6em; }
 .m-bigsym { font-size: 1.5em; line-height: 1; font-style: normal; }
