@@ -8,6 +8,7 @@
 
 **Links:**
 - Live demo: https://shineyrbl-byte.github.io/saymath/
+- Demo video: https://youtu.be/OQ8i_HQ8HNc
 - Source: https://github.com/shineyrbl-byte/saymath
 
 ---

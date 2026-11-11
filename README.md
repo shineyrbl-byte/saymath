@@ -4,6 +4,8 @@
 
 **Live demo:** https://shineyrbl-byte.github.io/saymath/ (no sign-up, no install, works offline after the first visit)
 
+**Demo video (2.5 min, captioned):** https://youtu.be/OQ8i_HQ8HNc · transcript: [docs/DEMO.md](docs/DEMO.md)
+
 Built for **AccessED Hacks** (October 17 – November 20, 2026). Everything in this repository was written during the event: there is no pre-existing foundation.
 
 ![SayMath reading the quadratic formula, with the before/after comparison](docs/screenshots/1-listen-before-after.png)
