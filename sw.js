@@ -2,7 +2,7 @@
 const VERSION = 'saymath-v2';
 const FILES = [
   './', 'index.html', 'styles.css', 'app.js', 'manifest.webmanifest', 'icon.svg',
-  'src/parser.js', 'src/speak.js', 'src/render.js', 'src/explorer.js', 'src/evaluate.js',
+  'src/parser.js', 'src/latex.js', 'src/speak.js', 'src/render.js', 'src/explorer.js', 'src/evaluate.js',
   'src/problems.js', 'src/practice.js', 'src/teacher.js', 'src/ui.js', 'src/settings.js',
   'src/worksheet.js', 'src/worksheet-runtime.js', 'src/lang/en.js', 'src/lang/hi.js', 'src/lang/mr.js', 'src/lang/ta.js', 'src/lang/bn.js', 'src/i18n.js', 'src/braille.js', 'src/download.js', 'src/photo.js', 'src/photo-ui.js', 'src/voice.js', 'src/cues.js',
 ];

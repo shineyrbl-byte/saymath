@@ -82,6 +82,7 @@ function update({ speakNow = true } = {}) {
     return;
   }
   showMessages([], parsed.warnings.map((w) => explain(w, settings.lang)));
+  if (parsed.latex) $('mathMsg').append(Object.assign(document.createElement('p'), { className: 'hint', textContent: ui(settings.lang).latexNote(parsed.latex) }));
   const words = speak(parsed.tree, { lang: settings.lang, mode: settings.mode });
   current = { tree: parsed.tree, words, src };
 

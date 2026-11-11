@@ -1,3 +1,5 @@
+import { looksLikeLatex, fromLatex } from './latex.js';
+
 // Parses typed math (like "(x^2 + 3x)/(2x - 1) = sqrt(5)") into a tree.
 // The syntax is close to what students type on a calculator or in AsciiMath.
 
@@ -93,7 +95,10 @@ export function tokenize(src) {
 //   bigop {op:'sum'|'prod', lower, upper, body} | integral {body, v, lower?, upper?}
 //   limit {v, to, body} | deriv {body, v, order} | matrix {rows:[row]} | row {items}
 //   deg {arg}       add items can also have op '±'
-export function parse(src) {
+export function parse(input) {
+  // LaTeX (\frac{a}{b}, x^{2}) is turned into typed maths first.
+  const latex = looksLikeLatex(input);
+  const src = latex ? fromLatex(input) : input;
   const tokens = tokenize(src);
   if (tokens.length === 0) throw new ParseError('Type some math to start.', 0, 'empty');
   const warnings = [];
@@ -330,7 +335,19 @@ export function parse(src) {
       t.value,
     );
   }
-  return { tree, warnings };
+  return { tree: latex ? unwrapFractions(tree) : tree, warnings, latex: latex ? src : null };
+}
+
+// LaTeX fractions arrive as ((top)/(bottom)); the outer brackets were only
+// there to keep the fraction together, so they are not read or drawn.
+function unwrapFractions(node) {
+  if (!node || typeof node !== 'object') return node;
+  if (node.type === 'paren' && node.arg.type === 'frac') return unwrapFractions(node.arg);
+  for (const [k, v] of Object.entries(node)) {
+    if (Array.isArray(v)) node[k] = v.map((x) => (x && x.node ? { ...x, node: unwrapFractions(x.node) } : unwrapFractions(x)));
+    else if (v && v.type) node[k] = unwrapFractions(v);
+  }
+  return node;
 }
 
 // The child nodes of a tree node, with a name for each position.
