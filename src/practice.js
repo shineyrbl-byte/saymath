@@ -53,6 +53,34 @@ const T = {
     hears: 'SayMath ऐकते:',
     best: (b, n) => `सर्वोत्तम ${n} पैकी ${b}`,
   },
+  ta: {
+    count: (i, n) => `கேள்வி ${n} இல் ${i}`,
+    correct: (w) => `சரி! ${w}.`,
+    wrong: (w) => `இன்னும் இல்லை. உங்கள் விடை: ${w}. மீண்டும் முயலுங்கள், அல்லது குறிப்பு கேளுங்கள்.`,
+    letters: (v) => `உங்கள் விடையில் இன்னும் எழுத்து உள்ளது. ${v} க்கு ஒரு எண்ணைத் தாருங்கள்.`,
+    notValue: 'விடையை மட்டும் எழுதுங்கள், எ.கா. 4 அல்லது x = 4.',
+    unreadable: (m) => `இந்த விடையைப் படிக்க முடியவில்லை. ${m}`,
+    empty: 'முதலில் விடையை எழுதுங்கள்.',
+    answerIs: (w) => `விடை ${w}.`,
+    score: (c, n) => `முதல் முயற்சியில் சரி: ${n} இல் ${c}.`,
+    done: (c, n) => `தொகுப்பு முடிந்தது! முதல் முயற்சியில் சரி: ${n} இல் ${c}.`,
+    hears: 'SayMath கேட்பது:',
+    best: (b, n) => `சிறந்தது ${n} இல் ${b}`,
+  },
+  bn: {
+    count: (i, n) => `প্রশ্ন ${n} টির মধ্যে ${i}`,
+    correct: (w) => `ঠিক! ${w}।`,
+    wrong: (w) => `এখনও হয়নি। আপনার উত্তর: ${w}। আবার চেষ্টা করুন, অথবা সংকেত নিন।`,
+    letters: (v) => `আপনার উত্তরে এখনও অক্ষর আছে। ${v} এর জন্য একটি সংখ্যা লিখুন।`,
+    notValue: 'শুধু উত্তর লিখুন, যেমন 4 অথবা x = 4।',
+    unreadable: (m) => `এই উত্তরটি পড়া গেল না। ${m}`,
+    empty: 'আগে উত্তর লিখুন।',
+    answerIs: (w) => `উত্তর হলো ${w}।`,
+    score: (c, n) => `প্রথম চেষ্টায় ঠিক: ${n} টির মধ্যে ${c}।`,
+    done: (c, n) => `সেট শেষ! প্রথম চেষ্টায় ঠিক: ${n} টির মধ্যে ${c}।`,
+    hears: 'SayMath শুনছে:',
+    best: (b, n) => `সেরা ${n} টির মধ্যে ${b}`,
+  },
 };
 
 // Best first-try score for each set, remembered on this device only.
@@ -78,7 +106,7 @@ export function initPractice() {
   const problem = () => set.problems[index];
   const promptText = () => {
     const p = problem();
-    return PROMPTS[settings.lang][p.kind](p.solveFor);
+    return (PROMPTS[settings.lang] || PROMPTS.en)[p.kind](p.solveFor);
   };
 
   // Set picker (radio buttons, so arrow keys work).
@@ -190,11 +218,13 @@ export function initPractice() {
   $('pEchoHear').addEventListener('click', () => { const w = echo(); say(w || t().empty); });
   $('pHear').addEventListener('click', () => say(`${promptText()} ${words(problem().math)}`));
   $('pHint').addEventListener('click', () => {
-    const h = problem().hint[settings.lang] || problem().hint.en;
+    // Hints not yet translated are shown and spoken in English.
+    const hl = problem().hint[settings.lang] ? settings.lang : 'en';
+    const h = problem().hint[hl];
     $('pHintText').textContent = h;
-    $('pHintText').lang = settings.lang;
+    $('pHintText').lang = hl;
     $('pHintText').hidden = false;
-    say(h);
+    say(h, hl);
   });
   $('pShow').addEventListener('click', () => {
     const p = problem();

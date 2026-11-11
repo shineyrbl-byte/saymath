@@ -1,4 +1,4 @@
-/* global DATA, M_parser, M_speak, M_render, M_explorer, M_evaluate, M_lang_en, M_lang_hi, M_lang_mr, M_cues */
+/* global DATA, M_parser, M_speak, M_render, M_explorer, M_evaluate, M_lang_en, M_lang_hi, M_lang_mr, M_lang_ta, M_lang_bn, M_cues */
 // Runs inside a downloaded worksheet file. Not a module: it is inlined
 // after the bundled engine, which defines the M_* objects.
 (() => {
@@ -8,7 +8,7 @@
   const { attachExplorer } = M_explorer;
   const { checkAnswer } = M_evaluate;
   // Only English and the teacher's chosen language are inside the file.
-  const PHRASES = Object.fromEntries(Object.entries({ en: M_lang_en.EN, hi: M_lang_hi.HI, mr: M_lang_mr.MR }).filter(([, v]) => v));
+  const PHRASES = Object.fromEntries(Object.entries({ en: M_lang_en.EN, hi: M_lang_hi.HI, mr: M_lang_mr.MR, ta: M_lang_ta.TA, bn: M_lang_bn.BN }).filter(([, v]) => v));
 
   const T = {
     en: { question: (i, n) => `Question ${i} of ${n}`, hear: 'Hear it', yours: 'Your answer', check: 'Check',
@@ -59,7 +59,7 @@
   };
 
   function build() {
-    const t = T[lang];
+    const t = T[lang] || T.en;
     const main = document.getElementById('main');
     document.documentElement.lang = lang;
     const qs = DATA.questions;

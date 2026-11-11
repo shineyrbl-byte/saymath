@@ -6,6 +6,8 @@ export const PROMPTS = {
   en: { solve: (v) => `Solve for ${v}.`, value: () => 'Work this out.', simplify: () => 'Simplify.' },
   hi: { solve: (v) => `${v} का मान ज्ञात कीजिए।`, value: () => 'इसका मान निकालिए।', simplify: () => 'सरल कीजिए।' },
   mr: { solve: (v) => `${v} ची किंमत काढा.`, value: () => 'याची किंमत काढा.', simplify: () => 'सोपे रूप द्या.' },
+  ta: { solve: (v) => `${v} இன் மதிப்பைக் காண்க.`, value: () => 'இதன் மதிப்பைக் காண்க.', simplify: () => 'சுருக்குக.' },
+  bn: { solve: (v) => `${v} এর মান নির্ণয় করো।`, value: () => 'এর মান বের করো।', simplify: () => 'সরল করো।' },
 };
 
 export const SETS = [

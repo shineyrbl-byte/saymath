@@ -48,4 +48,12 @@ export default async function ({ evaluate, press, wait, check, heard, send }) {
   await wait(1200);
   check('a shared link opens that maths in that language', await evaluate("document.getElementById('spoken').textContent"), 'ए का वर्ग प्लस बी का वर्ग बराबर सी का वर्ग');
   await evaluate("(() => { const l = document.getElementById('lang'); l.value = 'en'; l.dispatchEvent(new Event('change')); })()");
+
+  for (const [lang, want] of [['ta', /^சரி|^b/], ['bn', /^এক্স/]]) {
+    await evaluate(`(() => { const l = document.getElementById('lang'); l.value = '${lang}'; l.dispatchEvent(new Event('change'));
+      const i = document.getElementById('mathIn'); i.value = '${lang === 'ta' ? 'b/a' : 'x^2'}'; document.getElementById('mathForm').requestSubmit(); })()`);
+    await wait(100);
+    check(`${lang} (preview) speaks the maths`, await evaluate("document.getElementById('spoken').textContent"), lang === 'ta' ? 'a இல் b' : 'এক্স এর বর্গ');
+  }
+  await evaluate("(() => { const l = document.getElementById('lang'); l.value = 'en'; l.dispatchEvent(new Event('change')); })()");
 }

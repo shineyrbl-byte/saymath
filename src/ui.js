@@ -3,11 +3,13 @@
 import { EN } from './lang/en.js';
 import { HI } from './lang/hi.js';
 import { MR } from './lang/mr.js';
+import { TA } from './lang/ta.js';
+import { BN } from './lang/bn.js';
 import { ui } from './i18n.js';
 import { cue } from './cues.js';
 
 export const $ = (id) => document.getElementById(id);
-export const LANG_INFO = { en: EN, hi: HI, mr: MR };
+export const LANG_INFO = { en: EN, hi: HI, mr: MR, ta: TA, bn: BN };
 
 export const settings = {
   get lang() { return $('lang').value; },
