@@ -7,7 +7,7 @@ export default async function ({ evaluate, press, wait, check, heard }) {
 
   const size = await evaluate(`import('./src/worksheet.js').then(async (m) => {
     const html = await m.buildWorksheetHTML({ title: 'Test sheet', instructions: '', lang: 'en',
-      questions: [{ prompt: 'Solve for x', math: '3x - 4 = 11', answer: '5', solveFor: 'x' }, { prompt: '', math: 'sqrt(x+1)', answer: '' }] });
+      questions: [{ prompt: 'Solve for x', math: '3x - 4 = 11', answer: '5', solveFor: 'x', hint: 'Add 4 to both sides.' }, { prompt: '', math: 'sqrt(x+1)', answer: '' }] });
     window.__ws = html;
     return new Blob([html]).size;
   })`);
@@ -26,6 +26,8 @@ export default async function ({ evaluate, press, wait, check, heard }) {
   await evaluate("document.getElementById('wsVoice').checked = false; document.getElementById('wsVoice').dispatchEvent(new Event('change'))");
   await evaluate("(() => { const i = document.getElementById('a0'); i.value = 'x = 5'; i.dispatchEvent(new Event('input')); i.form.requestSubmit(); })()");
   check('worksheet checks answers offline', await heard(), 'Correct!');
+  await evaluate("[...document.querySelectorAll('article.problem button')].find((b) => b.textContent === 'Hint').click()");
+  check("worksheet shows the teacher's hint", await heard(), 'Add 4 to both sides.');
   await evaluate("document.querySelectorAll('.visual')[1].focus()");
   await press('ArrowDown');
   check('worksheet explorer works', await heard(), /^inside the root: x plus 1$/);

@@ -104,7 +104,8 @@ export const EN = {
     calcForm: (f) => `Write it like ${f}.`,
     at: (n) => `(at character ${n})`,
   },
-  keyHelp: 'Use the arrow keys to explore. Down goes inside a part, Up comes back out, Left and Right move between parts. Space repeats. Home goes back to the whole thing.',
+  keyHelp: 'Use the arrow keys to explore. Down goes inside a part, Up comes back out, Left and Right move between parts. Space repeats. Home goes back to the whole thing. W says where you are.',
+  whereLabel: 'You are on',
   explorer: 'math explorer',
 
   roles: { numerator: 'numerator', denominator: 'denominator', base: 'base', exponent: 'exponent',

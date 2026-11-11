@@ -57,6 +57,8 @@ export function attachExplorer(container, rendered, { onSay, getOpts, crumbs, la
       case 'ArrowLeft': go(sib[i - 1], t.firstPart, 'move'); break;
       case 'Home': go(top, '', 'out'); break;
       case ' ': case 'Enter': show(cur); break;
+      // W: where am I? Reads the path from the whole expression to this part.
+      case 'w': case 'W': onSay(`${t.whereLabel}: ${[t.wholeThing, ...path(cur)].join(', ')}`); break;
       default: return;
     }
     e.preventDefault();

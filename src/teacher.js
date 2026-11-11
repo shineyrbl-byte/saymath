@@ -57,6 +57,7 @@ export function initTeacher() {
         const ans = Object.assign(document.createElement('p'), { className: 'hint',
           textContent: q.answer ? t().wsAnswer(`${q.solveFor ? `${q.solveFor} = ` : ''}${q.answer}`) : t().wsNoAnswer });
         li.append(ans);
+        if (q.hint) li.append(Object.assign(document.createElement('p'), { className: 'hint', textContent: `${t().hint}: ${q.hint}` }));
         for (const w of q.warningObjs || []) {
           problems++;
           li.append(Object.assign(document.createElement('p'), { className: 'msg-inline warning', textContent: explain(w, settings.lang) }));
@@ -76,7 +77,7 @@ export function initTeacher() {
       title: $('wsTitle').value.trim() || 'Maths worksheet',
       instructions: $('wsInstr').value.trim(),
       lang: lang(),
-      questions: questions.filter((q) => !q.error).map(({ prompt, math, answer, solveFor }) => ({ prompt, math, answer, solveFor })),
+      questions: questions.filter((q) => !q.error).map(({ prompt, math, answer, solveFor, hint }) => ({ prompt, math, answer, solveFor, hint })),
     };
   }
 

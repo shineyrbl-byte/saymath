@@ -48,3 +48,11 @@ test('prompts in Hindi and Marathi are recognised', () => {
     assert.equal(q.answer, '3');
   }
 });
+
+test('teachers can add a hint at the end of a line', () => {
+  const [q] = parseWorksheet('Solve for x: 3x - 4 = 11 answer: x = 5 hint: Add 4 to both sides first.');
+  assert.equal(q.math, '3x - 4 = 11');
+  assert.equal(q.answer, '5');
+  assert.equal(q.hint, 'Add 4 to both sides first.');
+  assert.equal(parseWorksheet('x ची किंमत काढा: 2x = 6 उत्तर: x = 3 संकेत: दोन्ही बाजूंना 2 ने भागा.')[0].hint, 'दोन्ही बाजूंना 2 ने भागा.');
+});

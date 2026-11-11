@@ -3,7 +3,7 @@ import { speak, explain, children } from './src/speak.js';
 import { applyUI, ui } from './src/i18n.js';
 import { render, rawScreenReader } from './src/render.js';
 import { attachExplorer } from './src/explorer.js';
-import { $, settings, say, announce, mountMath } from './src/ui.js';
+import { $, settings, say, announce, mountMath, initVoicePick } from './src/ui.js';
 import { initPractice } from './src/practice.js';
 import { initTeacher } from './src/teacher.js';
 import { initSettings } from './src/settings.js';
@@ -212,8 +212,6 @@ function tabFromHash() {
 tabFromHash();
 window.addEventListener('hashchange', tabFromHash);
 
-// Chrome loads voices late.
-if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
 
 initSettings();
 // Opened from a shared link: show that maths, in that language.
@@ -224,6 +222,7 @@ applyUI(settings.lang);
 update({ speakNow: false });
 initPractice();
 initTeacher();
+initVoicePick();
 initKeypad($('mathKeys'), $('mathIn'));
 initKeypad($('pKeys'), $('pAnswer'));
 initPhoto({

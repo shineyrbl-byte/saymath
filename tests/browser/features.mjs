@@ -42,7 +42,7 @@ export default async function ({ evaluate, press, wait, check, heard, send }) {
   })()`);
   check('read-along highlights the part being spoken, in the equation and the words', hl, /^a2\+b2 \| a squared plus b squared \/ left after: 0$/);
   await evaluate("document.body.focus(); document.dispatchEvent(new KeyboardEvent('keydown', { key: '?', bubbles: true }))");
-  check('? opens the keyboard shortcuts list', await evaluate("document.getElementById('keysDialog').open + ' ' + document.querySelectorAll('#keysList dt').length"), 'true 10');
+  check('? opens the keyboard shortcuts list', await evaluate("document.getElementById('keysDialog').open + ' ' + document.querySelectorAll('#keysList dt').length"), 'true 11');
   await evaluate("document.getElementById('keysDialog').close()");
   await send('Page.navigate', { url: `http://localhost:8765/?m=${encodeURIComponent('a^2 + b^2 = c^2')}&lang=hi&t=${Date.now()}#listen` });
   await wait(1200);
@@ -60,4 +60,9 @@ export default async function ({ evaluate, press, wait, check, heard, send }) {
   await evaluate("(() => { document.getElementById('tab-listen').click(); const i = document.getElementById('mathIn'); i.value = ''; i.focus(); document.querySelectorAll('#mathKeys .key')[2].click(); i.setRangeText('9', i.selectionStart, i.selectionEnd, 'end'); i.setSelectionRange(i.value.length, i.value.length); document.querySelectorAll('#mathKeys .key')[8].click(); i.setRangeText('3', i.selectionStart, i.selectionEnd, 'end'); document.getElementById('mathForm').requestSubmit(); })()");
   await wait(100);
   check('maths keys insert at the cursor', await evaluate("document.getElementById('mathIn').value + ' | ' + document.querySelector('#mathKeys .key').getAttribute('aria-label')"), 'sqrt(9) = 3 | squared');
+
+  await evaluate("(() => { document.querySelector('[data-ex^=\\\"x = (-b\\\"]').click(); document.getElementById('visual').focus(); })()");
+  await press('ArrowDown'); await press('ArrowRight'); await press('ArrowDown'); await press('ArrowRight');
+  await press('w');
+  check('W says where you are', await heard(), 'You are on: whole expression, side, denominator');
 }

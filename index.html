@@ -48,6 +48,9 @@
             <span class="hint" data-i18n="voiceHint">Turn off if you use a screen reader, so you don't hear everything twice.</span>
           </label>
           <label class="check"><input type="checkbox" id="cues" checked> <span data-i18n="cues">Sound cues while exploring (and a buzz on phones at the edges)</span></label>
+          <label><span data-i18n="voicePick">Voice</span>
+            <select id="voicePick"><option value="" data-i18n="voiceAuto">Automatic</option></select>
+          </label>
           <label><span data-i18n="speed">Speed</span> <input type="range" id="rate" min="0.6" max="1.4" step="0.1" value="0.9"></label>
           <label><span data-i18n="textSize">Text size</span>
             <select id="textSize">
@@ -232,7 +235,7 @@ Solve for x: (x + 2)/4 = 3 answer: x = 10
 Work out: 2^4 + sqrt(9) answer: 19
 Simplify: (x^2 - 4)/(x - 2) answer: x + 2</textarea>
           <p class="hint" data-i18n="wsDraft">Your worksheet is saved on this device as you type.</p>
-          <p id="wsFormat" class="hint" data-i18n-html="wsFormatHtml">One question per line. You can start with words and a colon (<kbd>Solve for x:</kbd>) and end with <kbd>answer: x = 5</kbd>.</p>
+          <p id="wsFormat" class="hint" data-i18n-html="wsFormatHtml">One question per line. You can start with words and a colon (<kbd>Solve for x:</kbd>) and end with <kbd>answer: x = 5</kbd>. Add <kbd>hint: …</kbd> at the very end to give students a hint.</p>
           <label for="wsLangSel" class="big-label" data-i18n="wsLang">Students hear it in</label>
           <select id="wsLangSel">
             <option value="en">English</option>

@@ -44,7 +44,7 @@ Plain JavaScript modules with no framework, build step or server. A parser turns
 - **Braille level indicators:** Nemeth marks every move up into a power and back down. Getting nested powers right (e^(x²)) meant tidying runs of level changes after the fact.
 
 ## Accomplishments
-69 unit tests and 72 browser checks run on every push. The browser checks press real keys, open the worksheet with zero network requests, reload the app offline, check a 390px phone, and run an axe-core audit with **0 violations** across all tabs and themes.
+70 unit tests and 74 browser checks run on every push. The browser checks press real keys, open the worksheet with zero network requests, reload the app offline, check a 390px phone, and run an axe-core audit with **0 violations** across all tabs and themes.
 
 ## What we learned
 Accessibility work is mostly about removing ambiguity. A sighted reader gets grouping for free from layout, so a listener needs it put into words. Testing with automated tools is necessary but not enough: the next step is testing with blind students and Hindi-medium teachers.
