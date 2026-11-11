@@ -41,18 +41,21 @@ The same barrier is doubled for students in Hindi-medium schools, where maths is
 |---|---|
 | **Listen** | Type or paste math. SayMath shows it as a real equation and reads it aloud with clear rules (below). A side-by-side *before/after* shows what a screen reader says for the raw text. |
 | **Explore** | Arrow keys walk the equation like a tree: ↓ into a part, ↑ back out, ← → between parts, Home for the whole thing, Space to repeat. Each step says its role ("numerator", "term 2 of 3"). Sighted users see the part highlighted and a breadcrumb ("whole expression › side › denominator"). |
-| **Practice** | 18 practice problems in 4 sets (equations; fractions, powers and roots; simplifying; calculus and matrices). Hear the problem, explore it, type an answer. **SayMath reads your answer back as you type** ("SayMath hears: x equals 5"), so you know it understood you. Answers are checked by value: `8/2`, `x = 4` and `4` all count; for simplifying, any equivalent expression counts. Hints in all three languages. Answers can also be spoken (**Say it**). |
+| **Practice** | 27 practice problems in 6 sets (equations; fractions, powers and roots; simplifying; calculus and matrices; trigonometry; expanding brackets). Hear the problem, explore it, type an answer. **SayMath reads your answer back as you type** ("SayMath hears: x equals 5"), so you know it understood you. Answers are checked by value: `8/2`, `x = 4` and `4` all count; for simplifying, any equivalent expression counts. Hints in all three languages. Answers can also be spoken (**Say it**). |
 | **Teach** | A teacher types one question per line (`Solve for x: 3x - 4 = 11 answer: x = 5`). SayMath previews every line as speech and **flags anything a listener could misunderstand**, like `1/2x`. One click downloads a **single HTML file of about 80 KB** with the whole engine inside: speech, explorer, the chosen language and answer checking, with no internet needed. Or download a **braille worksheet (.brf)** for an embosser (maths in Nemeth, Hindi and Marathi words in Bharati braille), or copy the questions as plain words for SMS. Questions can be written with Hindi or Marathi prompts. |
 | **Hindi and Marathi** | Every spoken pattern has a Hindi and a Marathi version in that language's word order: एक्स का वर्ग, ए बटा बी, एक्स, 5 से कम है (Hindi); एक्स चा वर्ग, ए भागिले बी, एक्स, 5 पेक्षा लहान आहे (Marathi). Every button, label, hint and error message is translated too. Devices with no Marathi voice use a Hindi voice. |
 | **More maths** | Sums, products, integrals, limits, derivatives, matrices and determinants, ±, degrees, ≈, inverse and hyperbolic trig. All spoken, drawn, explorable and checked by value. |
 | **Braille** | Each equation's **Nemeth Code** braille, to copy to a braille display or download as a .brf file for an embosser (experimental). |
 | **Read from a photo or PDF** | Photograph a printed or handwritten worksheet, or choose a PDF: Claude, an AI model by Anthropic, turns it into typed maths, flags anything it was unsure of, and the questions can be heard or added to a worksheet. Needs the internet and your own Anthropic API key; the photo goes straight from your device to Anthropic. |
 | **Say it** | Speak maths or answers ("x squared plus 3 equals 7") in English, Hindi or Marathi. SayMath types it and reads it back so you can check it heard you. |
+| **Paste LaTeX** | Maths copied from Word, Overleaf or a website as LaTeX (`\frac{-b \pm \sqrt{b^2-4ac}}{2a}`, `\int_0^1`, `\sum`, `\lim`, `\frac{d}{dx}`, `pmatrix`) is read the same as typed maths. |
+| **Copy as MathML or LaTeX** | Move the maths into Word, Google Docs, Overleaf or a screen reader that reads MathML. Copied LaTeX reads back exactly the same. |
+| **Maths keys** | On-screen keys for x², powers, √, fractions, brackets, π, ±, ≤, ≥, ∫ and Σ, inserted at the cursor: easier on phones and for anyone who finds symbols hard to type. |
 | **Read-along** | While SayMath speaks, the part being read is highlighted in the equation and in the words (helps learners with dyslexia and low vision). |
 | **Sound cues** | Short tones while exploring: rising going into a part, falling coming out, a click moving along, and a low buzz (plus a vibration on phones) at an edge. Can be turned off. |
 | **Comfort settings** | Extra spacing between letters, words and lines; large text; three themes; Esc stops speech; press **?** for all keyboard shortcuts. |
-| **Progress** | Each practice set remembers your best first-try score on this device. |
-| **Tamil and Bengali (preview)** | Spoken maths in Tamil and Bengali word order. The interface stays in English for now, and the wording needs review by native-speaking teachers. |
+| **Progress and drafts** | Each practice set remembers your best first-try score; Teach keeps the worksheet you are writing. Both stay on this device only. |
+| **Tamil and Bengali (preview)** | Spoken maths, the whole interface, worksheets and Say it in Tamil and Bengali. The wording needs review by native-speaking teachers. |
 | **Share and print** | Copy a link that opens the same maths in the same language. Print just the maths, its words and braille in large print. Press Esc to stop speech at any time. |
 | **Offline** | After the first visit the app works with no signal and can be installed to the home screen. |
 | **Readable** | Atkinson Hyperlegible font (designed for low vision), large / extra-large text, light, dark and high-contrast (yellow on black) themes, 44px touch targets. |
@@ -109,9 +112,9 @@ npm start                         # small built-in server, no installs
 Tests (Node 20+; browser tests need Google Chrome):
 
 ```bash
-npm test                          # 61 unit tests: parser, speech (3 languages), calculus, braille, answer checking, voice, photo, worksheets
+npm test                          # 67 unit tests: parser, speech (3 languages), calculus, braille, answer checking, voice, photo, worksheets
 node scripts/serve.mjs 8765 &     # browser tests expect the site here
-npm run test:browser              # 67 checks in headless Chrome with real key presses
+npm run test:browser              # 71 checks in headless Chrome with real key presses
 ```
 
 ## Testing evidence
@@ -127,6 +130,9 @@ Automated, run on every push by GitHub Actions:
 - **Shared links:** a link opens the same maths in the same language.
 - **Read-along, sound cues, spacing, shortcuts:** the spoken part is highlighted and cleared afterwards; an edge buzzes; the spacing setting applies; **?** opens the shortcuts list.
 - **Tamil and Bengali:** every kind of maths has words in both, and the app speaks them.
+- **LaTeX:** pasted LaTeX reads the same as typed maths, and every export reads back identically.
+- **Maths keys:** keys insert at the cursor.
+- **Phone width** is checked in Tamil and Bengali too, the longest-worded languages.
 - **Worksheet file:** opened as its own page, **0 external requests**, answer checking and explorer work inside it, fits a phone, under 100 KB.
 - **Offline:** the app reloads with the network cut off; settings are remembered.
 - **Phone width:** no sideways scrolling at 390px on any tab or in the worksheet.
@@ -147,9 +153,10 @@ Not yet done (and important): **testing with blind and low-vision students, with
 - **Say it depends on the browser.** It works in Chrome, Edge and Safari, not Firefox, and those browsers may send the voice to their own speech service (the app says so). It understands common phrases, not every way of saying maths.
 - **Voices depend on the device.** Speech uses the browser's built-in voice. Some devices have no Hindi or Marathi voice, and the app says so. Screen reader users can turn the built-in voice off and hear everything through their screen reader instead.
 - **Screen readers: tested only with VoiceOver on macOS.** The explorer uses `role="application"` and a live region, and works with keyboard only. NVDA, JAWS and TalkBack haven't been tested yet and may behave differently.
+- **LaTeX support covers common school and early college LaTeX**, not every package or macro.
 - **Up to early college maths:** calculus answers are checked numerically (very close counts as equal); no vectors, set notation, piecewise functions or chemistry.
 - **Answer checking compares values**, not working: it can't give credit for method, and it can't check proofs.
-- **Tamil and Bengali are previews.** Their spoken maths was written without native-speaking maths teachers and needs review; their buttons and labels are in English; letters are read as English letters in Tamil, because Tamil script writes b and p (and d and t) the same way.
+- **Tamil and Bengali are previews.** Their spoken maths and interface were written without native-speaking maths teachers and need review. Letters are read as English letters in Tamil, because Tamil script writes b and p (and d and t) the same way. Their practice hints are in English, and braille worksheets don't include Tamil or Bengali words yet.
 
 ## How it's built
 
@@ -163,6 +170,9 @@ src/lang/hi.js       Hindi phrasebook (Hindi word order)
 src/lang/mr.js       Marathi phrasebook (Marathi word order)
 src/lang/ta.js, bn.js  Tamil and Bengali phrasebooks (preview)
 src/cues.js          sound cues and vibration for the explorer
+src/latex.js         LaTeX → typed maths
+src/export.js        maths → MathML and LaTeX
+src/keypad.js        on-screen maths keys
 src/i18n.js          interface text in English, Hindi and Marathi
 src/braille.js       Nemeth braille, ASCII braille (.brf), English and Bharati text braille
 src/photo.js         reads maths from a photo with Claude (structured JSON output)

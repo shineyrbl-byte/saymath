@@ -19,14 +19,16 @@ When a blind student gets maths homework as typed text, their screen reader says
 ## What it does
 - **Listen:** type maths and hear it read with clear rules: every fraction, root and bracket says where it ends. A before/after panel plays what a screen reader says for the raw text next to SayMath.
 - **Explore:** arrow keys walk the equation: ↓ into the fraction, → to the denominator ("denominator: 2 a"), ↑ back out.
-- **Practice:** 18 problems, from equations to calculus. SayMath reads your answer back as you type, then checks it by value (8/2 counts as 4). Answers can be typed or spoken (**Say it**).
+- **Practice:** 27 problems in 6 sets, from equations to calculus and trigonometry. SayMath reads your answer back as you type, then checks it by value (8/2 counts as 4). Answers can be typed or spoken (**Say it**).
 - **Teach:** teachers type questions, and SayMath flags ambiguous ones like 1/2x. It then builds a single ~80 KB offline HTML worksheet with speech, explorer and answer checking inside, or a braille (.brf) file for an embosser.
 - **Read from a photo or PDF:** photograph a printed or handwritten worksheet, or choose a PDF; Claude turns it into typed maths, flags anything unsure, and SayMath reads it.
 - **Braille:** every equation in Nemeth Code braille, to copy or emboss (experimental).
-- **Five languages:** English, Hindi and Marathi for the spoken maths and the whole interface; Tamil and Bengali spoken maths in preview.
+- **Five languages:** English, Hindi and Marathi for the spoken maths and the whole interface; Tamil and Bengali in preview.
+- **Paste LaTeX, copy MathML or LaTeX:** maths moves in from and out to Word, Overleaf and other screen-reader tools.
+- **Maths keys:** on-screen keys for symbols, for phones and anyone who finds typing symbols hard.
 - **Read-along and sound cues:** the part being spoken is highlighted; tones and phone vibration help you feel your way through an equation.
 - **More maths:** sums, integrals, limits, derivatives, matrices, ±, degrees.
-- **Offline**, large text, extra spacing, high contrast, large-print printing, shareable links, practice progress, and a keyboard shortcuts list.
+- **Offline**, large text, extra spacing, high contrast, large-print printing, shareable links, practice progress, saved worksheet drafts, and a keyboard shortcuts list.
 
 ## One before-and-after
 **Before:** "x equals left paren dash b plus s q r t left paren b caret 2 dash 4 a c right paren right paren slash left paren 2 a right paren"
@@ -42,7 +44,7 @@ Plain JavaScript modules with no framework, build step or server. A parser turns
 - **Braille level indicators:** Nemeth marks every move up into a power and back down. Getting nested powers right (e^(x²)) meant tidying runs of level changes after the fact.
 
 ## Accomplishments
-61 unit tests and 67 browser checks run on every push. The browser checks press real keys, open the worksheet with zero network requests, reload the app offline, check a 390px phone, and run an axe-core audit with **0 violations** across all tabs and themes.
+67 unit tests and 71 browser checks run on every push. The browser checks press real keys, open the worksheet with zero network requests, reload the app offline, check a 390px phone, and run an axe-core audit with **0 violations** across all tabs and themes.
 
 ## What we learned
 Accessibility work is mostly about removing ambiguity. A sighted reader gets grouping for free from layout, so a listener needs it put into words. Testing with automated tools is necessary but not enough: the next step is testing with blind students and Hindi-medium teachers.
