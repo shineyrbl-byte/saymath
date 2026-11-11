@@ -308,19 +308,19 @@ export function parse(input) {
     switch (name) {
       case 'sum': case 'prod':
         if (args.length !== 3) throw bad();
-        return { type: 'bigop', op: name, lower: args[0], upper: args[1], body: args[2] };
+        return { type: 'bigop', op: name, lower: args[0], upper: args[1], body: unwrap(args[2]) };
       case 'int':
         if (!(args.length === 2 || args.length === 4) || !isVar(args[1])) throw bad();
-        return args.length === 2 ? { type: 'integral', body: args[0], v: args[1] }
-          : { type: 'integral', body: args[0], v: args[1], lower: args[2], upper: args[3] };
+        return args.length === 2 ? { type: 'integral', body: unwrap(args[0]), v: args[1] }
+          : { type: 'integral', body: unwrap(args[0]), v: args[1], lower: args[2], upper: args[3] };
       case 'lim':
         if (args.length !== 2 || !isVar(arrow.v)) throw bad();
-        return { type: 'limit', v: arrow.v, to: arrow.to, body: args[1] };
+        return { type: 'limit', v: arrow.v, to: arrow.to, body: unwrap(args[1]) };
       default: {
         if (!(args.length === 2 || args.length === 3) || !isVar(args[1])) throw bad();
         const order = args[2] ? args[2] : null;
         if (order && !(order.type === 'num' && /^\d+$/.test(order.value))) throw bad();
-        return { type: 'deriv', body: args[0], v: args[1], order: order ? Number(order.value) : 1 };
+        return { type: 'deriv', body: unwrap(args[0]), v: args[1], order: order ? Number(order.value) : 1 };
       }
     }
   }

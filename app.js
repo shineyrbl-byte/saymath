@@ -10,6 +10,7 @@ import { initSettings } from './src/settings.js';
 import { toBraille, toASCII } from './src/braille.js';
 import { download } from './src/download.js';
 import { initPhoto } from './src/photo-ui.js';
+import { toMathML, toLatex } from './src/export.js';
 import { canListen, listenOnce, spokenToMath } from './src/voice.js';
 
 let current = null; // { tree, words, src }
@@ -124,6 +125,12 @@ $('copyLink').addEventListener('click', async () => {
   try { await navigator.clipboard.writeText(url.href); announce(ui(settings.lang).linkCopied); } catch { announce(ui(settings.lang).copyFailed); }
 });
 $('printPage').addEventListener('click', () => window.print());
+async function copyAs(convert) {
+  if (!current) return;
+  try { await navigator.clipboard.writeText(convert(current.tree)); announce(ui(settings.lang).copied); } catch { announce(ui(settings.lang).copyFailed); }
+}
+$('copyMathML').addEventListener('click', () => copyAs(toMathML));
+$('copyLatex').addEventListener('click', () => copyAs(toLatex));
 // Say it: answer or enter maths by voice.
 async function hearSpeech(input, after) {
   const t = ui(settings.lang);

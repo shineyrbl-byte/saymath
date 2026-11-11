@@ -62,10 +62,12 @@ export function fromLatex(input) {
       const [num, a] = group(s, i + 5);
       const [den, b] = group(s, a);
       // \frac{d}{dx} f is a derivative.
-      const d = /^d([a-z])$/.exec(den.trim());
-      if (num.trim() === 'd' && d) {
+      const d = /^d\s*([a-z])(?:\^\{?(\d)\}?)?$/.exec(den.trim());
+      const top = /^d(?:\^\{?(\d)\}?)?$/.exec(num.trim());
+      if (top && d && (top[1] || '1') === (d[2] || '1')) {
         const end = restUntilRelation(s, b);
-        out += `diff(${fromLatex(s.slice(b, end).trim())}, ${d[1]})`;
+        const order = top[1] && top[1] !== '1' ? `, ${top[1]}` : '';
+        out += `diff(${fromLatex(s.slice(b, end).trim())}, ${d[1]}${order})`;
         i = end;
       } else {
         out += `((${fromLatex(num)})/(${fromLatex(den)}))`;

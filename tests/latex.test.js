@@ -34,3 +34,13 @@ test('calculus and matrices', () => {
   assert.equal(en('\\frac{d}{dx} x^3'), 'the derivative with respect to x of x cubed, end derivative');
   assert.equal(en('\\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}'), 'the 2 by 2 matrix: row 1: 1, 2; row 2: 3, 4; end matrix');
 });
+
+test('copying as LaTeX and pasting it back reads the same', async () => {
+  const { toLatex, toMathML } = await import('../src/export.js');
+  for (const s of ['x = (-b +/- sqrt(b^2 - 4ac))/(2a)', 'int(x^2, x, 0, 1) = 1/3', 'det([[a, b], [c, d]]) = ad - bc',
+    'sin^2 x + cos^2 x = 1', 'lim(x -> 0, sin(x)/x)', 'diff(x^3, x, 2)', 'sum(i=1, n, i^2)', 'log_2(8) + |x| + 3! + 30°', 'e^(x^2)', 'pi ~= 3.14']) {
+    assert.equal(en(toLatex(parse(s).tree)), en(s), s);
+  }
+  assert.equal(toMathML(parse('x^2/2').tree),
+    '<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mfrac><msup><mi>x</mi><mn>2</mn></msup><mn>2</mn></mfrac></math>');
+});
