@@ -144,6 +144,9 @@ input[type="text"]:focus, textarea:focus { border-color: var(--accent); }
 .m-index { font-size: 0.55em; vertical-align: 1em; line-height: 0; margin-right: -0.35em; }
 .m-fence { font-style: normal; }
 .braille-box { margin-top: 1rem; }
+.photo summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; }
+.photo input[type=password], .photo input[type=file] { width: 100%; max-width: 32rem; }
+.photo-privacy { border-left: 4px solid var(--focus); padding-left: 0.6rem; }
 .braille-box summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; }
 .braille { font-size: calc(1.8rem * var(--scale, 1)); line-height: 1.6; letter-spacing: 0.08em; white-space: pre-wrap; overflow-wrap: anywhere; margin: 0.5rem 0; }
 .m-limits { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 0.15em; line-height: 1.1; }

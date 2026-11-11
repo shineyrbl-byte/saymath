@@ -9,6 +9,7 @@ import { initTeacher } from './src/teacher.js';
 import { initSettings } from './src/settings.js';
 import { toBraille, toASCII } from './src/braille.js';
 import { download } from './src/download.js';
+import { initPhoto } from './src/photo-ui.js';
 
 let current = null; // { tree, words, src }
 
@@ -112,6 +113,20 @@ applyUI(settings.lang);
 update({ speakNow: false });
 initPractice();
 initTeacher();
+initPhoto({
+  useMath(math) {
+    $('mathIn').value = math;
+    update();
+    $('visual').focus();
+  },
+  toTeach(items) {
+    const box = $('wsLines');
+    const lines = items.map((it) => (it.prompt ? `${it.prompt.replace(/:\s*$/, '')}: ${it.math}` : it.math));
+    box.value = `${box.value.trim()}\n${lines.join('\n')}`.trim();
+    box.dispatchEvent(new Event('input'));
+    selectTab(tabs.find((x) => x.id === 'tab-teach'));
+  },
+});
 
 // Offline: after the first visit, SayMath works with no internet.
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {

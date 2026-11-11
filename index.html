@@ -109,6 +109,21 @@
         <button type="button" data-ex="det([[a, b], [c, d]]) = ad - bc" data-i18n="exMatrix">Matrix</button>
       </div>
 
+      <details class="card photo" id="photoBox">
+        <summary data-i18n="photoTitle">Read maths from a photo</summary>
+        <p class="hint" data-i18n="photoLead"></p>
+        <p class="hint photo-privacy" data-i18n="photoPrivacy"></p>
+        <label for="photoKey" class="big-label" data-i18n="photoKey">Anthropic API key</label>
+        <input id="photoKey" type="password" autocomplete="off" spellcheck="false">
+        <label class="check"><input type="checkbox" id="photoRemember"> <span data-i18n="photoRemember">Remember the key on this device</span></label>
+        <label for="photoFile" class="big-label" data-i18n="photoFile">Photo</label>
+        <input id="photoFile" type="file" accept="image/*">
+        <div class="row"><button type="button" id="photoRead" class="primary" data-i18n="photoRead">Read the photo</button></div>
+        <p id="photoStatus" class="hint" role="status"></p>
+        <ol id="photoItems" class="ws-preview"></ol>
+        <button type="button" id="photoToTeach" hidden data-i18n="photoToTeach">Add all to a worksheet</button>
+      </details>
+
       <div class="card result" id="result" hidden>
         <div class="visual" id="visual" tabindex="0" role="application"
              aria-roledescription="math explorer" aria-label="Math explorer" aria-describedby="exploreHelp" data-i18n-attr="aria-roledescription:explorerRole"></div>
@@ -227,7 +242,7 @@ Simplify: (x^2 - 4)/(x - 2) answer: x + 2</textarea>
   <div id="announcer" class="sr-only" aria-live="polite"></div>
 
   <footer class="wrap foot">
-    <p><span data-i18n="footer">Made for AccessED Hacks 2026. Runs in your browser: nothing you type is sent anywhere.</span> <span id="offlineNote"></span></p>
+    <p><span data-i18n="footer">Made for AccessED Hacks 2026. Runs in your browser: nothing you type is sent anywhere. Only Read from a photo sends the photo to Anthropic, when you choose to.</span> <span id="offlineNote"></span></p>
   </footer>
 
   <script type="module" src="app.js"></script>

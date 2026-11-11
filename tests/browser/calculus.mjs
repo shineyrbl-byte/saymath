@@ -21,4 +21,9 @@ export default async function ({ evaluate, press, wait, check, heard }) {
   await evaluate("document.querySelector('[data-ex^=\"x = (-b\"]').click()");
   await wait(150);
   check('braille panel shows Nemeth for the quadratic formula', await evaluate("document.getElementById('brailleOut').textContent"), '⠭⠀⠨⠅⠀⠹⠤⠃⠬⠜⠃⠘⠆⠐⠤⠲⠁⠉⠻⠌⠆⠁⠼');
+
+  await evaluate("(() => { document.getElementById('photoBox').open = true; document.getElementById('photoRead').click(); })()");
+  await wait(100);
+  check('photo panel asks for a photo first', await evaluate("document.getElementById('photoStatus').textContent"), 'Choose a photo first.');
+  check('photo panel explains privacy', await evaluate("document.querySelector('.photo-privacy').textContent"), /sent from your device to Anthropic/);
 }
