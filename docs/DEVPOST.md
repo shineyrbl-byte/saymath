@@ -28,7 +28,7 @@ When a blind student gets maths homework as typed text, their screen reader says
 - **Maths keys:** on-screen keys for symbols, for phones and anyone who finds typing symbols hard.
 - **Read-along and sound cues:** the part being spoken is highlighted; tones and phone vibration help you feel your way through an equation.
 - **More maths:** sums, integrals, limits, derivatives, matrices, ±, degrees.
-- **Offline**, large text, extra spacing, high contrast, large-print printing, shareable links, practice progress, saved worksheet drafts, and a keyboard shortcuts list.
+- **Offline**, large text, extra spacing, high contrast, large-print printing, shareable links, practice progress, saved worksheet drafts, results a student can send to their teacher, answer sounds, and a keyboard shortcuts list.
 
 ## One before-and-after
 **Before:** "x equals left paren dash b plus s q r t left paren b caret 2 dash 4 a c right paren right paren slash left paren 2 a right paren"
@@ -44,7 +44,7 @@ Plain JavaScript modules with no framework, build step or server. A parser turns
 - **Braille level indicators:** Nemeth marks every move up into a power and back down. Getting nested powers right (e^(x²)) meant tidying runs of level changes after the fact.
 
 ## Accomplishments
-67 unit tests and 71 browser checks run on every push. The browser checks press real keys, open the worksheet with zero network requests, reload the app offline, check a 390px phone, and run an axe-core audit with **0 violations** across all tabs and themes.
+69 unit tests and 72 browser checks run on every push. The browser checks press real keys, open the worksheet with zero network requests, reload the app offline, check a 390px phone, and run an axe-core audit with **0 violations** across all tabs and themes.
 
 ## What we learned
 Accessibility work is mostly about removing ambiguity. A sighted reader gets grouping for free from layout, so a listener needs it put into words. Testing with automated tools is necessary but not enough: the next step is testing with blind students and Hindi-medium teachers.
