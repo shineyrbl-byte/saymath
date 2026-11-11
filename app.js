@@ -11,6 +11,7 @@ import { toBraille, toASCII } from './src/braille.js';
 import { download } from './src/download.js';
 import { initPhoto } from './src/photo-ui.js';
 import { toMathML, toLatex } from './src/export.js';
+import { initKeypad } from './src/keypad.js';
 import { canListen, listenOnce, spokenToMath } from './src/voice.js';
 
 let current = null; // { tree, words, src }
@@ -223,6 +224,8 @@ applyUI(settings.lang);
 update({ speakNow: false });
 initPractice();
 initTeacher();
+initKeypad($('mathKeys'), $('mathIn'));
+initKeypad($('pKeys'), $('pAnswer'));
 initPhoto({
   useMath(math) {
     $('mathIn').value = math;

@@ -56,4 +56,8 @@ export default async function ({ evaluate, press, wait, check, heard, send }) {
     check(`${lang} (preview) speaks the maths`, await evaluate("document.getElementById('spoken').textContent"), lang === 'ta' ? 'a இல் b' : 'এক্স এর বর্গ');
   }
   await evaluate("(() => { const l = document.getElementById('lang'); l.value = 'en'; l.dispatchEvent(new Event('change')); })()");
+
+  await evaluate("(() => { document.getElementById('tab-listen').click(); const i = document.getElementById('mathIn'); i.value = ''; i.focus(); document.querySelectorAll('#mathKeys .key')[2].click(); i.setRangeText('9', i.selectionStart, i.selectionEnd, 'end'); i.setSelectionRange(i.value.length, i.value.length); document.querySelectorAll('#mathKeys .key')[8].click(); i.setRangeText('3', i.selectionStart, i.selectionEnd, 'end'); document.getElementById('mathForm').requestSubmit(); })()");
+  await wait(100);
+  check('maths keys insert at the cursor', await evaluate("document.getElementById('mathIn').value + ' | ' + document.querySelector('#mathKeys .key').getAttribute('aria-label')"), 'sqrt(9) = 3 | squared');
 }
