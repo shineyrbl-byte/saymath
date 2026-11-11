@@ -10,7 +10,12 @@ const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/M
 const SITE = process.env.URL || 'http://localhost:8765/';
 const port = 9333;
 const chrome = spawn(CHROME, ['--headless=new', `--remote-debugging-port=${port}`, '--no-first-run',
-  `--user-data-dir=${mkdtempSync(join(tmpdir(), 'sm-'))}`, ...(process.env.CI ? ['--no-sandbox'] : []), 'about:blank'], { stdio: 'ignore' });
+  `--user-data-dir=${mkdtempSync(join(tmpdir(), 'sm-'))}`, ...(process.env.CI ? ['--no-sandbox'] : []), 'about:blank'], { stdio: ['ignore', 'ignore', 'pipe'] });
+// Keep Chrome's error output, to explain a failed start.
+let chromeErr = ''; let chromeExit = null;
+chrome.stderr.on('data', (d) => { chromeErr = (chromeErr + d).slice(-2000); });
+chrome.on('exit', (code) => { chromeExit = code; });
+chrome.on('error', (e) => { chromeErr += e.message; chromeExit = -1; });
 // Close Chrome even if the run is stopped early, so no hidden Chrome is left behind.
 const stop = () => { try { chrome.kill(); } catch { /* already gone */ } };
 process.on('exit', stop);
@@ -19,7 +24,8 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 let ws; let id = 0; const pending = new Map();
 async function connect() {
-  for (let i = 0; i < 50; i++) {
+  // Cold starts on CI machines can take several seconds.
+  for (let i = 0; i < 200 && chromeExit === null; i++) {
     try {
       const list = await (await fetch(`http://localhost:${port}/json`)).json();
       const page = list.find((t) => t.type === 'page');
@@ -32,7 +38,7 @@ async function connect() {
       return;
     } catch { await wait(100); }
   }
-  throw new Error('Chrome did not start');
+  throw new Error(`Chrome did not start${chromeExit !== null ? ` (exited with ${chromeExit})` : ' within 20 seconds'}\n${chromeErr}`);
 }
 const send = (method, params = {}) => new Promise((r) => { const i = ++id; pending.set(i, r); ws.send(JSON.stringify({ id: i, method, params })); });
 const evaluate = async (expr) => (await send('Runtime.evaluate', { expression: expr, awaitPromise: true, returnByValue: true })).result.result.value;
