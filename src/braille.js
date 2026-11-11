@@ -156,6 +156,37 @@ const BHARATI = {
 };
 const DEVANAGARI_NUM = '०१२३४५६७८९';
 
+// Bharati braille is shared across Indian scripts: the same sound has the
+// same cell. These map Bengali and Tamil letters to the Devanagari letter
+// with the same sound, then use the table above. Tamil short e and short o,
+// and the Tamil letters ழ ள ற ன, have cells of their own. EXPERIMENTAL.
+const BENGALI_TO_DEVANAGARI = (() => {
+  const m = {};
+  // Bengali and Devanagari letters sit at the same offsets in Unicode.
+  for (let c = 0x0985; c <= 0x09CD; c++) m[String.fromCharCode(c)] = String.fromCharCode(c - 0x0080);
+  Object.assign(m, { 'ং': 'ं', 'ঁ': 'ँ', 'ঃ': 'ः', 'য়': 'य', 'ড়': 'ड', 'ঢ়': 'ढ', 'ৎ': 'त्', '।': '।' });
+  return m;
+})();
+const TAMIL = {
+  'அ': '⠁', 'ஆ': '⠜', 'இ': '⠊', 'ஈ': '⠔', 'உ': '⠥', 'ஊ': '⠳', 'எ': '⠢', 'ஏ': '⠑', 'ஐ': '⠌', 'ஒ': '⠭', 'ஓ': '⠕', 'ஔ': '⠪',
+  'ா': '⠜', 'ி': '⠊', 'ீ': '⠔', 'ு': '⠥', 'ூ': '⠳', 'ெ': '⠢', 'ே': '⠑', 'ை': '⠌', 'ொ': '⠭', 'ோ': '⠕', 'ௌ': '⠪', '்': '⠈',
+  'க': '⠅', 'ங': '⠬', 'ச': '⠉', 'ஞ': '⠒', 'ட': '⠾', 'ண': '⠼', 'த': '⠞', 'ந': '⠝', 'ப': '⠏', 'ம': '⠍',
+  'ய': '⠽', 'ர': '⠗', 'ல': '⠇', 'வ': '⠧', 'ழ': '⠷', 'ள': '⠸', 'ற': '⠻', 'ன': '⠰', 'ஜ': '⠚', 'ஷ': '⠯', 'ஸ': '⠎', 'ஹ': '⠓',
+};
+
+export function indicToBraille(text) {
+  if (/[\u0B80-\u0BFF]/.test(text)) {
+    return [...text].map((c) => {
+      if (TAMIL[c]) return TAMIL[c];
+      const d = '௦௧௨௩௪௫௬௭௮௯'.indexOf(c);
+      if (d >= 0) return `⠼${TEXT_DIGITS[d]}`;
+      return devanagariToBraille(c);
+    }).join('').replace(/(⠼[⠁⠃⠉⠙⠑⠋⠛⠓⠊⠚])⠼/g, '$1');
+  }
+  const deva = [...text].map((c) => BENGALI_TO_DEVANAGARI[c] || (/[০-৯]/.test(c) ? String(c.charCodeAt(0) - 0x09E6) : c)).join('');
+  return devanagariToBraille(deva);
+}
+
 export function devanagariToBraille(text) {
   let out = '';
   for (let i = 0; i < text.length;) {

@@ -9,6 +9,7 @@ import { attachExplorer } from './explorer.js';
 import { checkAnswer } from './evaluate.js';
 import { SETS, PROMPTS } from './problems.js';
 import { $, settings, say, mountMath } from './ui.js';
+import { cue } from './cues.js';
 
 const T = {
   en: {
@@ -181,6 +182,7 @@ export function initPractice() {
       solved.add(index);
       const ans = p.solveFor ? `${p.solveFor} = ${p.answer}` : p.answer;
       msg = t().correct(words(ans));
+      if (settings.cues) cue('right');
       feedback(msg, 'good');
       $('pScore').textContent = t().score(firstTry, set.problems.length);
       $('pNext').focus();
@@ -192,6 +194,7 @@ export function initPractice() {
         unreadable: () => t().unreadable(result.error ? explain(result.error, settings.lang) : (result.message || '')),
       }[result.reason]();
       feedback(msg, 'bad');
+      if (settings.cues) cue('wrong');
       if (tries >= 2) $('pShow').hidden = false;
     }
     say(msg);

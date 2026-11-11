@@ -33,3 +33,14 @@ test('every construct has words in both preview languages', () => {
     assert.match(describeStep({ node: parse('2').tree, role: 'denominator' }, { lang }), /: 2$/);
   }
 });
+
+test('every practice problem has a hint and prompt in every language', async () => {
+  const { SETS, PROMPTS } = await import('../src/problems.js');
+  for (const lang of languages()) {
+    assert.ok(PROMPTS[lang], `prompts in ${lang}`);
+    for (const set of SETS) {
+      assert.ok(set.title[lang], `${set.id} title in ${lang}`);
+      for (const p of set.problems) assert.ok(p.hint[lang], `${p.math} hint in ${lang}`);
+    }
+  }
+});

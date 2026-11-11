@@ -15,32 +15,38 @@
       hears: 'SayMath hears:', correct: 'Correct!', wrong: (w) => `Not yet. Your answer reads as: ${w}.`,
       letters: 'Your answer still has a letter in it. Give a number.', empty: 'Type an answer first.',
       bad: (m) => `I couldn't read that. ${m}`, score: (c, n) => `${c} of ${n} correct`, voice: 'Speak aloud',
+      copy: 'Copy my results (to send to my teacher)', copied: 'Results copied. Paste them into WhatsApp, SMS or email.', right: 'right', wrong: 'not yet', notTried: 'not tried',
       lang: 'Language', offline: 'This worksheet works offline. Made with SayMath.' },
     hi: { question: (i, n) => `प्रश्न ${i}, ${n} में से`, hear: 'सुनिए', yours: 'आपका उत्तर', check: 'जाँचिए',
       hears: 'SayMath सुनता है:', correct: 'सही!', wrong: (w) => `अभी नहीं। आपका उत्तर: ${w}।`,
       letters: 'आपके उत्तर में अभी भी अक्षर है। एक संख्या लिखिए।', empty: 'पहले उत्तर लिखिए।',
       bad: (m) => `मैं यह पढ़ नहीं पाया। ${m}`, score: (c, n) => `${n} में से ${c} सही`, voice: 'आवाज़ में सुनें',
+      copy: 'मेरे परिणाम कॉपी कीजिए (शिक्षक को भेजने के लिए)', copied: 'परिणाम कॉपी हो गए। WhatsApp, SMS या ईमेल में पेस्ट कीजिए।', right: 'सही', wrong: 'अभी नहीं', notTried: 'नहीं किया',
       lang: 'भाषा', offline: 'यह वर्कशीट बिना इंटरनेट के चलती है। SayMath से बनी।' },
     mr: { question: (i, n) => `प्रश्न ${i}, ${n} पैकी`, hear: 'ऐका', yours: 'तुमचे उत्तर', check: 'तपासा',
       hears: 'SayMath ऐकते:', correct: 'बरोबर!', wrong: (w) => `अजून नाही. तुमचे उत्तर: ${w}.`,
       letters: 'तुमच्या उत्तरात अजून अक्षर आहे. एक संख्या लिहा.', empty: 'आधी उत्तर लिहा.',
       bad: (m) => `मला हे वाचता आले नाही. ${m}`, score: (c, n) => `${n} पैकी ${c} बरोबर`, voice: 'आवाजात ऐका',
+      copy: 'माझे निकाल कॉपी करा (शिक्षकांना पाठवण्यासाठी)', copied: 'निकाल कॉपी झाले. WhatsApp, SMS किंवा ईमेलमध्ये पेस्ट करा.', right: 'बरोबर', wrong: 'अजून नाही', notTried: 'केले नाही',
       lang: 'भाषा', offline: 'ही वर्कशीट इंटरनेटशिवाय चालते. SayMath ने बनवली.' },
     ta: { question: (i, n) => `கேள்வி ${n} இல் ${i}`, hear: 'கேளுங்கள்', yours: 'உங்கள் விடை', check: 'சரிபார்',
       hears: 'SayMath கேட்பது:', correct: 'சரி!', wrong: (w) => `இன்னும் இல்லை. உங்கள் விடை: ${w}.`,
       letters: 'உங்கள் விடையில் இன்னும் எழுத்து உள்ளது. ஒரு எண்ணைத் தாருங்கள்.', empty: 'முதலில் விடையை எழுதுங்கள்.',
       bad: (m) => `இதைப் படிக்க முடியவில்லை. ${m}`, score: (c, n) => `${n} இல் ${c} சரி`, voice: 'குரலில் கேளுங்கள்',
+      copy: 'என் முடிவுகளை நகலெடு (ஆசிரியருக்கு அனுப்ப)', copied: 'முடிவுகள் நகலெடுக்கப்பட்டன. WhatsApp, SMS அல்லது மின்னஞ்சலில் ஒட்டுங்கள்.', right: 'சரி', wrong: 'இன்னும் இல்லை', notTried: 'முயலவில்லை',
       lang: 'மொழி', offline: 'இந்தப் பணித்தாள் இணையமில்லாமல் இயங்கும். SayMath ஆல் உருவாக்கப்பட்டது.' },
     bn: { question: (i, n) => `প্রশ্ন ${n}টির মধ্যে ${i}`, hear: 'শুনুন', yours: 'আপনার উত্তর', check: 'যাচাই করুন',
       hears: 'SayMath শুনছে:', correct: 'ঠিক!', wrong: (w) => `এখনও হয়নি। আপনার উত্তর: ${w}।`,
       letters: 'আপনার উত্তরে এখনও অক্ষর আছে। একটি সংখ্যা লিখুন।', empty: 'আগে উত্তর লিখুন।',
       bad: (m) => `এটি পড়া গেল না। ${m}`, score: (c, n) => `${n}টির মধ্যে ${c}টি ঠিক`, voice: 'কণ্ঠে শুনুন',
+      copy: 'আমার ফলাফল কপি করুন (শিক্ষককে পাঠাতে)', copied: 'ফলাফল কপি হয়েছে। WhatsApp, SMS বা ইমেলে পেস্ট করুন।', right: 'ঠিক', wrong: 'এখনও হয়নি', notTried: 'চেষ্টা হয়নি',
       lang: 'ভাষা', offline: 'এই ওয়ার্কশিট ইন্টারনেট ছাড়াই চলে। SayMath দিয়ে তৈরি।' },
   };
 
   let lang = DATA.lang in PHRASES ? DATA.lang : 'en';
   let voiceOn = true;
   const done = new Set();
+  const tried = new Set();
   const opts = () => ({ lang, mode: 'clear' });
   const words = (src) => speak(parse(src).tree, opts());
 
@@ -132,6 +138,8 @@
           e.preventDefault();
           if (!input.value.trim()) { fb.textContent = t.empty; fb.className = 'feedback bad'; say(t.empty); return; }
           const r = checkAnswer(input.value, q.answer, { solveFor: q.solveFor });
+          tried.add(i);
+          M_cues.cue(r.ok ? 'right' : 'wrong');
           let msg;
           if (r.ok) { msg = t.correct; done.add(i); fb.className = 'feedback good'; } else {
             fb.className = 'feedback bad';
@@ -146,7 +154,19 @@
       }
       main.append(card);
     });
-    main.append(score, h('p', { className: 'hint', textContent: t.offline }));
+    // Results a student can send to their teacher: no server needed.
+    const results = h('button', { type: 'button', textContent: t.copy, id: 'copyResults' });
+    results.addEventListener('click', async () => {
+      const lines = [DATA.title, t.score(done.size, qs.filter((q) => q.answer).length), ''];
+      qs.forEach((q, i) => { if (q.answer) lines.push(`${i + 1}. ${done.has(i) ? t.right : tried.has(i) ? t.wrong : t.notTried}`); });
+      const text = lines.join('\n');
+      try { await navigator.clipboard.writeText(text); say(t.copied); } catch {
+        const box = h('textarea', { value: text, rows: lines.length, readOnly: true });
+        results.after(box);
+        box.select();
+      }
+    });
+    main.append(score, h('div', { className: 'row' }, results), h('p', { className: 'hint', textContent: t.offline }));
     updateScore();
   }
 

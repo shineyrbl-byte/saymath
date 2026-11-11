@@ -29,4 +29,12 @@ export default async function ({ evaluate, press, wait, check, heard }) {
   await evaluate("document.querySelectorAll('.visual')[1].focus()");
   await press('ArrowDown');
   check('worksheet explorer works', await heard(), /^inside the root: x plus 1$/);
+  const results = await evaluate(`(async () => {
+    let copied = '';
+    navigator.clipboard.writeText = async (t) => { copied = t; };
+    document.getElementById('copyResults').click();
+    await new Promise((r) => setTimeout(r, 100));
+    return copied;
+  })()`);
+  check('worksheet: student can copy results for the teacher', results, 'Test sheet\n1 of 1 correct\n\n1. right');
 }

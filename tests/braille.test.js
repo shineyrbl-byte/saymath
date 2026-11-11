@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parse } from '../src/parser.js';
-import { toBraille, toASCII, textToBraille, devanagariToBraille } from '../src/braille.js';
+import { toBraille, toASCII, textToBraille, devanagariToBraille, indicToBraille } from '../src/braille.js';
 import { parseWorksheet, worksheetBraille } from '../src/worksheet.js';
 
 const brf = (s) => toASCII(toBraille(parse(s).tree));
@@ -58,4 +58,12 @@ test('Bharati braille for Hindi and Marathi words (experimental)', () => {
   const out = worksheetBraille('गृहकार्य', '', qs, { toBraille, toASCII, textToBraille, devanagariToBraille });
   assert.match(out, /#2X\+1 \.K #7/);
   assert.ok(out.split('\r\n')[0].length > 0);
+});
+
+test('Bharati braille for Bengali and Tamil words (experimental): same sound, same cell', () => {
+  // গণিত (Bengali) and गणित (Hindi) are the same word, so the same braille.
+  assert.equal(indicToBraille('গণিত'), devanagariToBraille('गणित'));
+  assert.equal(indicToBraille('১২'), '⠼⠁⠃');
+  // கணிதம் (Tamil): க ண ி த ம ்
+  assert.equal(indicToBraille('கணிதம்'), '⠅⠼⠊⠞⠍⠈');
 });

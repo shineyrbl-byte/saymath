@@ -51,7 +51,7 @@ export function worksheetText(title, instructions, questions, opts) {
 // Braille worksheet (.brf): uncontracted English for the words, Nemeth
 // Code for the maths. Lines are at most 40 cells and pages 25 lines, the
 // usual size for braille embossers. Experimental.
-export function worksheetBraille(title, instructions, questions, { toBraille, toASCII, textToBraille, devanagariToBraille }) {
+export function worksheetBraille(title, instructions, questions, { toBraille, toASCII, textToBraille, devanagariToBraille, indicToBraille }) {
   const WIDTH = 40;
   const PAGE = 25;
   const wrap = (cells) => {
@@ -70,7 +70,8 @@ export function worksheetBraille(title, instructions, questions, { toBraille, to
   };
   // English words in English braille; Hindi and Marathi words in Bharati braille (experimental).
   const words = (t) => (/^[\x20-\x7e]*$/.test(t) ? textToBraille(t)
-    : devanagariToBraille && /[\u0900-\u097F]/.test(t) ? devanagariToBraille(t) : '');
+    : devanagariToBraille && /[\u0900-\u097F]/.test(t) ? devanagariToBraille(t)
+      : indicToBraille && /[\u0980-\u09FF\u0B80-\u0BFF]/.test(t) ? indicToBraille(t) : '');
   const lines = [...wrap(words(title)), ''];
   if (instructions && words(instructions)) lines.push(...wrap(words(instructions)), '');
   questions.filter((q) => !q.error).forEach((q, i) => {
