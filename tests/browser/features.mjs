@@ -1,5 +1,5 @@
-// Browser checks: calculus and matrices can be explored with the arrow keys.
-export default async function ({ evaluate, press, wait, check, heard }) {
+// Browser checks for newer features: calculus and matrix exploring, braille, photo panel, shared links.
+export default async function ({ evaluate, press, wait, check, heard, send }) {
   await evaluate("document.getElementById('tab-listen').click()");
   await evaluate("document.querySelector('[data-ex^=\"int(\"]').click()");
   await wait(150);
@@ -26,4 +26,9 @@ export default async function ({ evaluate, press, wait, check, heard }) {
   await wait(100);
   check('photo panel asks for a photo first', await evaluate("document.getElementById('photoStatus').textContent"), 'Choose a photo first.');
   check('photo panel explains privacy', await evaluate("document.querySelector('.photo-privacy').textContent"), /sent from your device to Anthropic/);
+
+  await send('Page.navigate', { url: `http://localhost:8765/?m=${encodeURIComponent('a^2 + b^2 = c^2')}&lang=hi&t=${Date.now()}#listen` });
+  await wait(1200);
+  check('a shared link opens that maths in that language', await evaluate("document.getElementById('spoken').textContent"), 'ए का वर्ग प्लस बी का वर्ग बराबर सी का वर्ग');
+  await evaluate("(() => { const l = document.getElementById('lang'); l.value = 'en'; l.dispatchEvent(new Event('change')); })()");
 }

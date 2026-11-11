@@ -10,6 +10,7 @@ import { initSettings } from './src/settings.js';
 import { toBraille, toASCII } from './src/braille.js';
 import { download } from './src/download.js';
 import { initPhoto } from './src/photo-ui.js';
+import { canListen, listenOnce, spokenToMath } from './src/voice.js';
 
 let current = null; // { tree, words, src }
 
@@ -64,6 +65,40 @@ $('copyBraille').addEventListener('click', async () => {
   try { await navigator.clipboard.writeText(current.braille); announce(ui(settings.lang).brailleCopied); } catch { announce(ui(settings.lang).copyFailed); }
 });
 $('downloadBrf').addEventListener('click', () => current && download('saymath.brf', `${toASCII(current.braille)}\r\n`, 'text/plain'));
+// A link that opens SayMath on this maths: ?m=<maths>&lang=<language>#listen
+$('copyLink').addEventListener('click', async () => {
+  if (!current) return;
+  const url = new URL(location.href);
+  url.search = new URLSearchParams({ m: current.src, lang: settings.lang }).toString();
+  url.hash = 'listen';
+  try { await navigator.clipboard.writeText(url.href); announce(ui(settings.lang).linkCopied); } catch { announce(ui(settings.lang).copyFailed); }
+});
+$('printPage').addEventListener('click', () => window.print());
+// Say it: answer or enter maths by voice.
+async function hearSpeech(input, after) {
+  const t = ui(settings.lang);
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
+  announce(t.voiceListening);
+  try {
+    const heard = await listenOnce(settings.lang);
+    const typed = spokenToMath(heard, settings.lang);
+    input.value = typed;
+    input.dispatchEvent(new Event('input'));
+    announce(t.voiceHeard(heard, typed));
+    after();
+  } catch {
+    announce(t.voiceFailed);
+  }
+}
+if (canListen()) {
+  document.querySelectorAll('.mic-row').forEach((r) => { r.hidden = false; });
+  $('mathMic').addEventListener('click', () => hearSpeech($('mathIn'), () => update()));
+  $('pMic').addEventListener('click', () => hearSpeech($('pAnswer'), () => setTimeout(() => $('pEchoHear').click(), 250)));
+}
+// Esc stops speaking, anywhere on the page.
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && 'speechSynthesis' in window) speechSynthesis.cancel();
+});
 document.querySelectorAll('[data-ex]').forEach((b) => b.addEventListener('click', () => {
   $('mathIn').value = b.dataset.ex;
   update();
@@ -109,6 +144,10 @@ window.addEventListener('hashchange', tabFromHash);
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
 
 initSettings();
+// Opened from a shared link: show that maths, in that language.
+const shared = new URLSearchParams(location.search);
+if (shared.get('lang') && [...$('lang').options].some((o) => o.value === shared.get('lang'))) $('lang').value = shared.get('lang');
+if (shared.get('m')) $('mathIn').value = shared.get('m').slice(0, 500);
 applyUI(settings.lang);
 update({ speakNow: false });
 initPractice();

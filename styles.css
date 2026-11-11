@@ -144,6 +144,19 @@ input[type="text"]:focus, textarea:focus { border-color: var(--accent); }
 .m-index { font-size: 0.55em; vertical-align: 1em; line-height: 0; margin-right: -0.35em; }
 .m-fence { font-style: normal; }
 .braille-box { margin-top: 1rem; }
+
+/* Large print: only the maths and its words, big, black on white. */
+@media print {
+  header.top, .tabs, .skip, .examples, form, .row, .crumbs, #exploreHelp, .compare, .photo, .foot, .syntax, .braille-box summary ~ .row { display: none !important; }
+  [role=tabpanel][hidden] { display: none !important; }
+  body { background: #fff !important; color: #000 !important; font-size: 18pt; }
+  .card { border: 0; background: #fff; padding: 0; }
+  .visual { font-size: 36pt; color: #000; }
+  .spoken { font-size: 18pt; }
+  .braille-box[open] .braille { font-size: 24pt; }
+}
+.mic-row { align-items: center; }
+.mic-row .hint { flex: 1 1 14rem; margin: 0; }
 .photo summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; }
 .photo input[type=password], .photo input[type=file] { width: 100%; max-width: 32rem; }
 .photo-privacy { border-left: 4px solid var(--focus); padding-left: 0.6rem; }

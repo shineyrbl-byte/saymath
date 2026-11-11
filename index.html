@@ -95,6 +95,10 @@
             <li><kbd>+/-</kbd> or <kbd>±</kbd>, <kbd>30°</kbd>, <kbd>~=</kbd> or <kbd>≈</kbd>, <kbd>asin cosh</kbd>…</li>
           </ul>
         </details>
+        <div class="row mic-row" hidden>
+          <button type="button" id="mathMic" class="mic" data-i18n="sayIt">🎤 Say it</button>
+          <p class="hint" data-i18n="voiceNote"></p>
+        </div>
         <div id="mathMsg" class="msg" role="alert"></div>
       </form>
 
@@ -128,12 +132,14 @@
         <div class="visual" id="visual" tabindex="0" role="application"
              aria-roledescription="math explorer" aria-label="Math explorer" aria-describedby="exploreHelp" data-i18n-attr="aria-roledescription:explorerRole"></div>
         <p class="crumbs" aria-hidden="true"><span class="label-inline" data-i18n="youAreOn">You are on:</span> <span id="crumbs"></span></p>
-        <p id="exploreHelp" class="hint" data-i18n-html="exploreHelpHtml">Explore by keyboard: click the equation or press <kbd>Tab</kbd> to reach it, then <kbd>↓</kbd> goes inside a part, <kbd>↑</kbd> comes back out, <kbd>←</kbd> <kbd>→</kbd> move between parts, <kbd>Space</kbd> repeats.</p>
+        <p id="exploreHelp" class="hint" data-i18n-html="exploreHelpHtml">Explore by keyboard: click the equation or press <kbd>Tab</kbd> to reach it, then <kbd>↓</kbd> goes inside a part, <kbd>↑</kbd> comes back out, <kbd>←</kbd> <kbd>→</kbd> move between parts, <kbd>Space</kbd> repeats, <kbd>Esc</kbd> stops speaking.</p>
         <h2 class="label" data-i18n="saymathSays">SayMath says</h2>
         <p class="spoken" id="spoken"></p>
         <div class="row">
           <button type="button" id="replay" data-i18n="hearAgain">Hear again</button>
           <button type="button" id="copySpoken" data-i18n="copyWords">Copy words</button>
+          <button type="button" id="copyLink" data-i18n="copyLink">Copy a link to this maths</button>
+          <button type="button" id="printPage" data-i18n="printPage">Print in large print</button>
         </div>
         <details class="braille-box">
           <summary data-i18n="brailleTitle">Braille (Nemeth Code, experimental)</summary>
@@ -188,6 +194,7 @@
             <input id="pAnswer" type="text" spellcheck="false" aria-describedby="pEchoLine">
             <button type="submit" class="primary" data-i18n="check">Check</button>
           </div>
+          <div class="row mic-row" hidden><button type="button" id="pMic" class="mic" data-i18n="sayIt">🎤 Say it</button></div>
           <p id="pEchoLine" class="echo"><span id="pEchoLabel" class="label-inline">SayMath hears:</span> <span id="pEcho">…</span></p>
           <button type="button" id="pEchoHear" data-i18n="hearMyAnswer">Hear my answer</button>
         </form>
