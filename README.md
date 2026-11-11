@@ -111,14 +111,18 @@ Automated, run on every push by GitHub Actions:
 - **Accessibility audit:** [axe-core](https://github.com/dequelabs/axe-core) on every tab in light, dark and high-contrast themes: **0 violations** in all 9 runs.
 - **Content:** every built-in answer key is checked to satisfy its equation.
 
-Not yet done (and important): **testing with blind and low-vision students and with Hindi-medium maths teachers.** The automated checks prove the app does what it was designed to do. They can't prove the design is right for real learners. This is the next step.
+Manual:
+
+- **VoiceOver on macOS:** I tested the app myself with VoiceOver and the app's own voice turned off. VoiceOver read the equation, the arrow keys walked into the fraction and announced each part ("numerator", "denominator: 2 a"), and Practice read back my answer and the feedback. Everything worked as designed.
+
+Not yet done (and important): **testing with blind and low-vision students and with Hindi-medium maths teachers.** My own VoiceOver test shows the app works with a screen reader, but I'm not a daily screen reader user. Only real learners can show whether the design is right for them. This is the next step.
 
 ## Limitations
 
 - **Typed input only.** SayMath can't read equations inside images or PDFs yet. A teacher or student has to type them (or paste typed text).
 - **Hindi wording is a first version.** It follows common classroom usage, but it hasn't been reviewed by Hindi-medium maths teachers. The buttons and labels are still in English. Only the spoken maths, prompts and feedback are in Hindi.
 - **Voices depend on the device.** Speech uses the browser's built-in voice. Some devices have no Hindi voice, and the app says so. Screen reader users can turn the built-in voice off and hear everything through their screen reader instead.
-- **Screen reader support is designed but not user-tested.** The explorer uses `role="application"` and a live region, and works with keyboard only. Behaviour can differ between NVDA, JAWS, VoiceOver and TalkBack.
+- **Screen readers: tested only with VoiceOver on macOS.** The explorer uses `role="application"` and a live region, and works with keyboard only. NVDA, JAWS and TalkBack haven't been tested yet and may behave differently.
 - **School-level maths only:** no matrices, integrals, sums or calculus notation yet.
 - **Answer checking compares values**, not working: it can't give credit for method, and it can't check proofs.
 - **No braille output** beyond copying plain words to a braille display (no Nemeth or Bharati braille maths code).
