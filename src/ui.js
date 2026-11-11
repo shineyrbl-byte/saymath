@@ -26,7 +26,8 @@ export function announce(text) {
 }
 
 // Speaks with the device's built-in voice (works offline on most phones).
-export function say(text, lang = settings.lang) {
+// `onBoundary(charIndex)` and `onEnd()` (optional) follow the speech, for read-along highlighting.
+export function say(text, lang = settings.lang, { onBoundary, onEnd } = {}) {
   announce(text);
   if (!settings.voiceOn || !('speechSynthesis' in window)) return;
   speechSynthesis.cancel();
@@ -41,6 +42,8 @@ export function say(text, lang = settings.lang) {
   if (voice) u.voice = voice;
   else if (lang !== 'en') announce(`${text} ${ui(settings.lang).noVoice(want)}`);
   u.rate = settings.rate;
+  if (onBoundary) u.onboundary = (e) => onBoundary(e.charIndex);
+  if (onEnd) { u.onend = onEnd; u.onerror = onEnd; }
   speechSynthesis.speak(u);
 }
 

@@ -181,6 +181,7 @@ input[type="text"]:focus, textarea:focus { border-color: var(--accent); }
 .crumbs { margin: -6px 0 4px; font-size: 0.9rem; }
 .label-inline { color: var(--muted); }
 #crumbs { font-weight: 700; }
+.reading { background: var(--hl); border-radius: 4px; box-shadow: 0 0 0 2px var(--hl); }
 .m-node.is-current { background: var(--hl); outline: 2px solid var(--focus); outline-offset: 1px; }
 
 /* Tabs */

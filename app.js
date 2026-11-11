@@ -1,5 +1,5 @@
 import { parse, ParseError } from './src/parser.js';
-import { speak, explain } from './src/speak.js';
+import { speak, explain, children } from './src/speak.js';
 import { applyUI, ui } from './src/i18n.js';
 import { render, rawScreenReader } from './src/render.js';
 import { attachExplorer } from './src/explorer.js';
@@ -21,6 +21,53 @@ function showMessages(errors, warnings) {
   for (const w of warnings) box.append(Object.assign(document.createElement('p'), { className: 'warning', textContent: w }));
 }
 
+// Read-along: find where each top-level part of the maths is in the spoken
+// sentence, so the part being read can be highlighted in the equation and in
+// the words below it.
+function segment(tree, words, rendered) {
+  const top = rendered.info.get(rendered.root);
+  const segs = [];
+  let from = 0;
+  children(tree).forEach((kid, i) => {
+    const w = speak(kid.node, { lang: settings.lang, mode: 'clear' });
+    const at = words.indexOf(w, from);
+    if (at < 0 || !top.kids[i]) return;
+    segs.push({ start: at, end: at + w.length, el: top.kids[i].el });
+    from = at + w.length;
+  });
+  return segs;
+}
+
+function drawSpoken(words, segs) {
+  const box = $('spoken');
+  box.replaceChildren();
+  let pos = 0;
+  for (const s of segs) {
+    if (s.start > pos) box.append(words.slice(pos, s.start));
+    s.span = Object.assign(document.createElement('span'), { textContent: words.slice(s.start, s.end) });
+    box.append(s.span);
+    pos = s.end;
+  }
+  box.append(words.slice(pos));
+}
+
+function clearReading() {
+  document.querySelectorAll('.reading').forEach((e) => e.classList.remove('reading'));
+}
+
+function readAlong() {
+  const { words, segments } = current;
+  clearReading();
+  say(words, settings.lang, {
+    onBoundary(i) {
+      clearReading();
+      const s = segments.find((x) => i >= x.start && i < x.end);
+      if (s) { s.el.classList.add('reading'); s.span.classList.add('reading'); }
+    },
+    onEnd: clearReading,
+  });
+}
+
 function update({ speakNow = true } = {}) {
   const src = $('mathIn').value;
   let parsed;
@@ -38,8 +85,10 @@ function update({ speakNow = true } = {}) {
   const words = speak(parsed.tree, { lang: settings.lang, mode: settings.mode });
   current = { tree: parsed.tree, words, src };
 
-  mountMath($('visual'), $('crumbs'), render(parsed.tree), words, attachExplorer);
-  $('spoken').textContent = words;
+  const rendered = render(parsed.tree);
+  mountMath($('visual'), $('crumbs'), rendered, words, attachExplorer);
+  current.segments = segment(parsed.tree, words, rendered);
+  drawSpoken(words, current.segments);
   current.braille = toBraille(parsed.tree);
   $('brailleOut').textContent = current.braille;
   // Tells screen readers which voice to use for the words.
@@ -50,11 +99,11 @@ function update({ speakNow = true } = {}) {
   $('afterText').textContent = words;
   $('compare').hidden = false;
 
-  if (speakNow) say(words);
+  if (speakNow) readAlong();
 }
 
 $('mathForm').addEventListener('submit', (e) => { e.preventDefault(); update(); });
-$('replay').addEventListener('click', () => current && say(current.words));
+$('replay').addEventListener('click', () => current && readAlong());
 $('hearBefore').addEventListener('click', () => current && say(rawScreenReader(current.src), 'en'));
 $('copySpoken').addEventListener('click', async () => {
   if (!current) return;

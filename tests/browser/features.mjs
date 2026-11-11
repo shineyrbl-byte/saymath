@@ -33,6 +33,14 @@ export default async function ({ evaluate, press, wait, check, heard, send }) {
   await evaluate("(() => { const c = document.getElementById('spacing'); c.checked = true; c.dispatchEvent(new Event('change')); })()");
   check('extra spacing setting', await evaluate("document.documentElement.classList.contains('spaced')"), true);
   await evaluate("(() => { const c = document.getElementById('spacing'); c.checked = false; c.dispatchEvent(new Event('change')); })()");
+  const hl = await evaluate(`(() => {
+    document.getElementById('voiceOn').checked = true;
+    speechSynthesis.speak = (u) => { u.onboundary({ charIndex: 0 }); window.__hl = [...document.querySelectorAll('.reading')].map((e) => e.textContent).join(' | '); u.onend(); };
+    document.querySelector('[data-ex^="a^2"]').click();
+    document.getElementById('voiceOn').checked = false;
+    return window.__hl + ' / left after: ' + document.querySelectorAll('.reading').length;
+  })()`);
+  check('read-along highlights the part being spoken, in the equation and the words', hl, /^a2\+b2 \| a squared plus b squared \/ left after: 0$/);
   await send('Page.navigate', { url: `http://localhost:8765/?m=${encodeURIComponent('a^2 + b^2 = c^2')}&lang=hi&t=${Date.now()}#listen` });
   await wait(1200);
   check('a shared link opens that maths in that language', await evaluate("document.getElementById('spoken').textContent"), 'ए का वर्ग प्लस बी का वर्ग बराबर सी का वर्ग');
