@@ -21,11 +21,12 @@ When a blind student gets maths homework as typed text, their screen reader says
 - **Explore:** arrow keys walk the equation: ↓ into the fraction, → to the denominator ("denominator: 2 a"), ↑ back out.
 - **Practice:** 18 problems, from equations to calculus. SayMath reads your answer back as you type, then checks it by value (8/2 counts as 4). Answers can be typed or spoken (**Say it**).
 - **Teach:** teachers type questions, and SayMath flags ambiguous ones like 1/2x. It then builds a single ~70 KB offline HTML worksheet with speech, explorer and answer checking inside, or a braille (.brf) file for an embosser.
-- **Read from a photo:** photograph a printed or handwritten worksheet; Claude turns it into typed maths, flags anything unsure, and SayMath reads it.
+- **Read from a photo or PDF:** photograph a printed or handwritten worksheet, or choose a PDF; Claude turns it into typed maths, flags anything unsure, and SayMath reads it.
 - **Braille:** every equation in Nemeth Code braille, to copy or emboss (experimental).
-- **Three languages:** English, Hindi and Marathi, for the spoken maths (in each language's word order) and the whole interface.
+- **Five languages:** English, Hindi and Marathi for the spoken maths and the whole interface; Tamil and Bengali spoken maths in preview.
+- **Read-along and sound cues:** the part being spoken is highlighted; tones and phone vibration help you feel your way through an equation.
 - **More maths:** sums, integrals, limits, derivatives, matrices, ±, degrees.
-- **Offline**, large text, high contrast, large-print printing, shareable links.
+- **Offline**, large text, extra spacing, high contrast, large-print printing, shareable links, practice progress, and a keyboard shortcuts list.
 
 ## One before-and-after
 **Before:** "x equals left paren dash b plus s q r t left paren b caret 2 dash 4 a c right paren right paren slash left paren 2 a right paren"
@@ -41,16 +42,15 @@ Plain JavaScript modules with no framework, build step or server. A parser turns
 - **Braille level indicators:** Nemeth marks every move up into a power and back down. Getting nested powers right (e^(x²)) meant tidying runs of level changes after the fact.
 
 ## Accomplishments
-55 unit tests and 61 browser checks run on every push. The browser checks press real keys, open the worksheet with zero network requests, reload the app offline, check a 390px phone, and run an axe-core audit with **0 violations** across all tabs and themes.
+61 unit tests and 67 browser checks run on every push. The browser checks press real keys, open the worksheet with zero network requests, reload the app offline, check a 390px phone, and run an axe-core audit with **0 violations** across all tabs and themes.
 
 ## What we learned
 Accessibility work is mostly about removing ambiguity. A sighted reader gets grouping for free from layout, so a listener needs it put into words. Testing with automated tools is necessary but not enough: the next step is testing with blind students and Hindi-medium teachers.
 
 ## What's next
 - Testing with blind and low-vision students, Hindi- and Marathi-medium maths teachers, and a braille transcriber
-- Bharati braille for Hindi and Marathi words in braille worksheets
-- More languages (Tamil, Bengali), each written with native-speaking teachers
-- Reading PDFs directly, not just photos
+- Review of the Hindi, Marathi, Tamil and Bengali wording by native-speaking maths teachers, and of the Nemeth and Bharati braille by a transcriber
+- Testing with NVDA, JAWS and TalkBack, not only VoiceOver
 
 ## Credits and disclosure
 Built during the event; no pre-existing work. AI assistance: Claude Code (Anthropic) helped plan, write code and tests, and draft text, and I reviewed and tested everything. Font: Atkinson Hyperlegible (Braille Institute, OFL). axe-core used only in tests. Photo reading uses Claude through the Anthropic TypeScript SDK (MIT), with the user's own key. All problems and examples are made up. No real student data.
