@@ -80,12 +80,12 @@ For the full experience, turn on a screen reader (VoiceOver: Cmd+F5 on Mac; NVDA
 
 ## Run it locally
 
-No build step and no dependencies.
+No build step and no dependencies. You need Node 20+ (or any static file server, such as `python3 -m http.server`).
 
 ```bash
 git clone https://github.com/shineyrbl-byte/saymath.git
 cd saymath
-python3 -m http.server 8080      # or: npm start
+npm start                         # small built-in server, no installs
 # open http://localhost:8080
 ```
 
@@ -93,7 +93,7 @@ Tests (Node 20+; browser tests need Google Chrome):
 
 ```bash
 npm test                          # 27 unit tests: parser, speech, Hindi, answer checking, worksheet bundler
-python3 -m http.server 8765 &     # browser tests expect the site here
+node scripts/serve.mjs 8765 &     # browser tests expect the site here
 npm run test:browser              # 46 checks in headless Chrome with real key presses
 ```
 
