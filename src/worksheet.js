@@ -104,8 +104,16 @@ export function wrapModule(name, src) {
   return `const ${modVar(name)} = (() => {\n${body}\nreturn { ${[...names].join(', ')} };\n})();\n`;
 }
 
-export function bundle(sources) {
-  return ENGINE.map((name) => wrapModule(name, sources[name])).join('\n');
+// `keep` lists the languages to include (English is always kept). Other
+// language modules become empty stubs, which keeps the file small.
+export function bundle(sources, keep = null) {
+  return ENGINE.map((name) => {
+    const code = name.startsWith('lang/') && name.slice(5);
+    if (code && code !== 'en' && keep && !keep.includes(code)) {
+      return `const ${modVar(name)} = { ${code.toUpperCase()}: undefined };\n`;
+    }
+    return wrapModule(name, sources[name]);
+  }).join('\n');
 }
 
 async function fetchText(url) {
@@ -117,7 +125,11 @@ async function fetchText(url) {
 export async function buildWorksheetHTML(data) {
   const base = new URL('./', import.meta.url);
   const sources = {};
-  for (const name of ENGINE) sources[name] = await fetchText(new URL(`${name}.js`, base));
+  const keep = ['en', data.lang];
+  for (const name of ENGINE) {
+    const code = name.startsWith('lang/') && name.slice(5);
+    if (!code || keep.includes(code)) sources[name] = await fetchText(new URL(`${name}.js`, base));
+  }
   const runtime = await fetchText(new URL('worksheet-runtime.js', base));
   const css = await fetchText(new URL('../styles.css', base));
   const safe = (s) => s.replace(/<\/(script|style)/gi, '<\\/$1');
@@ -135,7 +147,7 @@ export async function buildWorksheetHTML(data) {
 <div id="announcer" class="sr-only" aria-live="polite"></div>
 <script>
 const DATA = ${safe(JSON.stringify(data))};
-${safe(bundle(sources))}
+${safe(bundle(sources, keep))}
 ${safe(runtime)}
 </script>
 </body>

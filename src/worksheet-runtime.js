@@ -7,7 +7,8 @@
   const { render } = M_render;
   const { attachExplorer } = M_explorer;
   const { checkAnswer } = M_evaluate;
-  const PHRASES = { en: M_lang_en.EN, hi: M_lang_hi.HI, mr: M_lang_mr.MR };
+  // Only English and the teacher's chosen language are inside the file.
+  const PHRASES = Object.fromEntries(Object.entries({ en: M_lang_en.EN, hi: M_lang_hi.HI, mr: M_lang_mr.MR }).filter(([, v]) => v));
 
   const T = {
     en: { question: (i, n) => `Question ${i} of ${n}`, hear: 'Hear it', yours: 'Your answer', check: 'Check',
@@ -27,7 +28,7 @@
       lang: 'भाषा', offline: 'ही वर्कशीट इंटरनेटशिवाय चालते. SayMath ने बनवली.' },
   };
 
-  let lang = DATA.lang in T ? DATA.lang : 'en';
+  let lang = DATA.lang in PHRASES ? DATA.lang : 'en';
   let voiceOn = true;
   const done = new Set();
   const opts = () => ({ lang, mode: 'clear' });
@@ -66,9 +67,7 @@
     const updateScore = () => { score.textContent = t.score(done.size, qs.filter((q) => q.answer).length); };
 
     const langSel = h('select', { id: 'wsLang' },
-      h('option', { value: 'en', textContent: 'English', selected: lang === 'en' }),
-      h('option', { value: 'hi', textContent: 'हिन्दी', selected: lang === 'hi' }),
-      h('option', { value: 'mr', textContent: 'मराठी', selected: lang === 'mr' }));
+      ...Object.keys(PHRASES).map((code) => h('option', { value: code, textContent: PHRASES[code].name, selected: lang === code })));
     langSel.addEventListener('change', () => { lang = langSel.value; build(); });
     const voice = h('input', { type: 'checkbox', checked: voiceOn, id: 'wsVoice' });
     voice.addEventListener('change', () => { voiceOn = voice.checked; });
