@@ -23,6 +23,7 @@ const T = {
     score: (c, n) => `Correct on the first try: ${c} of ${n}.`,
     done: (c, n) => `Set finished! First-try score: ${c} of ${n}. Pick another set, or start again.`,
     hears: 'SayMath hears:',
+    best: (b, n) => `best ${b} of ${n}`,
   },
   hi: {
     count: (i, n) => `प्रश्न ${i}, ${n} में से`,
@@ -36,6 +37,7 @@ const T = {
     score: (c, n) => `पहली कोशिश में सही: ${c}, ${n} में से।`,
     done: (c, n) => `सेट पूरा हुआ! पहली कोशिश में सही: ${c}, ${n} में से।`,
     hears: 'SayMath सुनता है:',
+    best: (b, n) => `सबसे अच्छा ${b}, ${n} में से`,
   },
   mr: {
     count: (i, n) => `प्रश्न ${i}, ${n} पैकी`,
@@ -49,8 +51,20 @@ const T = {
     score: (c, n) => `पहिल्या प्रयत्नात बरोबर: ${n} पैकी ${c}.`,
     done: (c, n) => `संच पूर्ण झाला! पहिल्या प्रयत्नात बरोबर: ${n} पैकी ${c}.`,
     hears: 'SayMath ऐकते:',
+    best: (b, n) => `सर्वोत्तम ${n} पैकी ${b}`,
   },
 };
+
+// Best first-try score for each set, remembered on this device only.
+const PROGRESS = 'saymath-progress';
+function loadProgress() {
+  try { return JSON.parse(localStorage.getItem(PROGRESS)) || {}; } catch { return {}; }
+}
+function saveBest(id, score) {
+  const p = loadProgress();
+  if (!(id in p) || score > p[id]) p[id] = score;
+  try { localStorage.setItem(PROGRESS, JSON.stringify(p)); } catch { /* storage blocked */ }
+}
 
 export function initPractice() {
   let set = SETS[0];
@@ -75,7 +89,8 @@ export function initPractice() {
       label.className = 'set-choice';
       const input = Object.assign(document.createElement('input'), { type: 'radio', name: 'set', value: s.id, checked: s === set });
       input.addEventListener('change', () => { set = s; reset(); show(true); });
-      label.append(input, ` ${s.title[settings.lang] || s.title.en} (${s.problems.length})`);
+      const best = loadProgress()[s.id];
+      label.append(input, ` ${s.title[settings.lang] || s.title.en} (${best === undefined ? s.problems.length : t().best(best, s.problems.length)})`);
       return label;
     }));
   }
@@ -160,6 +175,8 @@ export function initPractice() {
       show(true);
     } else {
       const msg = t().done(firstTry, set.problems.length);
+      saveBest(set.id, firstTry);
+      drawPicker();
       feedback(msg, 'good');
       say(msg);
       reset();

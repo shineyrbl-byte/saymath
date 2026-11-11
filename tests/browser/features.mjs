@@ -41,6 +41,9 @@ export default async function ({ evaluate, press, wait, check, heard, send }) {
     return window.__hl + ' / left after: ' + document.querySelectorAll('.reading').length;
   })()`);
   check('read-along highlights the part being spoken, in the equation and the words', hl, /^a2\+b2 \| a squared plus b squared \/ left after: 0$/);
+  await evaluate("document.body.focus(); document.dispatchEvent(new KeyboardEvent('keydown', { key: '?', bubbles: true }))");
+  check('? opens the keyboard shortcuts list', await evaluate("document.getElementById('keysDialog').open + ' ' + document.querySelectorAll('#keysList dt').length"), 'true 10');
+  await evaluate("document.getElementById('keysDialog').close()");
   await send('Page.navigate', { url: `http://localhost:8765/?m=${encodeURIComponent('a^2 + b^2 = c^2')}&lang=hi&t=${Date.now()}#listen` });
   await wait(1200);
   check('a shared link opens that maths in that language', await evaluate("document.getElementById('spoken').textContent"), 'ए का वर्ग प्लस बी का वर्ग बराबर सी का वर्ग');

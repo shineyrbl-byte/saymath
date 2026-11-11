@@ -158,6 +158,12 @@ input[type="text"]:focus, textarea:focus { border-color: var(--accent); }
 /* Extra spacing (helps many readers with dyslexia). */
 .spaced body { letter-spacing: 0.06em; word-spacing: 0.16em; line-height: 1.85; }
 .spaced .visual { letter-spacing: 0.08em; }
+dialog { max-width: min(36rem, calc(100vw - 32px)); border: 2px solid var(--line); border-radius: 16px; background: var(--card); color: var(--ink); padding: 20px; }
+dialog::backdrop { background: rgb(0 0 0 / 0.5); }
+.keys-list { display: grid; grid-template-columns: auto 1fr; gap: 0.4rem 1rem; }
+.keys-list dt { font-weight: 700; font-family: ui-monospace, monospace; }
+.keys-list dd { margin: 0; }
+.linkish { background: none; border: 0; color: inherit; text-decoration: underline; padding: 0; min-height: 44px; cursor: pointer; }
 .mic-row { align-items: center; }
 .mic-row .hint { flex: 1 1 14rem; margin: 0; }
 .photo summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; }

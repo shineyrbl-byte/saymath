@@ -7,6 +7,12 @@
 export const UI = {
   en: {
     pageTitle: 'SayMath: math you can hear',
+    shortcutsTitle: 'Keyboard shortcuts',
+    shortcutsOpen: 'Keyboard shortcuts (?)',
+    close: 'Close',
+    shortcuts: [['Enter', 'Hear the maths you typed'], ['Tab', 'Move to the equation, buttons and fields'], ['↓', 'Explorer: go inside a part'],
+      ['↑', 'Explorer: come back out'], ['← →', 'Explorer: previous or next part'], ['Home', 'Explorer: the whole equation'],
+      ['Space', 'Explorer: say this part again'], ['Esc', 'Stop speaking'], ['← → on the tabs', 'Switch between Listen, Practice and Teach'], ['?', 'Show this list']],
     photoTitle: 'Read maths from a photo or PDF',
     photoLead: 'Take or choose a photo of a worksheet, textbook page or whiteboard, or choose a PDF. Claude, an AI model made by Anthropic, turns it into typed maths that SayMath can read aloud. AI can misread, especially handwriting: check each line.',
     photoPrivacy: 'This needs the internet and an Anthropic API key (from console.anthropic.com). The photo is sent from your device to Anthropic, and nowhere else. Only photograph maths: no faces, names or private information.',
@@ -131,6 +137,12 @@ export const UI = {
 
   hi: {
     pageTitle: 'SayMath: सुनिए गणित',
+    shortcutsTitle: 'कीबोर्ड शॉर्टकट',
+    shortcutsOpen: 'कीबोर्ड शॉर्टकट (?)',
+    close: 'बंद कीजिए',
+    shortcuts: [['Enter', 'लिखा हुआ गणित सुनिए'], ['Tab', 'समीकरण, बटन और खानों तक जाइए'], ['↓', 'एक्सप्लोरर: भाग के अंदर जाइए'],
+      ['↑', 'एक्सप्लोरर: बाहर आइए'], ['← →', 'एक्सप्लोरर: पिछला या अगला भाग'], ['Home', 'एक्सप्लोरर: पूरा समीकरण'],
+      ['Space', 'एक्सप्लोरर: यह भाग फिर से सुनिए'], ['Esc', 'बोलना रोकिए'], ['टैब पर ← →', 'सुनिए, अभ्यास और पढ़ाइए के बीच जाइए'], ['?', 'यह सूची दिखाइए']],
     photoTitle: 'फ़ोटो या PDF से गणित पढ़िए',
     photoLead: 'वर्कशीट, किताब के पन्ने या बोर्ड की फ़ोटो लीजिए या चुनिए, या कोई PDF चुनिए। Claude, Anthropic का बनाया AI मॉडल, उसे लिखे हुए गणित में बदलता है, जिसे SayMath पढ़कर सुना सकता है। AI ग़लत पढ़ सकता है, ख़ासकर हाथ की लिखावट: हर पंक्ति जाँचिए।',
     photoPrivacy: 'इसके लिए इंटरनेट और Anthropic API key (console.anthropic.com से) चाहिए। फ़ोटो आपके डिवाइस से सीधे Anthropic को भेजी जाती है, और कहीं नहीं। केवल गणित की फ़ोटो लीजिए: चेहरे, नाम या निजी जानकारी नहीं।',
@@ -254,6 +266,12 @@ export const UI = {
   },
   mr: {
     pageTitle: 'SayMath: ऐकता येणारे गणित',
+    shortcutsTitle: 'कीबोर्ड शॉर्टकट',
+    shortcutsOpen: 'कीबोर्ड शॉर्टकट (?)',
+    close: 'बंद करा',
+    shortcuts: [['Enter', 'लिहिलेले गणित ऐका'], ['Tab', 'समीकरण, बटणे आणि रकान्यांकडे जा'], ['↓', 'एक्सप्लोरर: भागाच्या आत जा'],
+      ['↑', 'एक्सप्लोरर: बाहेर या'], ['← →', 'एक्सप्लोरर: मागचा किंवा पुढचा भाग'], ['Home', 'एक्सप्लोरर: संपूर्ण समीकरण'],
+      ['Space', 'एक्सप्लोरर: हा भाग पुन्हा ऐका'], ['Esc', 'बोलणे थांबवा'], ['टॅबवर ← →', 'ऐका, सराव आणि शिकवा यांमध्ये जा'], ['?', 'ही यादी दाखवा']],
     photoTitle: 'फोटो किंवा PDF मधून गणित वाचा',
     photoLead: 'वर्कशीट, पुस्तकाचे पान किंवा फळ्याचा फोटो काढा किंवा निवडा, किंवा PDF निवडा. Claude, Anthropic ने बनवलेले AI मॉडेल, त्याचे लिहिलेल्या गणितात रूपांतर करते, जे SayMath वाचून दाखवू शकते. AI चुकीचे वाचू शकते, विशेषतः हस्ताक्षर: प्रत्येक ओळ तपासा.',
     photoPrivacy: 'यासाठी इंटरनेट आणि Anthropic API key (console.anthropic.com वरून) लागते. फोटो तुमच्या उपकरणातून थेट Anthropic कडे पाठवला जातो, आणि इतर कुठेही नाही. फक्त गणिताचा फोटो काढा: चेहरे, नावे किंवा खाजगी माहिती नको.',

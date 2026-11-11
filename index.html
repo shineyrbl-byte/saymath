@@ -250,8 +250,15 @@ Simplify: (x^2 - 4)/(x - 2) answer: x + 2</textarea>
 
   <div id="announcer" class="sr-only" aria-live="polite"></div>
 
+  <dialog id="keysDialog" aria-labelledby="keysTitle">
+    <h2 id="keysTitle" data-i18n="shortcutsTitle">Keyboard shortcuts</h2>
+    <dl id="keysList" class="keys-list"></dl>
+    <form method="dialog"><button class="primary" data-i18n="close">Close</button></form>
+  </dialog>
+
   <footer class="wrap foot">
     <p><span data-i18n="footer">Made for AccessED Hacks 2026. Runs in your browser: nothing you type is sent anywhere. Only Read from a photo sends the photo to Anthropic, when you choose to.</span> <span id="offlineNote"></span></p>
+    <p><button type="button" id="keysOpen" class="linkish" data-i18n="shortcutsOpen">Keyboard shortcuts (?)</button></p>
   </footer>
 
   <script type="module" src="app.js"></script>

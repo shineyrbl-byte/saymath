@@ -144,6 +144,20 @@ if (canListen()) {
   $('mathMic').addEventListener('click', () => hearSpeech($('mathIn'), () => update()));
   $('pMic').addEventListener('click', () => hearSpeech($('pAnswer'), () => setTimeout(() => $('pEchoHear').click(), 250)));
 }
+// Keyboard shortcuts list: the ? key (when not typing) or the footer button.
+function openKeys() {
+  const list = $('keysList');
+  list.replaceChildren(...ui(settings.lang).shortcuts.flatMap(([k, what]) => [
+    Object.assign(document.createElement('dt'), { textContent: k }),
+    Object.assign(document.createElement('dd'), { textContent: what }),
+  ]));
+  $('keysDialog').showModal();
+}
+$('keysOpen').addEventListener('click', openKeys);
+document.addEventListener('keydown', (e) => {
+  const typing = e.target.closest && e.target.closest('input, textarea, select');
+  if (e.key === '?' && !typing && !$('keysDialog').open) { e.preventDefault(); openKeys(); }
+});
 // Esc stops speaking, anywhere on the page.
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && 'speechSynthesis' in window) speechSynthesis.cancel();
