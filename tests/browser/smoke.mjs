@@ -11,6 +11,10 @@ const SITE = process.env.URL || 'http://localhost:8765/';
 const port = 9333;
 const chrome = spawn(CHROME, ['--headless=new', `--remote-debugging-port=${port}`, '--no-first-run',
   `--user-data-dir=${mkdtempSync(join(tmpdir(), 'sm-'))}`, ...(process.env.CI ? ['--no-sandbox'] : []), 'about:blank'], { stdio: 'ignore' });
+// Close Chrome even if the run is stopped early, so no hidden Chrome is left behind.
+const stop = () => { try { chrome.kill(); } catch { /* already gone */ } };
+process.on('exit', stop);
+for (const sig of ['SIGINT', 'SIGTERM', 'SIGHUP']) process.on(sig, () => { stop(); process.exit(130); });
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 let ws; let id = 0; const pending = new Map();
@@ -51,8 +55,8 @@ async function heard() {
   }
   return last;
 }
-async function until(expr) {
-  for (let i = 0; i < 100; i++) { if (await evaluate(expr)) return; await wait(50); }
+async function until(expr, tries = 100) {
+  for (let i = 0; i < tries; i++) { if (await evaluate(expr)) return; await wait(50); }
   throw new Error(`Timed out waiting for: ${expr}`);
 }
 
@@ -68,7 +72,7 @@ try {
   await connect();
   await send('Page.enable'); await send('Runtime.enable');
   await send('Page.navigate', { url: SITE });
-  await until("document.getElementById('result') && !document.getElementById('result').hidden");
+  await until("document.getElementById('result') && !document.getElementById('result').hidden", 300);
   await evaluate("document.getElementById('voiceOn').checked = false");
 
   await evaluate("document.getElementById('mathIn').value = '(x+1)/(x-1) = 2'; document.getElementById('mathForm').requestSubmit()");
