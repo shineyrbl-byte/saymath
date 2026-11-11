@@ -84,7 +84,7 @@ export function worksheetBraille(title, instructions, questions, { toBraille, to
 
 // ---- A tiny bundler: turns the ES modules into one inline script. ----
 
-export const ENGINE = ['parser', 'lang/en', 'lang/hi', 'lang/mr', 'speak', 'render', 'explorer', 'evaluate'];
+export const ENGINE = ['parser', 'lang/en', 'lang/hi', 'lang/mr', 'speak', 'render', 'explorer', 'evaluate', 'cues'];
 
 const modVar = (name) => `M_${name.replace(/\W/g, '_')}`;
 const resolve = (from, path) => new URL(path, `http://x/${from}.js`).pathname.slice(1).replace(/\.js$/, '');

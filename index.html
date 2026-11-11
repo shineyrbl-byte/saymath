@@ -45,6 +45,7 @@
           <label class="check"><input type="checkbox" id="voiceOn" checked> <span data-i18n="voiceOn">Speak with this device's voice</span>
             <span class="hint" data-i18n="voiceHint">Turn off if you use a screen reader, so you don't hear everything twice.</span>
           </label>
+          <label class="check"><input type="checkbox" id="cues" checked> <span data-i18n="cues">Sound cues while exploring (and a buzz on phones at the edges)</span></label>
           <label><span data-i18n="speed">Speed</span> <input type="range" id="rate" min="0.6" max="1.4" step="0.1" value="0.9"></label>
           <label><span data-i18n="textSize">Text size</span>
             <select id="textSize">
@@ -53,6 +54,7 @@
               <option value="1.45" data-i18n="sizeXL">Extra large</option>
             </select>
           </label>
+          <label class="check"><input type="checkbox" id="spacing"> <span data-i18n="spacing">Extra spacing between letters, words and lines</span></label>
           <label><span data-i18n="colours">Colours</span>
             <select id="theme">
               <option value="auto" data-i18n="themeAuto">Match my device</option>
@@ -121,7 +123,7 @@
         <input id="photoKey" type="password" autocomplete="off" spellcheck="false">
         <label class="check"><input type="checkbox" id="photoRemember"> <span data-i18n="photoRemember">Remember the key on this device</span></label>
         <label for="photoFile" class="big-label" data-i18n="photoFile">Photo</label>
-        <input id="photoFile" type="file" accept="image/*">
+        <input id="photoFile" type="file" accept="image/*,application/pdf">
         <div class="row"><button type="button" id="photoRead" class="primary" data-i18n="photoRead">Read the photo</button></div>
         <p id="photoStatus" class="hint" role="status"></p>
         <ol id="photoItems" class="ws-preview"></ol>

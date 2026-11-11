@@ -1,4 +1,4 @@
-// Reads maths from a photo (a printed or handwritten worksheet) with Claude,
+// Reads maths from a photo or PDF (a printed or handwritten worksheet) with Claude,
 // and turns it into SayMath's typed maths, one question per item.
 //
 // This is the only part of SayMath that uses the internet and sends data
@@ -56,8 +56,10 @@ export function buildRequest({ imageBase64, mediaType }) {
     messages: [{
       role: 'user',
       content: [
-        { type: 'image', source: { type: 'base64', media_type: mediaType, data: imageBase64 } },
-        { type: 'text', text: 'Transcribe every maths question or expression in this photo.' },
+        mediaType === 'application/pdf'
+          ? { type: 'document', source: { type: 'base64', media_type: mediaType, data: imageBase64 } }
+          : { type: 'image', source: { type: 'base64', media_type: mediaType, data: imageBase64 } },
+        { type: 'text', text: `Transcribe every maths question or expression in this ${mediaType === 'application/pdf' ? 'document' : 'photo'}.` },
       ],
     }],
   };
@@ -111,6 +113,14 @@ export async function readPhoto({ apiKey, imageBase64, mediaType }, makeClient =
 // Shrinks a photo to at most 1568 pixels on its long side (what the model
 // uses anyway), as JPEG, so it uploads quickly on a slow connection.
 export async function prepareImage(file) {
+  if (file.type === 'application/pdf') {
+    // PDFs go as they are (up to 10 MB, well under the API's 32 MB limit).
+    if (file.size > 10 * 1024 * 1024) throw new PhotoError('tooBig', 'That PDF is too big. Try one under 10 MB, or a photo of the page.');
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    let bin = '';
+    for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+    return { imageBase64: btoa(bin), mediaType: 'application/pdf', preview: null };
+  }
   const bitmap = await createImageBitmap(file);
   const scale = Math.min(1, 1568 / Math.max(bitmap.width, bitmap.height));
   const canvas = document.createElement('canvas');

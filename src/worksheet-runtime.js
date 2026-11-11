@@ -1,4 +1,4 @@
-/* global DATA, M_parser, M_speak, M_render, M_explorer, M_evaluate, M_lang_en, M_lang_hi, M_lang_mr */
+/* global DATA, M_parser, M_speak, M_render, M_explorer, M_evaluate, M_lang_en, M_lang_hi, M_lang_mr, M_cues */
 // Runs inside a downloaded worksheet file. Not a module: it is inlined
 // after the bundled engine, which defines the M_* objects.
 (() => {
@@ -92,7 +92,7 @@
       const rendered = render(tree);
       rendered.root.setAttribute('aria-hidden', 'true');
       box.append(rendered.root);
-      attachExplorer(box, rendered, { onSay: say, getOpts: opts, crumbs, lang: () => PHRASES[lang] });
+      attachExplorer(box, rendered, { onSay: say, getOpts: opts, crumbs, lang: () => PHRASES[lang], onCue: M_cues.cue });
 
       const card = h('article', { className: 'card problem' },
         h('h2', { className: 'label', textContent: t.question(i + 1, qs.length) }),

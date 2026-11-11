@@ -4,7 +4,7 @@
 import { $ } from './ui.js';
 
 const KEY = 'saymath-settings';
-const FIELDS = ['lang', 'mode', 'voiceOn', 'rate', 'textSize', 'theme'];
+const FIELDS = ['lang', 'mode', 'voiceOn', 'rate', 'textSize', 'theme', 'cues', 'spacing'];
 
 function load() {
   try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; }
@@ -17,6 +17,7 @@ function save() {
 
 function apply() {
   document.documentElement.style.setProperty('--scale', $('textSize').value);
+  document.documentElement.classList.toggle('spaced', $('spacing').checked);
   const theme = $('theme').value;
   if (theme === 'auto') document.documentElement.removeAttribute('data-theme');
   else document.documentElement.dataset.theme = theme;

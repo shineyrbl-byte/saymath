@@ -10,7 +10,8 @@ import { EN } from './lang/en.js';
 
 export const KEY_HELP = EN.keyHelp;
 
-export function attachExplorer(container, rendered, { onSay, getOpts, crumbs, lang }) {
+// `onCue(kind)` (optional) plays a sound: 'in', 'out', 'move' or 'edge'.
+export function attachExplorer(container, rendered, { onSay, getOpts, crumbs, lang, onCue = () => {} }) {
   const { root, info } = rendered;
   const top = info.get(root);
   let cur = top;
@@ -35,8 +36,9 @@ export function attachExplorer(container, rendered, { onSay, getOpts, crumbs, la
     onSay(extra ? `${words}. ${extra}` : words);
   }
 
-  function go(entry, edgeMsg) {
-    if (!entry) { onSay(edgeMsg); return; }
+  function go(entry, edgeMsg, kind) {
+    if (!entry) { onCue('edge'); onSay(edgeMsg); return; }
+    if (kind) onCue(kind);
     cur = entry;
     show(entry);
   }
@@ -49,11 +51,11 @@ export function attachExplorer(container, rendered, { onSay, getOpts, crumbs, la
     const sib = siblings();
     const i = sib.indexOf(cur);
     switch (e.key) {
-      case 'ArrowDown': go(cur.kids[0], t.nothingInside); break;
-      case 'ArrowUp': go(cur.parent, t.atTop); break;
-      case 'ArrowRight': go(sib[i + 1], t.lastPart); break;
-      case 'ArrowLeft': go(sib[i - 1], t.firstPart); break;
-      case 'Home': go(top); break;
+      case 'ArrowDown': go(cur.kids[0], t.nothingInside, 'in'); break;
+      case 'ArrowUp': go(cur.parent, t.atTop, 'out'); break;
+      case 'ArrowRight': go(sib[i + 1], t.lastPart, 'move'); break;
+      case 'ArrowLeft': go(sib[i - 1], t.firstPart, 'move'); break;
+      case 'Home': go(top, '', 'out'); break;
       case ' ': case 'Enter': show(cur); break;
       default: return;
     }

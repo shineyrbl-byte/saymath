@@ -46,3 +46,10 @@ test('readPhoto: needs a key, sends the request, explains API errors', async () 
   await assert.rejects(readPhoto({ apiKey: 'k', imageBase64: 'A', mediaType: 'image/jpeg' }, failing(401)), (e) => e.code === 'badKey');
   await assert.rejects(readPhoto({ apiKey: 'k', imageBase64: 'A', mediaType: 'image/jpeg' }, failing(429)), (e) => e.code === 'busy');
 });
+
+test('PDFs are sent as a document block', () => {
+  const r = buildRequest({ imageBase64: 'JVBERi0=', mediaType: 'application/pdf' });
+  assert.equal(r.messages[0].content[0].type, 'document');
+  assert.equal(r.messages[0].content[0].source.media_type, 'application/pdf');
+  assert.match(r.messages[0].content[1].text, /document/);
+});

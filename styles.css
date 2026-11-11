@@ -155,6 +155,9 @@ input[type="text"]:focus, textarea:focus { border-color: var(--accent); }
   .spoken { font-size: 18pt; }
   .braille-box[open] .braille { font-size: 24pt; }
 }
+/* Extra spacing (helps many readers with dyslexia). */
+.spaced body { letter-spacing: 0.06em; word-spacing: 0.16em; line-height: 1.85; }
+.spaced .visual { letter-spacing: 0.08em; }
 .mic-row { align-items: center; }
 .mic-row .hint { flex: 1 1 14rem; margin: 0; }
 .photo summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; }

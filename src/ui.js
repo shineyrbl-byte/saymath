@@ -4,6 +4,7 @@ import { EN } from './lang/en.js';
 import { HI } from './lang/hi.js';
 import { MR } from './lang/mr.js';
 import { ui } from './i18n.js';
+import { cue } from './cues.js';
 
 export const $ = (id) => document.getElementById(id);
 export const LANG_INFO = { en: EN, hi: HI, mr: MR };
@@ -13,6 +14,7 @@ export const settings = {
   get mode() { return $('mode').value; },
   get voiceOn() { return $('voiceOn').checked; },
   get rate() { return Number($('rate').value); },
+  get cues() { return $('cues').checked; },
   get phrases() { return LANG_INFO[$('lang').value] || EN; },
 };
 
@@ -53,5 +55,6 @@ export function mountMath(box, crumbs, rendered, words, attachExplorer) {
     getOpts: () => ({ lang: settings.lang, mode: settings.mode }),
     crumbs,
     lang: () => settings.phrases,
+    onCue: (kind) => settings.cues && cue(kind),
   });
 }

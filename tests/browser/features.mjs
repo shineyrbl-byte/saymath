@@ -27,6 +27,12 @@ export default async function ({ evaluate, press, wait, check, heard, send }) {
   check('photo panel asks for a photo first', await evaluate("document.getElementById('photoStatus').textContent"), 'Choose a photo first.');
   check('photo panel explains privacy', await evaluate("document.querySelector('.photo-privacy').textContent"), /sent from your device to Anthropic/);
 
+  await evaluate("(() => { window.__buzz = 0; navigator.vibrate = () => { window.__buzz++; return true; }; document.querySelector('[data-ex^=\"a^2\"]').click(); document.getElementById('visual').focus(); })()");
+  await press('ArrowLeft');
+  check('edge of the equation: a buzz and a message', await evaluate('window.__buzz') + ' ' + await heard(), '1 No more parts to the left.');
+  await evaluate("(() => { const c = document.getElementById('spacing'); c.checked = true; c.dispatchEvent(new Event('change')); })()");
+  check('extra spacing setting', await evaluate("document.documentElement.classList.contains('spaced')"), true);
+  await evaluate("(() => { const c = document.getElementById('spacing'); c.checked = false; c.dispatchEvent(new Event('change')); })()");
   await send('Page.navigate', { url: `http://localhost:8765/?m=${encodeURIComponent('a^2 + b^2 = c^2')}&lang=hi&t=${Date.now()}#listen` });
   await wait(1200);
   check('a shared link opens that maths in that language', await evaluate("document.getElementById('spoken').textContent"), 'ए का वर्ग प्लस बी का वर्ग बराबर सी का वर्ग');
