@@ -72,6 +72,26 @@ export const EN = {
   },
   list: (items) => (items.length === 2 ? `the point ${items[0]}, comma, ${items[1]}` : `the list ${items.join(', comma, ')}`),
 
+  // Parser messages, by code (see ParseError in parser.js).
+  errors: {
+    symbol: (c) => `I don't know the symbol "${c}".`,
+    empty: () => 'Type some math to start.',
+    ambiguousFraction: () => 'This could mean two things, like 1/2x: (1/2)·x or 1/(2x). I read it as (1/2)·x. Add brackets to make it clear.',
+    numberAfter: () => 'A number after a letter or bracket was read as multiplication. Use * to make it clear.',
+    missingPower: () => 'Something is missing after ^ (the power).',
+    missingAfter: (n) => `Something is missing after ${n}.`,
+    endsEarly: () => 'The math ends too early. Is something missing at the end?',
+    unclosed: () => 'A bracket was opened but never closed.',
+    unclosedAbs: () => 'An absolute value bar | was opened but never closed.',
+    rootForm: () => 'Write a root like root(3, x) for the cube root of x.',
+    extraClose: () => 'There is a closing bracket with no opening bracket.',
+    cantGo: (v) => `"${v}" can't go here.`,
+    unexpected: (v) => `I didn't expect "${v}" here.`,
+    at: (n) => `(at character ${n})`,
+  },
+  keyHelp: 'Use the arrow keys to explore. Down goes inside a part, Up comes back out, Left and Right move between parts. Space repeats. Home goes back to the whole thing.',
+  explorer: 'math explorer',
+
   roles: { numerator: 'numerator', denominator: 'denominator', base: 'base', exponent: 'exponent',
     subscript: 'subscript', radicand: 'inside the root', index: 'root index', argument: 'inside',
     inside: 'inside', term: 'term', factor: 'factor', side: 'side', item: 'item' },

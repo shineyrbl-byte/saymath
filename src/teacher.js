@@ -1,15 +1,18 @@
 // Teach tab: type questions, check them, download an offline worksheet.
 
 import { parse } from './parser.js';
-import { speak } from './speak.js';
+import { speak, explain } from './speak.js';
+import { ui } from './i18n.js';
 import { render } from './render.js';
 import { parseWorksheet, worksheetText, buildWorksheetHTML } from './worksheet.js';
-import { $, announce } from './ui.js';
+import { $, announce, settings } from './ui.js';
 
 const slug = (s) => s.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '') || 'worksheet';
 
 export function initTeacher() {
   const lang = () => $('wsLangSel').value;
+  const t = () => ui(settings.lang);
+  const err = (q) => (q.errorObj ? (q.errorInAnswer ? t().wsAnswerError(explain(q.errorObj, settings.lang)) : explain(q.errorObj, settings.lang)) : q.error);
   let questions = [];
 
   function preview() {
@@ -23,8 +26,8 @@ export function initTeacher() {
       if (q.error) {
         problems++;
         li.classList.add('has-error');
-        li.append(Object.assign(document.createElement('p'), { className: 'ws-raw', textContent: `Line ${q.line}: ${q.raw}` }),
-          Object.assign(document.createElement('p'), { className: 'msg-inline error', textContent: q.error }));
+        li.append(Object.assign(document.createElement('p'), { className: 'ws-raw', textContent: t().wsLine(q.line, q.raw) }),
+          Object.assign(document.createElement('p'), { className: 'msg-inline error', textContent: err(q) }));
       } else {
         const tree = parse(q.math).tree;
         const vis = document.createElement('div');
@@ -36,19 +39,19 @@ export function initTeacher() {
         said.lang = lang();
         li.append(vis, said);
         const ans = Object.assign(document.createElement('p'), { className: 'hint',
-          textContent: q.answer ? `Answer: ${q.solveFor ? `${q.solveFor} = ` : ''}${q.answer} (students can check it)` : 'No answer given: students can listen and explore, but not check.' });
+          textContent: q.answer ? t().wsAnswer(`${q.solveFor ? `${q.solveFor} = ` : ''}${q.answer}`) : t().wsNoAnswer });
         li.append(ans);
-        for (const w of q.warnings) {
+        for (const w of q.warningObjs || []) {
           problems++;
-          li.append(Object.assign(document.createElement('p'), { className: 'msg-inline warning', textContent: w }));
+          li.append(Object.assign(document.createElement('p'), { className: 'msg-inline warning', textContent: explain(w, settings.lang) }));
         }
       }
       list.append(li);
     }
     const ok = questions.filter((q) => !q.error).length;
     $('wsStatus').textContent = questions.length
-      ? `${ok} question${ok === 1 ? '' : 's'} ready${problems ? `, ${problems} to look at` : ''}.`
-      : 'Type at least one question.';
+      ? t().wsReady(ok, problems)
+      : t().wsEmpty;
     $('wsDownload').disabled = ok === 0;
   }
 
@@ -72,10 +75,10 @@ export function initTeacher() {
       a.remove();
       setTimeout(() => URL.revokeObjectURL(a.href), 5000);
       const kb = Math.ceil(blob.size / 1024);
-      $('wsSize').textContent = `Downloaded ${a.download} (${kb} KB). Share it by WhatsApp, Bluetooth, email or a USB stick: it opens in any browser, with no internet.`;
+      $('wsSize').textContent = t().wsDownloaded(a.download, kb);
       announce($('wsSize').textContent);
     } catch (e) {
-      $('wsSize').textContent = `Could not build the worksheet: ${e.message}`;
+      $('wsSize').textContent = t().wsBuildFailed(e.message);
       announce($('wsSize').textContent);
     }
   }
@@ -85,9 +88,9 @@ export function initTeacher() {
     const text = worksheetText(d.title, d.instructions, questions, { lang: d.lang });
     try {
       await navigator.clipboard.writeText(text);
-      $('wsSize').textContent = 'Copied the questions as plain words. Paste into an SMS, WhatsApp, or a braille display.';
+      $('wsSize').textContent = t().wsCopied;
     } catch {
-      $('wsSize').textContent = 'Could not copy. Your browser blocked the clipboard.';
+      $('wsSize').textContent = t().wsCopyFailed;
     }
     announce($('wsSize').textContent);
   }
@@ -95,6 +98,7 @@ export function initTeacher() {
   let timer;
   $('wsLines').addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(preview, 250); });
   $('wsLangSel').addEventListener('change', preview);
+  document.addEventListener('saymath:settings', preview);
   $('wsDownload').addEventListener('click', download);
   $('wsCopy').addEventListener('click', copyText);
   preview();

@@ -1,10 +1,14 @@
 // Parses typed math (like "(x^2 + 3x)/(2x - 1) = sqrt(5)") into a tree.
 // The syntax is close to what students type on a calculator or in AsciiMath.
 
+// `code` and `arg` let the app show the message in the learner's language
+// (see `errors` in the phrasebooks). `message` is the English version.
 export class ParseError extends Error {
-  constructor(message, pos) {
+  constructor(message, pos, code, arg) {
     super(message);
     this.pos = pos;
+    this.code = code;
+    this.arg = arg;
   }
 }
 
@@ -63,7 +67,7 @@ export function tokenize(src) {
     if ('+-*/^_!(),|'.includes(ch)) { tokens.push({ type: ch, value: ch, pos: i }); i++; continue; }
     if ('[{'.includes(ch)) { tokens.push({ type: '(', value: ch, pos: i }); i++; continue; }
     if (']}'.includes(ch)) { tokens.push({ type: ')', value: ch, pos: i }); i++; continue; }
-    throw new ParseError(`I don't know the symbol "${ch}".`, i);
+    throw new ParseError(`I don't know the symbol "${ch}".`, i, 'symbol', ch);
   }
   return tokens;
 }
@@ -76,7 +80,7 @@ export function tokenize(src) {
 //   func {name, arg, base?} | rel {items, ops} | list {items}
 export function parse(src) {
   const tokens = tokenize(src);
-  if (tokens.length === 0) throw new ParseError('Type some math to start.', 0);
+  if (tokens.length === 0) throw new ParseError('Type some math to start.', 0, 'empty');
   const warnings = [];
   let p = 0;
   let absDepth = 0;
@@ -84,8 +88,8 @@ export function parse(src) {
   const peek = () => tokens[p];
   const at = (type) => tokens[p] && tokens[p].type === type;
   const next = () => tokens[p++];
-  const expect = (type, msg) => {
-    if (!at(type)) throw new ParseError(msg, peek() ? peek().pos : src.length);
+  const expect = (type, msg, code) => {
+    if (!at(type)) throw new ParseError(msg, peek() ? peek().pos : src.length, code);
     return next();
   };
   const unwrap = (n) => (n.type === 'paren' ? n.arg : n);
@@ -128,6 +132,7 @@ export function parse(src) {
         if (lastWasBareFrac && !explicit) {
           warnings.push({
             pos: tokens[p - 1].pos,
+            code: 'ambiguousFraction',
             message: 'This could mean two things, like 1/2x: (1/2)·x or 1/(2x). I read it as (1/2)·x. Add brackets to make it clear.',
           });
         }
@@ -141,7 +146,7 @@ export function parse(src) {
       } else if (at('num') && startsFactor()) {
         // "x 2" or "(x+1)3" is unusual; read it as multiplication but say so.
         const f = unary();
-        warnings.push({ pos: tokens[p - 1].pos, message: 'A number after a letter or bracket was read as multiplication. Use * to make it clear.' });
+        warnings.push({ pos: tokens[p - 1].pos, code: 'numberAfter', message: 'A number after a letter or bracket was read as multiplication. Use * to make it clear.' });
         acc = acc.type === 'mul' ? (acc.factors.push(f), acc.explicit.push(false), acc) : { type: 'mul', factors: [acc, f], explicit: [false] };
       } else if (at('/')) {
         next();
@@ -172,7 +177,7 @@ export function parse(src) {
     while (true) {
       if (at('^')) {
         next();
-        if (!peek()) throw new ParseError('Something is missing after ^ (the power).', src.length);
+        if (!peek()) throw new ParseError('Something is missing after ^ (the power).', src.length, 'missingPower');
         node = { type: 'pow', base: node, exp: unwrap(exponent()) };
       } else if (at('_')) {
         next();
@@ -188,14 +193,14 @@ export function parse(src) {
 
   // The argument of sqrt/sin/etc: a bracket group, or a single factor ("sin x").
   function argument(name) {
-    if (!peek()) throw new ParseError(`Something is missing after ${name}.`, src.length);
+    if (!peek()) throw new ParseError(`Something is missing after ${name}.`, src.length, 'missingAfter', name);
     if (at('(')) return unwrap(primary());
     return postfix(primary());
   }
 
   function primary() {
     const t = peek();
-    if (!t) throw new ParseError('The math ends too early. Is something missing at the end?', src.length);
+    if (!t) throw new ParseError('The math ends too early. Is something missing at the end?', src.length, 'endsEarly');
     switch (t.type) {
       case 'num': next(); return { type: 'num', value: t.value };
       case 'var': next(); return { type: 'var', name: t.value };
@@ -206,10 +211,10 @@ export function parse(src) {
         if (at(',')) {
           const items = [inner];
           while (at(',')) { next(); items.push(relation()); }
-          expect(')', 'A bracket was opened but never closed.');
+          expect(')', 'A bracket was opened but never closed.', 'unclosed');
           return { type: 'list', items };
         }
-        expect(')', 'A bracket was opened but never closed.');
+        expect(')', 'A bracket was opened but never closed.', 'unclosed');
         return { type: 'paren', arg: inner };
       }
       case '|': {
@@ -217,18 +222,18 @@ export function parse(src) {
         absDepth++;
         const inner = expr();
         absDepth--;
-        expect('|', 'An absolute value bar | was opened but never closed.');
+        expect('|', 'An absolute value bar | was opened but never closed.', 'unclosedAbs');
         return { type: 'abs', arg: inner };
       }
       case 'sqrt': next(); return { type: 'sqrt', arg: argument('sqrt') };
       case 'abs': next(); return { type: 'abs', arg: argument('abs') };
       case 'root': {
         next();
-        expect('(', 'Write a root like root(3, x) for the cube root of x.');
+        expect('(', 'Write a root like root(3, x) for the cube root of x.', 'rootForm');
         const index = expr();
-        expect(',', 'Write a root like root(3, x) for the cube root of x.');
+        expect(',', 'Write a root like root(3, x) for the cube root of x.', 'rootForm');
         const arg = relation();
-        expect(')', 'A bracket was opened but never closed.');
+        expect(')', 'A bracket was opened but never closed.', 'unclosed');
         return { type: 'root', index, arg };
       }
       case 'func': {
@@ -241,8 +246,8 @@ export function parse(src) {
         const fn = { type: 'func', name: t.value, base, arg: argument(t.value) };
         return power ? { type: 'pow', base: fn, exp: power } : fn;
       }
-      case ')': throw new ParseError('There is a closing bracket with no opening bracket.', t.pos);
-      default: throw new ParseError(`"${t.value}" can't go here.`, t.pos);
+      case ')': throw new ParseError('There is a closing bracket with no opening bracket.', t.pos, 'extraClose');
+      default: throw new ParseError(`"${t.value}" can't go here.`, t.pos, 'cantGo', t.value);
     }
   }
 
@@ -252,6 +257,8 @@ export function parse(src) {
     throw new ParseError(
       t.type === ')' ? 'There is a closing bracket with no opening bracket.' : `I didn't expect "${t.value}" here.`,
       t.pos,
+      t.type === ')' ? 'extraClose' : 'unexpected',
+      t.value,
     );
   }
   return { tree, warnings };

@@ -129,4 +129,15 @@ export function describeStep(step, opts = {}) {
   return `${role}${pos}: ${words}`;
 }
 
+// A parser error or warning in the learner's language.
+export function explain(err, lang = 'en') {
+  const L = LANGS[lang] || EN;
+  const fn = err && err.code && L.errors && L.errors[err.code];
+  return fn ? fn(err.arg) : (err && err.message) || String(err);
+}
+
+export function phrases(lang) {
+  return LANGS[lang] || EN;
+}
+
 export { children };

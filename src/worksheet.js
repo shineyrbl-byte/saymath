@@ -21,12 +21,16 @@ export function parseWorksheet(text) {
     if (ans) {
       const m = /^([a-z])\s*=\s*(.+)$/.exec(ans.trim());
       if (m) { q.solveFor = m[1]; q.answer = m[2].trim(); } else q.answer = ans.trim();
-      try { parse(q.answer); } catch (e) { q.error = `Answer: ${e.message}`; }
+      try { parse(q.answer); } catch (e) { q.error = `Answer: ${e.message}`; q.errorObj = e; q.errorInAnswer = true; }
     }
     try {
-      q.warnings = parse(q.math).warnings.map((w) => w.message);
+      const w = parse(q.math).warnings;
+      q.warnings = w.map((x) => x.message);
+      q.warningObjs = w;
     } catch (e) {
       q.error = e.message;
+      q.errorObj = e;
+      q.errorInAnswer = false;
     }
     questions.push(q);
   });

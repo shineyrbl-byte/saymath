@@ -80,7 +80,7 @@ export function checkAnswer(typed, expected, { solveFor } = {}) {
   try {
     tree = parse(typed).tree;
   } catch (e) {
-    return { ok: false, reason: 'unreadable', message: e.message };
+    return { ok: false, reason: 'unreadable', message: e.message, error: e };
   }
   if (solveFor && tree.type === 'rel' && tree.ops.length === 1 && tree.ops[0] === '='
       && tree.items[0].type === 'var' && tree.items[0].name === solveFor) {

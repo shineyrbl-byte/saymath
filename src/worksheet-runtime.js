@@ -3,9 +3,9 @@
 // after the bundled engine, which defines the M_* objects.
 (() => {
   const { parse } = M_parser;
-  const { speak } = M_speak;
+  const { speak, explain } = M_speak;
   const { render } = M_render;
-  const { attachExplorer, KEY_HELP } = M_explorer;
+  const { attachExplorer } = M_explorer;
   const { checkAnswer } = M_evaluate;
   const PHRASES = { en: M_lang_en.EN, hi: M_lang_hi.HI };
 
@@ -71,7 +71,7 @@
       h('div', { className: 'row ws-controls' },
         h('label', {}, `${t.lang} `, langSel),
         h('label', { className: 'check' }, voice, ` ${t.voice}`)),
-      h('p', { className: 'hint', textContent: KEY_HELP }),
+      h('p', { className: 'hint', textContent: PHRASES[lang].keyHelp }),
     );
 
     qs.forEach((q, i) => {
@@ -79,7 +79,7 @@
       const spoken = `${q.prompt ? `${q.prompt}. ` : ''}${words(q.math)}`;
       const box = h('div', { className: 'visual', tabIndex: 0 });
       box.setAttribute('role', 'application');
-      box.setAttribute('aria-roledescription', 'math explorer');
+      box.setAttribute('aria-roledescription', PHRASES[lang].explorer);
       box.setAttribute('aria-label', spoken);
       const crumbs = h('span');
       const rendered = render(tree);
@@ -105,7 +105,7 @@
         const fb = h('div', { className: 'feedback' });
         fb.setAttribute('role', 'status');
         input.addEventListener('input', () => {
-          try { echo.textContent = input.value.trim() ? words(input.value) : '…'; } catch (e) { echo.textContent = e.message; }
+          try { echo.textContent = input.value.trim() ? words(input.value) : '…'; } catch (e) { echo.textContent = explain(e, lang); }
         });
         const form = h('form', { className: 'answer' },
           h('label', { htmlFor: id, className: 'big-label', textContent: t.yours }),
@@ -119,7 +119,7 @@
           if (r.ok) { msg = t.correct; done.add(i); fb.className = 'feedback good'; } else {
             fb.className = 'feedback bad';
             msg = r.reason === 'wrong' ? t.wrong(words(input.value))
-              : r.reason === 'still-has-letters' ? t.letters : t.bad(r.message || '');
+              : r.reason === 'still-has-letters' ? t.letters : t.bad(r.error ? explain(r.error, lang) : (r.message || ''));
           }
           fb.textContent = msg;
           updateScore();

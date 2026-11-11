@@ -6,8 +6,9 @@
 // Clicking a part also selects it.
 
 import { describeStep } from './speak.js';
+import { EN } from './lang/en.js';
 
-export const KEY_HELP = 'Use the arrow keys to explore. Down goes inside a part, Up comes back out, Left and Right move between parts. Space repeats. Home goes back to the whole thing.';
+export const KEY_HELP = EN.keyHelp;
 
 export function attachExplorer(container, rendered, { onSay, getOpts, crumbs, lang }) {
   const { root, info } = rendered;

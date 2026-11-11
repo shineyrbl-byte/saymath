@@ -1,10 +1,10 @@
 // Offline support: keep a copy of every file so SayMath works with no signal.
-const VERSION = 'saymath-v1';
+const VERSION = 'saymath-v2';
 const FILES = [
   './', 'index.html', 'styles.css', 'app.js', 'manifest.webmanifest', 'icon.svg',
   'src/parser.js', 'src/speak.js', 'src/render.js', 'src/explorer.js', 'src/evaluate.js',
   'src/problems.js', 'src/practice.js', 'src/teacher.js', 'src/ui.js', 'src/settings.js',
-  'src/worksheet.js', 'src/worksheet-runtime.js', 'src/lang/en.js', 'src/lang/hi.js',
+  'src/worksheet.js', 'src/worksheet-runtime.js', 'src/lang/en.js', 'src/lang/hi.js', 'src/i18n.js',
 ];
 
 self.addEventListener('install', (e) => {

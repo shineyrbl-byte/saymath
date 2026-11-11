@@ -2,6 +2,7 @@
 
 import { EN } from './lang/en.js';
 import { HI } from './lang/hi.js';
+import { ui } from './i18n.js';
 
 export const $ = (id) => document.getElementById(id);
 export const LANG_INFO = { en: EN, hi: HI };
@@ -32,7 +33,7 @@ export function say(text, lang = settings.lang) {
   const voices = speechSynthesis.getVoices();
   const voice = voices.find((v) => v.lang === want) || voices.find((v) => v.lang.startsWith(want.slice(0, 2)));
   if (voice) u.voice = voice;
-  else if (lang !== 'en') announce(`${text} (No ${want} voice on this device: install one in your system speech settings.)`);
+  else if (lang !== 'en') announce(`${text} ${ui(settings.lang).noVoice(want)}`);
   u.rate = settings.rate;
   speechSynthesis.speak(u);
 }
@@ -41,7 +42,7 @@ export function say(text, lang = settings.lang) {
 export function mountMath(box, crumbs, rendered, words, attachExplorer) {
   rendered.root.setAttribute('aria-hidden', 'true');
   box.replaceChildren(rendered.root);
-  box.setAttribute('aria-label', `Math explorer: ${words}`);
+  box.setAttribute('aria-label', `${ui(settings.lang).mathExplorer}: ${words}`);
   box._explorer?.detach();
   box._explorer = attachExplorer(box, rendered, {
     onSay: (t) => say(t),

@@ -15,7 +15,7 @@
   <meta name="theme-color" content="#0b6e69">
 </head>
 <body>
-  <a class="skip" href="#main">Skip to the math</a>
+  <a class="skip" href="#main" data-i18n="skip">Skip to the math</a>
 
   <header class="top">
     <div class="wrap top-row">
@@ -23,41 +23,41 @@
         <span class="logo" aria-hidden="true">√ ))</span>
         <div>
           <p class="name">SayMath</p>
-          <p class="tag">Math you can hear</p>
+          <p class="tag" data-i18n="tagline">Math you can hear</p>
         </div>
       </div>
       <details class="settings">
-        <summary>Settings</summary>
+        <summary data-i18n="settings">Settings</summary>
         <div class="settings-panel">
-          <label>Language
+          <label><span data-i18n="language">Language</span>
             <select id="lang">
               <option value="en">English</option>
               <option value="hi" lang="hi">हिन्दी (Hindi)</option>
             </select>
           </label>
-          <label>Detail
+          <label><span data-i18n="detail">Detail</span>
             <select id="mode">
-              <option value="clear">Clear: always say where groups end</option>
-              <option value="brief">Brief: fewer words</option>
+              <option value="clear" data-i18n="detailClear">Clear: always say where groups end</option>
+              <option value="brief" data-i18n="detailBrief">Brief: fewer words</option>
             </select>
           </label>
-          <label class="check"><input type="checkbox" id="voiceOn" checked> Speak with this device's voice
-            <span class="hint">Turn off if you use a screen reader, so you don't hear everything twice.</span>
+          <label class="check"><input type="checkbox" id="voiceOn" checked> <span data-i18n="voiceOn">Speak with this device's voice</span>
+            <span class="hint" data-i18n="voiceHint">Turn off if you use a screen reader, so you don't hear everything twice.</span>
           </label>
-          <label>Speed <input type="range" id="rate" min="0.6" max="1.4" step="0.1" value="0.9"></label>
-          <label>Text size
+          <label><span data-i18n="speed">Speed</span> <input type="range" id="rate" min="0.6" max="1.4" step="0.1" value="0.9"></label>
+          <label><span data-i18n="textSize">Text size</span>
             <select id="textSize">
-              <option value="1">Normal</option>
-              <option value="1.2">Large</option>
-              <option value="1.45">Extra large</option>
+              <option value="1" data-i18n="sizeNormal">Normal</option>
+              <option value="1.2" data-i18n="sizeLarge">Large</option>
+              <option value="1.45" data-i18n="sizeXL">Extra large</option>
             </select>
           </label>
-          <label>Colours
+          <label><span data-i18n="colours">Colours</span>
             <select id="theme">
-              <option value="auto">Match my device</option>
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-              <option value="contrast">High contrast (yellow on black)</option>
+              <option value="auto" data-i18n="themeAuto">Match my device</option>
+              <option value="light" data-i18n="themeLight">Light</option>
+              <option value="dark" data-i18n="themeDark">Dark</option>
+              <option value="contrast" data-i18n="themeContrast">High contrast (yellow on black)</option>
             </select>
           </label>
         </div>
@@ -66,133 +66,133 @@
   </header>
 
   <main id="main" class="wrap">
-    <div class="tabs" role="tablist" aria-label="What do you want to do?">
-      <button role="tab" id="tab-listen" aria-controls="listen" aria-selected="true">Listen</button>
-      <button role="tab" id="tab-practice" aria-controls="practice" aria-selected="false" tabindex="-1">Practice</button>
-      <button role="tab" id="tab-teach" aria-controls="teach" aria-selected="false" tabindex="-1">Teach</button>
+    <div class="tabs" role="tablist" data-i18n-attr="aria-label:tabsLabel" aria-label="What do you want to do?">
+      <button role="tab" id="tab-listen" aria-controls="listen" aria-selected="true" data-i18n="tabListen">Listen</button>
+      <button role="tab" id="tab-practice" aria-controls="practice" aria-selected="false" tabindex="-1" data-i18n="tabPractice">Practice</button>
+      <button role="tab" id="tab-teach" aria-controls="teach" aria-selected="false" tabindex="-1" data-i18n="tabTeach">Teach</button>
     </div>
 
     <section id="listen" role="tabpanel" aria-labelledby="tab-listen">
-      <h1 id="listen-h">Type math. Hear it clearly.</h1>
-      <p class="lead">Screen readers often read typed math as a string of symbols. SayMath reads it the way a teacher would, and tells you where every fraction, root and bracket ends.</p>
+      <h1 id="listen-h" data-i18n="listenTitle">Type math. Hear it clearly.</h1>
+      <p class="lead" data-i18n="listenLead">Screen readers often read typed math as a string of symbols. SayMath reads it the way a teacher would, and tells you where every fraction, root and bracket ends.</p>
 
       <form id="mathForm" class="input-row" autocomplete="off">
-        <label for="mathIn" class="big-label">Your math</label>
+        <label for="mathIn" class="big-label" data-i18n="yourMath">Your math</label>
         <div class="field">
           <input id="mathIn" type="text" spellcheck="false" inputmode="text"
                  aria-describedby="mathHelp mathMsg" value="(x^2 + 3x)/(2x - 1) = sqrt(5)">
-          <button type="submit" class="primary">Hear it</button>
+          <button type="submit" class="primary" data-i18n="hearIt">Hear it</button>
         </div>
-        <p id="mathHelp" class="hint">Use <kbd>^</kbd> for powers, <kbd>/</kbd> for fractions, <kbd>sqrt( )</kbd> for roots, <kbd>_</kbd> for subscripts. Press <kbd>Enter</kbd> to hear it.</p>
+        <p id="mathHelp" class="hint" data-i18n-html="mathHelpHtml">Use <kbd>^</kbd> for powers, <kbd>/</kbd> for fractions, <kbd>sqrt( )</kbd> for roots, <kbd>_</kbd> for subscripts. Press <kbd>Enter</kbd> to hear it.</p>
         <div id="mathMsg" class="msg" role="alert"></div>
       </form>
 
-      <div class="examples" role="group" aria-label="Examples">
-        <span class="hint">Try:</span>
-        <button type="button" data-ex="x = (-b + sqrt(b^2 - 4ac))/(2a)">Quadratic formula</button>
-        <button type="button" data-ex="a^2 + b^2 = c^2">Pythagoras</button>
-        <button type="button" data-ex="sin^2 x + cos^2 x = 1">Trig identity</button>
-        <button type="button" data-ex="|2x - 3| <= 7">Inequality</button>
-        <button type="button" data-ex="1/2x">An ambiguous one</button>
+      <div class="examples" role="group" aria-label="Examples" data-i18n-attr="aria-label:examples">
+        <span class="hint" data-i18n="tryLabel">Try:</span>
+        <button type="button" data-ex="x = (-b + sqrt(b^2 - 4ac))/(2a)" data-i18n="exQuadratic">Quadratic formula</button>
+        <button type="button" data-ex="a^2 + b^2 = c^2" data-i18n="exPythagoras">Pythagoras</button>
+        <button type="button" data-ex="sin^2 x + cos^2 x = 1" data-i18n="exTrig">Trig identity</button>
+        <button type="button" data-ex="|2x - 3| <= 7" data-i18n="exInequality">Inequality</button>
+        <button type="button" data-ex="1/2x" data-i18n="exAmbiguous">An ambiguous one</button>
       </div>
 
       <div class="card result" id="result" hidden>
         <div class="visual" id="visual" tabindex="0" role="application"
-             aria-roledescription="math explorer" aria-label="Math explorer" aria-describedby="exploreHelp"></div>
-        <p class="crumbs" aria-hidden="true"><span class="label-inline">You are on:</span> <span id="crumbs"></span></p>
-        <p id="exploreHelp" class="hint">Explore by keyboard: click the equation or press <kbd>Tab</kbd> to reach it, then <kbd>↓</kbd> goes inside a part, <kbd>↑</kbd> comes back out, <kbd>←</kbd> <kbd>→</kbd> move between parts, <kbd>Space</kbd> repeats.</p>
-        <h2 class="label">SayMath says</h2>
+             aria-roledescription="math explorer" aria-label="Math explorer" aria-describedby="exploreHelp" data-i18n-attr="aria-roledescription:explorerRole"></div>
+        <p class="crumbs" aria-hidden="true"><span class="label-inline" data-i18n="youAreOn">You are on:</span> <span id="crumbs"></span></p>
+        <p id="exploreHelp" class="hint" data-i18n-html="exploreHelpHtml">Explore by keyboard: click the equation or press <kbd>Tab</kbd> to reach it, then <kbd>↓</kbd> goes inside a part, <kbd>↑</kbd> comes back out, <kbd>←</kbd> <kbd>→</kbd> move between parts, <kbd>Space</kbd> repeats.</p>
+        <h2 class="label" data-i18n="saymathSays">SayMath says</h2>
         <p class="spoken" id="spoken"></p>
         <div class="row">
-          <button type="button" id="replay">Hear again</button>
-          <button type="button" id="copySpoken">Copy words</button>
+          <button type="button" id="replay" data-i18n="hearAgain">Hear again</button>
+          <button type="button" id="copySpoken" data-i18n="copyWords">Copy words</button>
         </div>
       </div>
 
       <div class="compare" id="compare" hidden>
         <div class="card before">
-          <h2 class="label">Before: a screen reader reading the raw text</h2>
+          <h2 class="label" data-i18n="beforeTitle">Before: a screen reader reading the raw text</h2>
           <p id="beforeText"></p>
-          <button type="button" id="hearBefore">Hear the before</button>
+          <button type="button" id="hearBefore" data-i18n="hearBefore">Hear the before</button>
         </div>
         <div class="card after">
-          <h2 class="label">After: SayMath</h2>
+          <h2 class="label" data-i18n="afterTitle">After: SayMath</h2>
           <p id="afterText"></p>
         </div>
       </div>
     </section>
 
     <section id="practice" role="tabpanel" aria-labelledby="tab-practice" hidden>
-      <h1>Practice by ear</h1>
-      <p class="lead">Hear a problem, explore it with the arrow keys, and type your answer. SayMath reads your answer back before checking it, so you know it understood what you typed.</p>
+      <h1 data-i18n="practiceTitle">Practice by ear</h1>
+      <p class="lead" data-i18n="practiceLead">Hear a problem, explore it with the arrow keys, and type your answer. SayMath reads your answer back before checking it, so you know it understood what you typed.</p>
 
       <fieldset class="sets">
-        <legend>Choose a practice set</legend>
+        <legend data-i18n="chooseSet">Choose a practice set</legend>
         <div id="sets"></div>
       </fieldset>
-      <label class="check"><input type="checkbox" id="listenOnly"> Listen only: hide the written math (practise listening)</label>
+      <label class="check"><input type="checkbox" id="listenOnly"> <span data-i18n="listenOnly">Listen only: hide the written math (practise listening)</span></label>
 
       <div class="card problem">
         <p class="label" id="pCount"></p>
         <p class="prompt" id="pPrompt"></p>
         <div class="visual" id="pVisual" tabindex="0" role="application"
-             aria-roledescription="math explorer" aria-label="Math explorer" aria-describedby="exploreHelp2"></div>
-        <p class="crumbs" aria-hidden="true"><span class="label-inline">You are on:</span> <span id="pCrumbs"></span></p>
-        <p id="exploreHelp2" class="sr-only">Use the arrow keys to explore the problem. Down goes inside a part, Up comes back out, Left and Right move between parts.</p>
+             aria-roledescription="math explorer" aria-label="Math explorer" aria-describedby="exploreHelp2" data-i18n-attr="aria-roledescription:explorerRole"></div>
+        <p class="crumbs" aria-hidden="true"><span class="label-inline" data-i18n="youAreOn">You are on:</span> <span id="pCrumbs"></span></p>
+        <p id="exploreHelp2" class="sr-only" data-i18n="exploreHelpShort">Use the arrow keys to explore the problem. Down goes inside a part, Up comes back out, Left and Right move between parts.</p>
         <div class="row">
-          <button type="button" id="pHear">Hear the problem</button>
-          <button type="button" id="pHint">Hint</button>
+          <button type="button" id="pHear" data-i18n="hearProblem">Hear the problem</button>
+          <button type="button" id="pHint" data-i18n="hint">Hint</button>
         </div>
         <p id="pHintText" class="hint-box" hidden></p>
 
         <form id="pForm" class="answer" autocomplete="off">
-          <label for="pAnswer" class="big-label">Your answer</label>
+          <label for="pAnswer" class="big-label" data-i18n="yourAnswer">Your answer</label>
           <div class="field">
             <input id="pAnswer" type="text" spellcheck="false" aria-describedby="pEchoLine">
-            <button type="submit" class="primary">Check</button>
+            <button type="submit" class="primary" data-i18n="check">Check</button>
           </div>
           <p id="pEchoLine" class="echo"><span id="pEchoLabel" class="label-inline">SayMath hears:</span> <span id="pEcho">…</span></p>
-          <button type="button" id="pEchoHear">Hear my answer</button>
+          <button type="button" id="pEchoHear" data-i18n="hearMyAnswer">Hear my answer</button>
         </form>
 
         <div id="pFeedback" class="feedback" role="status"></div>
         <div class="row">
-          <button type="button" id="pShow" hidden>Show the answer</button>
-          <button type="button" id="pNext" class="primary">Next problem</button>
+          <button type="button" id="pShow" hidden data-i18n="showAnswer">Show the answer</button>
+          <button type="button" id="pNext" class="primary" data-i18n="nextProblem">Next problem</button>
         </div>
       </div>
       <p class="score" id="pScore"></p>
     </section>
 
     <section id="teach" role="tabpanel" aria-labelledby="tab-teach" hidden>
-      <h1>Make an offline worksheet</h1>
-      <p class="lead">Type your questions. SayMath checks every line and flags anything a listener could misunderstand. It then builds one small file that opens on any phone or computer with no internet. Students can hear each question, explore it with the keyboard and check their answers.</p>
+      <h1 data-i18n="teachTitle">Make an offline worksheet</h1>
+      <p class="lead" data-i18n="teachLead">Type your questions. SayMath checks every line and flags anything a listener could misunderstand. It then builds one small file that opens on any phone or computer with no internet. Students can hear each question, explore it with the keyboard and check their answers.</p>
 
       <div class="teach-grid">
         <div class="teach-form">
-          <label for="wsTitle" class="big-label">Title</label>
+          <label for="wsTitle" class="big-label" data-i18n="wsTitle">Title</label>
           <input id="wsTitle" type="text" value="Homework: equations and powers">
-          <label for="wsInstr" class="big-label">Instructions <span class="hint">(optional)</span></label>
+          <label for="wsInstr" class="big-label"><span data-i18n="wsInstr">Instructions</span> <span class="hint" data-i18n="optional">(optional)</span></label>
           <input id="wsInstr" type="text" value="Listen to each question, explore it with the arrow keys, then type your answer.">
-          <label for="wsLines" class="big-label">Questions</label>
+          <label for="wsLines" class="big-label" data-i18n="wsQuestions">Questions</label>
           <textarea id="wsLines" rows="7" spellcheck="false" aria-describedby="wsFormat">Solve for x: 3x - 4 = 11 answer: x = 5
 Solve for x: (x + 2)/4 = 3 answer: x = 10
 Work out: 2^4 + sqrt(9) answer: 19
 Simplify: (x^2 - 4)/(x - 2) answer: x + 2</textarea>
-          <p id="wsFormat" class="hint">One question per line. You can start with words and a colon (<kbd>Solve for x:</kbd>) and end with <kbd>answer: x = 5</kbd>.</p>
-          <label for="wsLangSel" class="big-label">Students hear it in</label>
+          <p id="wsFormat" class="hint" data-i18n-html="wsFormatHtml">One question per line. You can start with words and a colon (<kbd>Solve for x:</kbd>) and end with <kbd>answer: x = 5</kbd>.</p>
+          <label for="wsLangSel" class="big-label" data-i18n="wsLang">Students hear it in</label>
           <select id="wsLangSel">
             <option value="en">English</option>
             <option value="hi" lang="hi">हिन्दी (Hindi)</option>
           </select>
           <div class="row ws-actions">
-            <button type="button" id="wsDownload" class="primary">Download worksheet (.html)</button>
-            <button type="button" id="wsCopy">Copy as plain words (SMS, braille)</button>
+            <button type="button" id="wsDownload" class="primary" data-i18n="wsDownload">Download worksheet (.html)</button>
+            <button type="button" id="wsCopy" data-i18n="wsCopy">Copy as plain words (SMS, braille)</button>
           </div>
           <p id="wsSize" class="hint" role="status"></p>
         </div>
         <div>
-          <h2 class="label">Check your questions</h2>
+          <h2 class="label" data-i18n="wsCheck">Check your questions</h2>
           <p id="wsStatus" class="hint"></p>
           <ol id="wsPreview" class="ws-preview"></ol>
         </div>
@@ -203,7 +203,7 @@ Simplify: (x^2 - 4)/(x - 2) answer: x + 2</textarea>
   <div id="announcer" class="sr-only" aria-live="polite"></div>
 
   <footer class="wrap foot">
-    <p>Made for AccessED Hacks 2026. Runs in your browser: nothing you type is sent anywhere. <span id="offlineNote"></span></p>
+    <p><span data-i18n="footer">Made for AccessED Hacks 2026. Runs in your browser: nothing you type is sent anywhere.</span> <span id="offlineNote"></span></p>
   </footer>
 
   <script type="module" src="app.js"></script>

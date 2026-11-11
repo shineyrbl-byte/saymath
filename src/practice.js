@@ -3,7 +3,7 @@
 // knows SayMath understood what they meant.
 
 import { parse } from './parser.js';
-import { speak } from './speak.js';
+import { speak, explain } from './speak.js';
 import { render } from './render.js';
 import { attachExplorer } from './explorer.js';
 import { checkAnswer } from './evaluate.js';
@@ -108,7 +108,7 @@ export function initPractice() {
       $('pEcho').textContent = w;
       return w;
     } catch (e) {
-      $('pEcho').textContent = e.message;
+      $('pEcho').textContent = explain(e, settings.lang);
       return '';
     }
   }
@@ -133,7 +133,7 @@ export function initPractice() {
         wrong: () => t().wrong(echo()),
         'still-has-letters': () => t().letters(p.solveFor),
         'not-a-value': () => t().notValue,
-        unreadable: () => t().unreadable(result.message || ''),
+        unreadable: () => t().unreadable(result.error ? explain(result.error, settings.lang) : (result.message || '')),
       }[result.reason]();
       feedback(msg, 'bad');
       if (tries >= 2) $('pShow').hidden = false;

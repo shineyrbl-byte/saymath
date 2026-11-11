@@ -1,5 +1,6 @@
 import { parse, ParseError } from './src/parser.js';
-import { speak } from './src/speak.js';
+import { speak, explain } from './src/speak.js';
+import { applyUI, ui } from './src/i18n.js';
 import { render, rawScreenReader } from './src/render.js';
 import { attachExplorer } from './src/explorer.js';
 import { $, settings, say, announce, mountMath } from './src/ui.js';
@@ -23,12 +24,13 @@ function update({ speakNow = true } = {}) {
     parsed = parse(src);
   } catch (err) {
     if (!(err instanceof ParseError)) throw err;
-    const where = err.pos !== undefined && src.trim() ? ` (at character ${err.pos + 1})` : '';
-    showMessages([err.message + where], []);
-    if (speakNow) say(err.message, 'en');
+    const L = settings.lang;
+    const where = err.pos !== undefined && src.trim() ? ` ${explain({ code: 'at', arg: err.pos + 1 }, L)}` : '';
+    showMessages([explain(err, L) + where], []);
+    if (speakNow) say(explain(err, L));
     return;
   }
-  showMessages([], parsed.warnings.map((w) => w.message));
+  showMessages([], parsed.warnings.map((w) => explain(w, settings.lang)));
   const words = speak(parsed.tree, { lang: settings.lang, mode: settings.mode });
   current = { tree: parsed.tree, words, src };
 
@@ -50,13 +52,14 @@ $('replay').addEventListener('click', () => current && say(current.words));
 $('hearBefore').addEventListener('click', () => current && say(rawScreenReader(current.src), 'en'));
 $('copySpoken').addEventListener('click', async () => {
   if (!current) return;
-  try { await navigator.clipboard.writeText(current.words); announce('Copied.'); } catch { announce('Could not copy.'); }
+  try { await navigator.clipboard.writeText(current.words); announce(ui(settings.lang).copied); } catch { announce(ui(settings.lang).copyFailed); }
 });
 document.querySelectorAll('[data-ex]').forEach((b) => b.addEventListener('click', () => {
   $('mathIn').value = b.dataset.ex;
   update();
 }));
 ['lang', 'mode'].forEach((id) => $(id).addEventListener('change', () => {
+  applyUI(settings.lang);
   update({ speakNow: false });
   document.dispatchEvent(new Event('saymath:settings'));
 }));
@@ -96,6 +99,7 @@ window.addEventListener('hashchange', tabFromHash);
 if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
 
 initSettings();
+applyUI(settings.lang);
 update({ speakNow: false });
 initPractice();
 initTeacher();
@@ -103,6 +107,6 @@ initTeacher();
 // Offline: after the first visit, SayMath works with no internet.
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   navigator.serviceWorker.register('sw.js').then(() => navigator.serviceWorker.ready).then(() => {
-    $('offlineNote').textContent = 'Saved for offline use.';
+    $('offlineNote').textContent = ui(settings.lang).savedOffline;
   }).catch(() => {});
 }
