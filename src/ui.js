@@ -2,10 +2,11 @@
 
 import { EN } from './lang/en.js';
 import { HI } from './lang/hi.js';
+import { MR } from './lang/mr.js';
 import { ui } from './i18n.js';
 
 export const $ = (id) => document.getElementById(id);
-export const LANG_INFO = { en: EN, hi: HI };
+export const LANG_INFO = { en: EN, hi: HI, mr: MR };
 
 export const settings = {
   get lang() { return $('lang').value; },
@@ -28,10 +29,13 @@ export function say(text, lang = settings.lang) {
   if (!settings.voiceOn || !('speechSynthesis' in window)) return;
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  const want = (LANG_INFO[lang] || EN).speechLang;
+  const info = LANG_INFO[lang] || EN;
+  const want = info.speechLang;
   u.lang = want;
   const voices = speechSynthesis.getVoices();
-  const voice = voices.find((v) => v.lang === want) || voices.find((v) => v.lang.startsWith(want.slice(0, 2)));
+  const find = (code) => code && (voices.find((v) => v.lang === code) || voices.find((v) => v.lang.startsWith(code.slice(0, 2))));
+  // No voice for this language: a related one (Hindi for Marathi) is better than none.
+  const voice = find(want) || find(info.fallbackSpeechLang);
   if (voice) u.voice = voice;
   else if (lang !== 'en') announce(`${text} ${ui(settings.lang).noVoice(want)}`);
   u.rate = settings.rate;

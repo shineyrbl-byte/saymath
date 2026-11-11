@@ -12,8 +12,9 @@
 import { children } from './parser.js';
 import { EN } from './lang/en.js';
 import { HI } from './lang/hi.js';
+import { MR } from './lang/mr.js';
 
-const LANGS = { en: EN, hi: HI };
+const LANGS = { en: EN, hi: HI, mr: MR };
 
 export function registerLanguage(code, phrases) {
   LANGS[code] = phrases;

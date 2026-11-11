@@ -1,4 +1,4 @@
-/* global DATA, M_parser, M_speak, M_render, M_explorer, M_evaluate, M_lang_en, M_lang_hi */
+/* global DATA, M_parser, M_speak, M_render, M_explorer, M_evaluate, M_lang_en, M_lang_hi, M_lang_mr */
 // Runs inside a downloaded worksheet file. Not a module: it is inlined
 // after the bundled engine, which defines the M_* objects.
 (() => {
@@ -7,7 +7,7 @@
   const { render } = M_render;
   const { attachExplorer } = M_explorer;
   const { checkAnswer } = M_evaluate;
-  const PHRASES = { en: M_lang_en.EN, hi: M_lang_hi.HI };
+  const PHRASES = { en: M_lang_en.EN, hi: M_lang_hi.HI, mr: M_lang_mr.MR };
 
   const T = {
     en: { question: (i, n) => `Question ${i} of ${n}`, hear: 'Hear it', yours: 'Your answer', check: 'Check',
@@ -20,6 +20,11 @@
       letters: 'आपके उत्तर में अभी भी अक्षर है। एक संख्या लिखिए।', empty: 'पहले उत्तर लिखिए।',
       bad: (m) => `मैं यह पढ़ नहीं पाया। ${m}`, score: (c, n) => `${n} में से ${c} सही`, voice: 'आवाज़ में सुनें',
       lang: 'भाषा', offline: 'यह वर्कशीट बिना इंटरनेट के चलती है। SayMath से बनी।' },
+    mr: { question: (i, n) => `प्रश्न ${i}, ${n} पैकी`, hear: 'ऐका', yours: 'तुमचे उत्तर', check: 'तपासा',
+      hears: 'SayMath ऐकते:', correct: 'बरोबर!', wrong: (w) => `अजून नाही. तुमचे उत्तर: ${w}.`,
+      letters: 'तुमच्या उत्तरात अजून अक्षर आहे. एक संख्या लिहा.', empty: 'आधी उत्तर लिहा.',
+      bad: (m) => `मला हे वाचता आले नाही. ${m}`, score: (c, n) => `${n} पैकी ${c} बरोबर`, voice: 'आवाजात ऐका',
+      lang: 'भाषा', offline: 'ही वर्कशीट इंटरनेटशिवाय चालते. SayMath ने बनवली.' },
   };
 
   let lang = DATA.lang in T ? DATA.lang : 'en';
@@ -39,7 +44,9 @@
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = PHRASES[lang].speechLang;
-    const v = speechSynthesis.getVoices().find((x) => x.lang.startsWith(lang));
+    const voices = speechSynthesis.getVoices();
+    const fb = PHRASES[lang].fallbackSpeechLang;
+    const v = voices.find((x) => x.lang.startsWith(lang)) || (fb && voices.find((x) => x.lang.startsWith(fb.slice(0, 2))));
     if (v) u.voice = v;
     u.rate = 0.9;
     speechSynthesis.speak(u);
@@ -60,7 +67,8 @@
 
     const langSel = h('select', { id: 'wsLang' },
       h('option', { value: 'en', textContent: 'English', selected: lang === 'en' }),
-      h('option', { value: 'hi', textContent: 'हिन्दी', selected: lang === 'hi' }));
+      h('option', { value: 'hi', textContent: 'हिन्दी', selected: lang === 'hi' }),
+      h('option', { value: 'mr', textContent: 'मराठी', selected: lang === 'mr' }));
     langSel.addEventListener('change', () => { lang = langSel.value; build(); });
     const voice = h('input', { type: 'checkbox', checked: voiceOn, id: 'wsVoice' });
     voice.addEventListener('change', () => { voiceOn = voice.checked; });

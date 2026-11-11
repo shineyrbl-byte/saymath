@@ -38,3 +38,13 @@ test('the bundled engine runs on its own (as in the downloaded file)', () => {
   assert.equal(engine.M_evaluate.checkAnswer('x = 5', '5', { solveFor: 'x' }).ok, true);
   assert.equal(typeof engine.M_explorer.attachExplorer, 'function');
 });
+
+test('prompts in Hindi and Marathi are recognised', () => {
+  for (const line of ['x का मान ज्ञात कीजिए: 2x + 1 = 7 उत्तर: x = 3', 'x ची किंमत काढा: 2x + 1 = 7 उत्तर: x = 3']) {
+    const [q] = parseWorksheet(line);
+    assert.equal(q.error, null);
+    assert.equal(q.math, '2x + 1 = 7');
+    assert.equal(q.solveFor, 'x');
+    assert.equal(q.answer, '3');
+  }
+});

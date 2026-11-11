@@ -16,7 +16,8 @@ export function parseWorksheet(text) {
     const q = { line: i + 1, raw: line, prompt: '', math: line, answer: '', solveFor: undefined, error: null, warnings: [] };
     const [left, ans] = line.split(/\s+(?:answer|उत्तर)\s*:\s*/i);
     q.math = left.trim();
-    const pre = /^([\p{L}\s,.'()-]*\p{L}{3,}[\p{L}\s,.'()-]*):\s*(.+)$/u.exec(q.math);
+    // Words before a colon are the prompt. \p{M} keeps Hindi and Marathi vowel signs.
+    const pre = /^([\p{L}\p{M}\s,.'()-]*[\p{L}\p{M}]{3,}[\p{L}\p{M}\s,.'()-]*):\s*(.+)$/u.exec(q.math);
     if (pre) { q.prompt = pre[1].trim(); q.math = pre[2].trim(); }
     if (ans) {
       const m = /^([a-z])\s*=\s*(.+)$/.exec(ans.trim());
@@ -83,7 +84,7 @@ export function worksheetBraille(title, instructions, questions, { toBraille, to
 
 // ---- A tiny bundler: turns the ES modules into one inline script. ----
 
-export const ENGINE = ['parser', 'lang/en', 'lang/hi', 'speak', 'render', 'explorer', 'evaluate'];
+export const ENGINE = ['parser', 'lang/en', 'lang/hi', 'lang/mr', 'speak', 'render', 'explorer', 'evaluate'];
 
 const modVar = (name) => `M_${name.replace(/\W/g, '_')}`;
 const resolve = (from, path) => new URL(path, `http://x/${from}.js`).pathname.slice(1).replace(/\.js$/, '');

@@ -37,6 +37,19 @@ const T = {
     done: (c, n) => `सेट पूरा हुआ! पहली कोशिश में सही: ${c}, ${n} में से।`,
     hears: 'SayMath सुनता है:',
   },
+  mr: {
+    count: (i, n) => `प्रश्न ${i}, ${n} पैकी`,
+    correct: (w) => `बरोबर! ${w}.`,
+    wrong: (w) => `अजून नाही. तुमचे उत्तर: ${w}. पुन्हा प्रयत्न करा, किंवा संकेत घ्या.`,
+    letters: (v) => `तुमच्या उत्तरात अजून अक्षर आहे. ${v} साठी एक संख्या लिहा.`,
+    notValue: 'फक्त उत्तर लिहा, जसे 4 किंवा x = 4.',
+    unreadable: (m) => `मला हे उत्तर वाचता आले नाही. ${m}`,
+    empty: 'आधी उत्तर लिहा.',
+    answerIs: (w) => `उत्तर आहे ${w}.`,
+    score: (c, n) => `पहिल्या प्रयत्नात बरोबर: ${n} पैकी ${c}.`,
+    done: (c, n) => `संच पूर्ण झाला! पहिल्या प्रयत्नात बरोबर: ${n} पैकी ${c}.`,
+    hears: 'SayMath ऐकते:',
+  },
 };
 
 export function initPractice() {
@@ -62,7 +75,7 @@ export function initPractice() {
       label.className = 'set-choice';
       const input = Object.assign(document.createElement('input'), { type: 'radio', name: 'set', value: s.id, checked: s === set });
       input.addEventListener('change', () => { set = s; reset(); show(true); });
-      label.append(input, ` ${s.title[settings.lang]} (${s.problems.length})`);
+      label.append(input, ` ${s.title[settings.lang] || s.title.en} (${s.problems.length})`);
       return label;
     }));
   }
@@ -160,7 +173,7 @@ export function initPractice() {
   $('pEchoHear').addEventListener('click', () => { const w = echo(); say(w || t().empty); });
   $('pHear').addEventListener('click', () => say(`${promptText()} ${words(problem().math)}`));
   $('pHint').addEventListener('click', () => {
-    const h = problem().hint[settings.lang];
+    const h = problem().hint[settings.lang] || problem().hint.en;
     $('pHintText').textContent = h;
     $('pHintText').lang = settings.lang;
     $('pHintText').hidden = false;

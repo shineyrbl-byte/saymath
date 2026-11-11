@@ -38,6 +38,11 @@ export default async function ({ evaluate, press, wait, check, heard }) {
   await wait(100);
   check('Hindi interface: error messages', await evaluate("document.getElementById('mathMsg').textContent"), /कोष्ठक खोला गया, पर बंद नहीं किया गया। \(अक्षर 7 पर\)/);
   await evaluate("(() => { const i = document.getElementById('mathIn'); i.value = '(x^2 + 3x)/(2x - 1) = sqrt(5)'; document.getElementById('mathForm').requestSubmit(); })()");
+  await evaluate("document.getElementById('lang').value = 'mr'; document.getElementById('lang').dispatchEvent(new Event('change'))");
+  await wait(100);
+  check('Marathi interface and prompt', await evaluate("[document.getElementById('tab-listen').textContent, document.getElementById('pPrompt').textContent, document.documentElement.lang].join(' | ')"),
+    'ऐका | x ची किंमत काढा. | mr');
+  check('Marathi speech on the Listen tab', await evaluate("document.getElementById('spoken').textContent"), /^अपूर्णांक: अंश एक्स चा वर्ग अधिक 3 एक्स/);
   await evaluate("document.getElementById('lang').value = 'en'; document.getElementById('lang').dispatchEvent(new Event('change'))");
   check('back to English interface', await evaluate("document.getElementById('tab-listen').textContent + ' ' + document.documentElement.lang"), 'Listen en');
 }
