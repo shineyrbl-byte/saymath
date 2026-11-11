@@ -139,3 +139,44 @@ export function textToBraille(text) {
     .replace(/[A-Za-z]/g, (c) => letter(c))
     .replace(/[.,:;?!\-'() ]/g, (c) => TEXT_PUNCT[c]);
 }
+
+// Bharati braille for Hindi and Marathi words (Devanagari). EXPERIMENTAL.
+// Bharati braille gives each Devanagari letter the cell of its nearest
+// English sound. A consonant on its own carries the vowel a; a vowel sign is
+// written as the full vowel after its consonant; ् (halant) is ⠈.
+const BHARATI = {
+  'क्ष': '⠟', 'ज्ञ': '⠱',
+  'अ': '⠁', 'आ': '⠜', 'इ': '⠊', 'ई': '⠔', 'उ': '⠥', 'ऊ': '⠳', 'ऋ': '⠐⠗', 'ए': '⠑', 'ऐ': '⠌', 'ओ': '⠕', 'औ': '⠪', 'ऑ': '⠕',
+  'ा': '⠜', 'ि': '⠊', 'ी': '⠔', 'ु': '⠥', 'ू': '⠳', 'ृ': '⠐⠗', 'े': '⠑', 'ै': '⠌', 'ो': '⠕', 'ौ': '⠪', 'ॉ': '⠕',
+  'क': '⠅', 'ख': '⠨', 'ग': '⠛', 'घ': '⠣', 'ङ': '⠬', 'च': '⠉', 'छ': '⠡', 'ज': '⠚', 'झ': '⠴', 'ञ': '⠒',
+  'ट': '⠾', 'ठ': '⠺', 'ड': '⠫', 'ढ': '⠿', 'ण': '⠼', 'त': '⠞', 'थ': '⠹', 'द': '⠙', 'ध': '⠮', 'न': '⠝',
+  'प': '⠏', 'फ': '⠖', 'ब': '⠃', 'भ': '⠘', 'म': '⠍', 'य': '⠽', 'र': '⠗', 'ल': '⠇', 'ळ': '⠸', 'व': '⠧',
+  'श': '⠩', 'ष': '⠯', 'स': '⠎', 'ह': '⠓',
+  '्': '⠈', 'ं': '⠰', 'ँ': '⠄', 'ः': '⠠', '़': '', '।': '⠲', ' ': SP,
+};
+const DEVANAGARI_NUM = '०१२३४५६७८९';
+
+export function devanagariToBraille(text) {
+  let out = '';
+  for (let i = 0; i < text.length;) {
+    const two = text.slice(i, i + 3);
+    if (BHARATI[two]) { out += BHARATI[two]; i += 3; continue; }
+    const c = text[i];
+    const d = DEVANAGARI_NUM.indexOf(c);
+    if (/\d/.test(c) || d >= 0) {
+      let digits = '';
+      while (i < text.length && (/\d/.test(text[i]) || DEVANAGARI_NUM.includes(text[i]))) {
+        const k = /\d/.test(text[i]) ? text[i] : String(DEVANAGARI_NUM.indexOf(text[i]));
+        digits += TEXT_DIGITS[k];
+        i++;
+      }
+      out += `⠼${digits}`;
+      continue;
+    }
+    if (c in BHARATI) out += BHARATI[c];
+    else if (/[A-Za-z]/.test(c)) out += letter(c);
+    else if (TEXT_PUNCT[c]) out += TEXT_PUNCT[c];
+    i++;
+  }
+  return out;
+}

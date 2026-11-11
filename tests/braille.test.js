@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parse } from '../src/parser.js';
-import { toBraille, toASCII, textToBraille } from '../src/braille.js';
+import { toBraille, toASCII, textToBraille, devanagariToBraille } from '../src/braille.js';
 import { parseWorksheet, worksheetBraille } from '../src/worksheet.js';
 
 const brf = (s) => toASCII(toBraille(parse(s).tree));
@@ -45,4 +45,17 @@ test('braille worksheet: 40-cell lines, numbered questions', () => {
   const out = worksheetBraille('Homework', '', qs, { toBraille, toASCII, textToBraille });
   assert.match(out, /#A4 ,SOLVE FOR X3\r\n#3X-4 \.K #11/);
   assert.ok(out.split('\r\n').every((l) => l.replace('\f', '').length <= 40));
+});
+
+test('Bharati braille for Hindi and Marathi words (experimental)', () => {
+  // ग-ण-ि-त: consonants carry a; the vowel sign ि is written as इ after its consonant.
+  assert.equal(devanagariToBraille('गणित'), '⠛⠼⠊⠞');
+  assert.equal(devanagariToBraille('मान'), '⠍⠜⠝');
+  assert.equal(devanagariToBraille('ज्ञात'), '⠱⠜⠞');
+  assert.equal(devanagariToBraille('क्या'), '⠅⠈⠽⠜');
+  assert.equal(devanagariToBraille('१२'), '⠼⠁⠃');
+  const qs = parseWorksheet('x का मान ज्ञात कीजिए: 2x + 1 = 7 उत्तर: x = 3');
+  const out = worksheetBraille('गृहकार्य', '', qs, { toBraille, toASCII, textToBraille, devanagariToBraille });
+  assert.match(out, /#2X\+1 \.K #7/);
+  assert.ok(out.split('\r\n')[0].length > 0);
 });

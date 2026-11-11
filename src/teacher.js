@@ -5,7 +5,7 @@ import { speak, explain } from './speak.js';
 import { ui } from './i18n.js';
 import { render } from './render.js';
 import { parseWorksheet, worksheetText, worksheetBraille, buildWorksheetHTML } from './worksheet.js';
-import { toBraille, toASCII, textToBraille } from './braille.js';
+import { toBraille, toASCII, textToBraille, devanagariToBraille } from './braille.js';
 import { download as save } from './download.js';
 import { $, announce, settings } from './ui.js';
 
@@ -100,7 +100,7 @@ export function initTeacher() {
   function brf() {
     const d = data();
     const name = `${slug(d.title)}.brf`;
-    save(name, worksheetBraille(d.title, d.instructions, questions, { toBraille, toASCII, textToBraille }));
+    save(name, worksheetBraille(d.title, d.instructions, questions, { toBraille, toASCII, textToBraille, devanagariToBraille }));
     $('wsSize').textContent = t().wsBrfDone(name);
     announce($('wsSize').textContent);
   }
