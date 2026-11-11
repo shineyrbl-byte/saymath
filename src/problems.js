@@ -52,4 +52,20 @@ export const SETS = [
         hint: { en: 'Multiply the quantity a plus b by itself: you get four parts.', hi: '(ए प्लस बी) को उसी से गुणा कीजिए: चार पद मिलेंगे।' } },
     ],
   },
+  {
+    id: 'calculus',
+    title: { en: 'Calculus and matrices', hi: 'कलन और आव्यूह' },
+    problems: [
+      { kind: 'value', math: 'diff(x^3, x)', answer: '3x^2',
+        hint: { en: 'Bring the power down in front, then take one off the power.', hi: 'घात को आगे लाइए, फिर घात में से 1 घटाइए।' } },
+      { kind: 'value', math: 'int(2x, x, 0, 3)', answer: '9',
+        hint: { en: 'The integral of 2 x is x squared. Work out 3 squared minus 0 squared.', hi: '2 एक्स का समाकल एक्स का वर्ग है। 3 का वर्ग माइनस 0 का वर्ग निकालिए।' } },
+      { kind: 'value', math: 'lim(x -> 2, (x^2 - 4)/(x - 2))', answer: '4',
+        hint: { en: 'x squared minus 4 is the quantity x minus 2 times the quantity x plus 2. Cancel, then put x equals 2.', hi: 'एक्स का वर्ग माइनस 4 को (एक्स माइनस 2)(एक्स प्लस 2) लिखिए। काटिए, फिर एक्स बराबर 2 रखिए।' } },
+      { kind: 'value', math: 'sum(k=1, 5, k)', answer: '15',
+        hint: { en: 'Add 1, 2, 3, 4 and 5.', hi: '1, 2, 3, 4 और 5 को जोड़िए।' } },
+      { kind: 'value', math: 'det([[2, 1], [4, 3]])', answer: '2',
+        hint: { en: 'For a 2 by 2 matrix: top left times bottom right, minus top right times bottom left.', hi: '2 गुणा 2 आव्यूह के लिए: ऊपर बाएँ गुणा नीचे दाएँ, माइनस ऊपर दाएँ गुणा नीचे बाएँ।' } },
+    ],
+  },
 ];

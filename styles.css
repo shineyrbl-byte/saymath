@@ -143,6 +143,17 @@ input[type="text"]:focus, textarea:focus { border-color: var(--accent); }
 .m-radicand { border-top: 2px solid currentColor; padding: 2px 0.15em 0; display: inline-block; }
 .m-index { font-size: 0.55em; vertical-align: 1em; line-height: 0; margin-right: -0.35em; }
 .m-fence { font-style: normal; }
+.m-limits { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 0.15em; line-height: 1.1; }
+.m-lim-up, .m-lim-lo { font-size: 0.6em; }
+.m-bigsym { font-size: 1.5em; line-height: 1; font-style: normal; }
+.m-intsym { font-size: 1.5em; font-style: normal; vertical-align: -0.15em; }
+.m-int-lo { font-size: 0.6em; vertical-align: -0.6em; line-height: 0; margin-left: -0.1em; }
+.m-int-up { font-size: 0.6em; vertical-align: 1em; line-height: 0; margin-left: 0.05em; }
+.m-matrix { display: inline-flex; align-items: stretch; vertical-align: middle; }
+.m-mfence { font-size: 1.6em; line-height: 1; display: flex; align-items: center; font-style: normal; }
+.m-grid { display: inline-grid; grid-template-columns: 1fr; gap: 0.15em; padding: 0.1em 0.2em; }
+.m-row { display: grid; grid-template-columns: repeat(var(--cols, 2), minmax(1em, auto)); column-gap: 0.7em; }
+.m-cell { text-align: center; }
 .visual { cursor: pointer; }
 .visual:focus-visible { outline-offset: -3px; border-radius: 12px; }
 .crumbs { margin: -6px 0 4px; font-size: 0.9rem; }

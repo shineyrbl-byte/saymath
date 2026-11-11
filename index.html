@@ -84,6 +84,16 @@
           <button type="submit" class="primary" data-i18n="hearIt">Hear it</button>
         </div>
         <p id="mathHelp" class="hint" data-i18n-html="mathHelpHtml">Use <kbd>^</kbd> for powers, <kbd>/</kbd> for fractions, <kbd>sqrt( )</kbd> for roots, <kbd>_</kbd> for subscripts. Press <kbd>Enter</kbd> to hear it.</p>
+        <details class="syntax">
+          <summary data-i18n="moreSyntax">More: calculus, matrices, ±</summary>
+          <ul class="hint">
+            <li><kbd>sum(i=1, n, i^2)</kbd>, <kbd>prod(k=1, n, k)</kbd></li>
+            <li><kbd>int(x^2, x)</kbd>, <kbd>int(x^2, x, 0, 1)</kbd></li>
+            <li><kbd>lim(x -> 0, sin(x)/x)</kbd>, <kbd>diff(x^3, x)</kbd>, <kbd>diff(y, x, 2)</kbd></li>
+            <li><kbd>[[1, 2], [3, 4]]</kbd>, <kbd>det([[1, 2], [3, 4]])</kbd></li>
+            <li><kbd>+/-</kbd> or <kbd>±</kbd>, <kbd>30°</kbd>, <kbd>~=</kbd> or <kbd>≈</kbd>, <kbd>asin cosh</kbd>…</li>
+          </ul>
+        </details>
         <div id="mathMsg" class="msg" role="alert"></div>
       </form>
 
@@ -94,6 +104,8 @@
         <button type="button" data-ex="sin^2 x + cos^2 x = 1" data-i18n="exTrig">Trig identity</button>
         <button type="button" data-ex="|2x - 3| <= 7" data-i18n="exInequality">Inequality</button>
         <button type="button" data-ex="1/2x" data-i18n="exAmbiguous">An ambiguous one</button>
+        <button type="button" data-ex="int(x^2, x, 0, 1) = 1/3" data-i18n="exCalculus">Calculus</button>
+        <button type="button" data-ex="det([[a, b], [c, d]]) = ad - bc" data-i18n="exMatrix">Matrix</button>
       </div>
 
       <div class="card result" id="result" hidden>

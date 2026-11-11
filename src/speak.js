@@ -28,8 +28,12 @@ export function isAtom(n) {
   if (!n) return false;
   if (n.type === 'num' || n.type === 'var' || n.type === 'const') return true;
   if (n.type === 'sub') return isAtom(n.base) && isAtom(n.sub);
+  if (n.type === 'deg') return isAtom(n.arg);
   return false;
 }
+
+// Parts that already say where they end ("d x", "end matrix").
+const closes = (n) => isAtom(n) || n.type === 'matrix' || n.type === 'integral';
 
 export function speak(node, { lang = 'en', mode = 'clear' } = {}) {
   const L = LANGS[lang] || EN;
@@ -44,12 +48,29 @@ export function speak(node, { lang = 'en', mode = 'clear' } = {}) {
       case 'var': return L.letter(n.name);
       case 'const': return L.constant(n.name);
       case 'neg': return L.negative(say(n.arg, last));
+      case 'pm': return `${L.plusMinus} ${say(n.arg, last)}`;
+      case 'deg': return L.degrees(say(n.arg, false));
+      case 'bigop':
+        return L.bigop(n.op, say(n.lower, false), say(n.upper, false), say(n.body, last), !closes(n.body) && needEnd(last));
+      case 'integral':
+        // "d x" at the end closes the integral, so no end marker is needed.
+        return L.integral(n.lower ? say(n.lower, false) : null, n.upper ? say(n.upper, false) : null,
+          say(n.body, false), say(n.v, last));
+      case 'limit':
+        return L.limit(say(n.v, false), say(n.to, false), say(n.body, last), !closes(n.body) && needEnd(last));
+      case 'deriv':
+        return L.deriv(n.order, say(n.v, false), say(n.body, last), !closes(n.body) && needEnd(last));
+      case 'matrix':
+        return L.matrix(n.rows.map((r) => r.items.map((it) => say(it, false))));
+      case 'row':
+        return L.row(n.items.map((it) => say(it, false)));
       case 'add':
         return n.items
           .map((it, i) => {
             const words = say(it.node, last && i === n.items.length - 1);
             if (it.op === '+') return `${L.plus} ${words}`;
             if (it.op === '-') return `${L.minus} ${words}`;
+            if (it.op === '±') return `${L.plusMinus} ${words}`;
             return words;
           })
           .join(' ');
@@ -102,7 +123,7 @@ export function speak(node, { lang = 'en', mode = 'clear' } = {}) {
         if (isAtom(n.arg)) return say(n.arg, last);
         return L.quantity(say(n.arg, false), needEnd(last));
       case 'func':
-        return L.func(n.name, n.base ? say(n.base, false) : null, say(n.arg, last), !isAtom(n.arg) && needEnd(last));
+        return L.func(n.name, n.base ? say(n.base, false) : null, say(n.arg, last), !closes(n.arg) && needEnd(last));
       case 'rel':
         return L.relation(n.items.map((it, i) => say(it, last && i === n.items.length - 1)), n.ops);
       case 'list':

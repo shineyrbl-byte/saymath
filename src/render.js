@@ -3,9 +3,10 @@
 
 import { children } from './parser.js';
 
-const CONSTS = { pi: 'π', theta: 'θ', alpha: 'α', beta: 'β', gamma: 'γ', delta: 'δ', lambda: 'λ',
-  mu: 'μ', sigma: 'σ', phi: 'φ', omega: 'ω', infinity: '∞' };
-const RELS = { '=': '=', '<': '<', '>': '>', '<=': '≤', '>=': '≥', '!=': '≠' };
+const CONSTS = { pi: 'π', theta: 'θ', alpha: 'α', beta: 'β', gamma: 'γ', delta: 'δ', epsilon: 'ε', lambda: 'λ',
+  mu: 'μ', rho: 'ρ', sigma: 'σ', tau: 'τ', phi: 'φ', omega: 'ω', infinity: '∞' };
+const RELS = { '=': '=', '<': '<', '>': '>', '<=': '≤', '>=': '≥', '!=': '≠', '~=': '≈' };
+const FN_NAMES = { asin: 'sin⁻¹', acos: 'cos⁻¹', atan: 'tan⁻¹' };
 
 function el(tag, cls, ...kids) {
   const e = document.createElement(tag);
@@ -39,9 +40,40 @@ export function render(tree) {
       case 'var': box.textContent = node.name; break;
       case 'const': box.textContent = CONSTS[node.name] || node.name; break;
       case 'neg': box.append(op('−'), drawn[0]); break;
+      case 'pm': box.append(el('span', 'm-op-tight', '±'), drawn[0]); break;
+      case 'deg': box.append(drawn[0], el('span', 'm-op-tight', '°')); break;
+      case 'bigop':
+        box.append(el('span', 'm-limits', el('span', 'm-lim-up', drawn[1]),
+          el('span', 'm-bigsym', node.op === 'sum' ? '∑' : '∏'), el('span', 'm-lim-lo', drawn[0])), drawn[2]);
+        break;
+      case 'integral': {
+        const lim = node.lower ? [el('sub', 'm-int-lo', drawn[0]), el('sup', 'm-int-up', drawn[1])] : [];
+        const k = node.lower ? 2 : 0;
+        box.append(el('span', 'm-intsym', '∫'), ...lim, el('span', 'm-thin'), drawn[k], el('span', 'm-op-tight', ' d'), drawn[k + 1]);
+        break;
+      }
+      case 'limit':
+        box.append(el('span', 'm-limits', el('span', 'm-fn', 'lim'),
+          el('span', 'm-lim-lo', drawn[0], el('span', 'm-op-tight', '→'), drawn[1])), el('span', 'm-thin'), drawn[2]);
+        break;
+      case 'deriv': {
+        // Superscript digits as characters, so they sit right inside the stacked fraction.
+        const sup = node.order > 1 ? String(node.order).replace(/\d/g, (d) => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]) : '';
+        const top = el('span', 'm-top', `d${sup}`);
+        const bot = el('span', 'm-bottom', 'd', drawn[1], sup);
+        const atom = ['num', 'var', 'const'].includes(node.body.type);
+        box.append(el('span', 'm-frac', top, bot),
+          ...(atom ? [drawn[0]] : [el('span', 'm-fence', '('), drawn[0], el('span', 'm-fence', ')')]));
+        break;
+      }
+      case 'matrix':
+        box.append(el('span', 'm-mfence', '['), el('span', 'm-grid', ...drawn), el('span', 'm-mfence', ']'));
+        box.querySelector('.m-grid').style.setProperty('--cols', String(node.rows[0].items.length));
+        break;
+      case 'row': box.classList.add('m-row'); box.append(...drawn.map((d) => el('span', 'm-cell', d))); break;
       case 'add':
         node.items.forEach((it, i) => {
-          if (it.op) box.append(op(it.op === '+' ? '+' : '−'));
+          if (it.op) box.append(op({ '+': '+', '-': '−', '±': '±' }[it.op]));
           box.append(drawn[i]);
         });
         break;
@@ -70,12 +102,12 @@ export function render(tree) {
       case 'fact': box.append(drawn[0], el('span', 'm-op-tight', '!')); break;
       case 'paren': box.append(el('span', 'm-fence', '('), drawn[0], el('span', 'm-fence', ')')); break;
       case 'func': {
-        const name = el('span', 'm-fn', node.name);
+        const name = el('span', 'm-fn', FN_NAMES[node.name] || node.name);
         const hasBase = !!node.base;
         box.append(name);
         if (hasBase) box.append(el('sub', 'm-sub', drawn[0]));
         const arg = drawn[hasBase ? 1 : 0];
-        const atom = ['num', 'var', 'const'].includes(node.arg.type);
+        const atom = ['num', 'var', 'const', 'matrix'].includes(node.arg.type);
         if (atom) box.append(el('span', 'm-thin'), arg);
         else box.append(el('span', 'm-fence', '('), arg, el('span', 'm-fence', ')'));
         break;
