@@ -11,7 +11,21 @@ import { $, announce, settings } from './ui.js';
 
 const slug = (s) => s.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '') || 'worksheet';
 
+// The worksheet being written is kept on this device, so it is still there next time.
+const DRAFT = 'saymath-worksheet-draft';
+const DRAFT_FIELDS = ['wsTitle', 'wsInstr', 'wsLines', 'wsLangSel'];
+
 export function initTeacher() {
+  try {
+    const d = JSON.parse(localStorage.getItem(DRAFT));
+    if (d) for (const f of DRAFT_FIELDS) if (typeof d[f] === 'string') $(f).value = d[f];
+  } catch { /* no draft, or storage blocked */ }
+  const saveDraft = () => {
+    try { localStorage.setItem(DRAFT, JSON.stringify(Object.fromEntries(DRAFT_FIELDS.map((f) => [f, $(f).value])))); } catch { /* storage blocked */ }
+  };
+  for (const f of DRAFT_FIELDS) $(f).addEventListener('input', saveDraft);
+  $('wsLangSel').addEventListener('change', saveDraft);
+
   const lang = () => $('wsLangSel').value;
   const t = () => ui(settings.lang);
   const err = (q) => (q.errorObj ? (q.errorInAnswer ? t().wsAnswerError(explain(q.errorObj, settings.lang)) : explain(q.errorObj, settings.lang)) : q.error);
@@ -112,5 +126,13 @@ export function initTeacher() {
   $('wsDownload').addEventListener('click', download);
   $('wsCopy').addEventListener('click', copyText);
   $('wsBrf').addEventListener('click', brf);
+  $('wsNew').addEventListener('click', () => {
+    $('wsTitle').value = '';
+    $('wsInstr').value = '';
+    $('wsLines').value = '';
+    saveDraft();
+    preview();
+    $('wsTitle').focus();
+  });
   preview();
 }
