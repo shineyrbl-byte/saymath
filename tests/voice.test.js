@@ -30,3 +30,8 @@ test('what comes out can be read and checked', () => {
     assert.ok(checkAnswer(typed, '4', { solveFor: 'x' }).ok, said);
   }
 });
+
+test('Tamil and Bengali (preview), including their digits', () => {
+  assert.equal(spokenToMath('x சமம் ௫', 'ta'), 'x = 5');
+  assert.equal(spokenToMath('এক্স এর বর্গ যোগ ৩', 'bn'), 'x^2 + 3');
+});

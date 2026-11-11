@@ -14,7 +14,7 @@ export function parseWorksheet(text) {
     const line = raw.trim();
     if (!line) return;
     const q = { line: i + 1, raw: line, prompt: '', math: line, answer: '', solveFor: undefined, error: null, warnings: [] };
-    const [left, ans] = line.split(/\s+(?:answer|उत्तर)\s*:\s*/i);
+    const [left, ans] = line.split(/\s+(?:answer|उत्तर|উত্তর|விடை)\s*:\s*/i);
     q.math = left.trim();
     // Words before a colon are the prompt. \p{M} keeps Hindi and Marathi vowel signs.
     const pre = /^([\p{L}\p{M}\s,.'()-]*[\p{L}\p{M}]{3,}[\p{L}\p{M}\s,.'()-]*):\s*(.+)$/u.exec(q.math);

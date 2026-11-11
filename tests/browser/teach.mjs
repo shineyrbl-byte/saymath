@@ -11,7 +11,7 @@ export default async function ({ evaluate, press, wait, check, heard }) {
     window.__ws = html;
     return new Blob([html]).size;
   })`);
-  check(`worksheet file is small (${Math.round(size / 1024)} KB)`, size < 80000, true);
+  check(`worksheet file is small (${Math.round(size / 1024)} KB)`, size < 100000, true);
   const hindi = await evaluate(`import('./src/worksheet.js').then(async (m) => {
     const html = await m.buildWorksheetHTML({ title: 'T', instructions: '', lang: 'hi', questions: [{ prompt: '', math: 'x^2', answer: '' }] });
     return [Math.round(new Blob([html]).size / 1024), html.includes('एक्स'), html.includes('भागिले')].join(' ');

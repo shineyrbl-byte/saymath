@@ -20,7 +20,7 @@ When a blind student gets maths homework as typed text, their screen reader says
 - **Listen:** type maths and hear it read with clear rules: every fraction, root and bracket says where it ends. A before/after panel plays what a screen reader says for the raw text next to SayMath.
 - **Explore:** arrow keys walk the equation: ↓ into the fraction, → to the denominator ("denominator: 2 a"), ↑ back out.
 - **Practice:** 18 problems, from equations to calculus. SayMath reads your answer back as you type, then checks it by value (8/2 counts as 4). Answers can be typed or spoken (**Say it**).
-- **Teach:** teachers type questions, and SayMath flags ambiguous ones like 1/2x. It then builds a single ~70 KB offline HTML worksheet with speech, explorer and answer checking inside, or a braille (.brf) file for an embosser.
+- **Teach:** teachers type questions, and SayMath flags ambiguous ones like 1/2x. It then builds a single ~80 KB offline HTML worksheet with speech, explorer and answer checking inside, or a braille (.brf) file for an embosser.
 - **Read from a photo or PDF:** photograph a printed or handwritten worksheet, or choose a PDF; Claude turns it into typed maths, flags anything unsure, and SayMath reads it.
 - **Braille:** every equation in Nemeth Code braille, to copy or emboss (experimental).
 - **Five languages:** English, Hindi and Marathi for the spoken maths and the whole interface; Tamil and Bengali spoken maths in preview.
@@ -38,7 +38,7 @@ Plain JavaScript modules with no framework, build step or server. A parser turns
 ## Challenges
 - Making speech **unambiguous without being slow**. The rule "say where a group ends unless it holds one symbol" keeps it short. Small tricks remove more end markers: "x to the n-th power" closes itself, and so does "sine squared of x".
 - **Hindi word order** puts powers and roots after the base (एक्स का वर्ग), so the phrasebook needed patterns, not word swaps.
-- Fitting the whole engine into a worksheet file a phone with no data can open. It came out at about 70 KB, by bundling only the language the teacher picks.
+- Fitting the whole engine into a worksheet file a phone with no data can open. It came out at about 80 KB, by bundling only the language the teacher picks.
 - **Braille level indicators:** Nemeth marks every move up into a power and back down. Getting nested powers right (e^(x²)) meant tidying runs of level changes after the fact.
 
 ## Accomplishments

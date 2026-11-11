@@ -8,6 +8,8 @@
 import { EN } from './lang/en.js';
 import { HI } from './lang/hi.js';
 import { MR } from './lang/mr.js';
+import { TA } from './lang/ta.js';
+import { BN } from './lang/bn.js';
 
 const EN_NUMBERS = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9,
   ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17,
@@ -41,17 +43,28 @@ const PHRASES = {
     ['पेक्षा लहान किंवा बरोबर आहे', '<='], ['पेक्षा मोठा किंवा बरोबर आहे', '>='], ['पेक्षा लहान आहे', '<'],
     ['पेक्षा मोठा आहे', '>'], ['कंस उघडा', '('], ['कंस बंद', ')'],
   ],
+  ta: [
+    ['கூட்டல் அல்லது கழித்தல்', '+/-'], ['சமம்', '='], ['கூட்டல்', '+'], ['பிளஸ்', '+'], ['கழித்தல்', '-'], ['மைனஸ்', '-'],
+    ['குறை', '-'], ['பெருக்கல்', '*'], ['வகுத்தல்', '/'], ['இன் வர்க்கமூலம்', 'sqrt'], ['வர்க்கமூலம்', 'sqrt'],
+    ['இன் வர்க்கம்', '^2'], ['வர்க்கம்', '^2'], ['இன் கனம்', '^3'], ['அடுக்கு', '^'], ['புள்ளி', '.'],
+  ],
+  bn: [
+    ['যোগ অথবা বিয়োগ', '+/-'], ['সমান', '='], ['যোগ', '+'], ['প্লাস', '+'], ['বিয়োগ', '-'], ['মাইনাস', '-'],
+    ['ঋণাত্মক', '-'], ['গুণ', '*'], ['ভাগ', '/'], ['এর বর্গমূল', 'sqrt'], ['বর্গমূল', 'sqrt'], ['এর বর্গ', '^2'],
+    ['এর ঘন', '^3'], ['এর ঘাত', '^'], ['দশমিক', '.'],
+  ],
 };
 
 // Letter names ("एक्स" for x), taken from the phrasebooks.
 const letterNames = (L) => [...'abcdefghijklmnopqrstuvwxyz'].map((c) => [L.letter(c), c]).filter(([w, c]) => w !== c);
-const LETTERS = { en: [], hi: letterNames(HI), mr: letterNames(MR) };
-const DEVANAGARI_DIGITS = { '०': 0, '१': 1, '२': 2, '३': 3, '४': 4, '५': 5, '६': 6, '७': 7, '८': 8, '९': 9 };
+const LETTERS = { en: [], hi: letterNames(HI), mr: letterNames(MR), ta: [], bn: letterNames(BN) };
+// Devanagari, Bengali and Tamil digits become 0-9.
+const DEVANAGARI_DIGITS = Object.fromEntries(['०१२३४५६७८९', '০১২৩৪৫৬৭৮৯', '௦௧௨௩௪௫௬௭௮௯'].flatMap((set) => [...set].map((c, i) => [c, i])));
 
 const escape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 export function spokenToMath(text, lang = 'en') {
-  let s = ` ${text.toLowerCase().replace(/[०-९]/g, (d) => DEVANAGARI_DIGITS[d])} `;
+  let s = ` ${text.toLowerCase().replace(/[०-९০-৯௦-௯]/g, (d) => DEVANAGARI_DIGITS[d])} `;
   s = s.replace(/[,?]/g, ' ');
   if (lang === 'en') {
     // "twenty one" -> 21, "five" -> 5
@@ -69,7 +82,7 @@ export function spokenToMath(text, lang = 'en') {
   return s.replace(/\s+/g, ' ').replace(/\s*\^\s*/g, '^').trim().replace(/^=\s*/, '');
 }
 
-export const RECOGNITION_LANG = { en: EN.speechLang, hi: HI.speechLang, mr: MR.speechLang };
+export const RECOGNITION_LANG = { en: EN.speechLang, hi: HI.speechLang, mr: MR.speechLang, ta: TA.speechLang, bn: BN.speechLang };
 
 export function canListen() {
   return typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
